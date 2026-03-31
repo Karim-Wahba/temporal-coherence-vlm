@@ -1,0 +1,3 @@
+[submodule "submodules/TAM"]
+	path = submodules/TAM
+	url = git@github.com:Karim-Wahba/TAM.git

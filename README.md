@@ -31,8 +31,12 @@ git submodule update --init --recursive
 
 ## Setup
 
-Each experiment folder may have its own dependencies. Check the relevant submodule's `requirements.txt`:
-
 ```bash
-pip install -r submodules/<method>/requirements.txt
+conda env create -f environment.yml
+conda activate vlm_probe
+pip install -r requirements.txt
 ```
+
+## Reproducing Results
+
+See the README in each experiment folder for run instructions and expected outputs.

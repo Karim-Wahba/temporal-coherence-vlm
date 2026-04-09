@@ -8,7 +8,7 @@ from transformers import Qwen3VLForConditionalGeneration, AutoProcessor
 from qwen_vl_utils import process_vision_info
 
 # --- CONFIGURATION ---
-DAVIS_ROOT = "/home/wahba/git/davis/DAVIS2017/semisupervised"
+DAVIS_ROOT = "/home/geiger/gwb913/git/davis/DAVIS2017/unsupervised"
 OUTPUT_DIR = "./davis_local_results"
 MODEL_ID = "Qwen/Qwen3-VL-8B-Instruct"  # Or "3B-Instruct" for lower VRAM
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -180,9 +180,9 @@ def save_local_results(response_text, frame_paths, sequence_name, sample_rate=2)
     print(f"Successfully mapped {len(final_json_results['frames'])} frames.")
 
 if __name__ == "__main__":
-    seq_name = "night-race"
-    query = "car"
-    sample_rate = 4
+    seq_name = "breakdance"
+    query = "A man in a red sweatshirt performing breakdance."
+    sample_rate = 2
     
     resp, processed_paths = process_davis_locally(seq_name, query, sample_rate=sample_rate)
     save_local_results(resp, processed_paths, seq_name, sample_rate)

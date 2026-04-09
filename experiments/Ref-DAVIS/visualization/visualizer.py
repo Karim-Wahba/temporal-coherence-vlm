@@ -14,6 +14,7 @@ Functions
   save_failure_case()          - save annotated frames for one failure
 """
 
+import math
 import os
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
@@ -435,52 +436,56 @@ def plot_iou_curves(
 def save_vot_result_case(
     result: dict,
     save_dir: str,
-    max_frames: int = 8,
+    num_columns: int = 5,
+    sample_rate: int = 1,
 ):
     """
-    Save a multi-panel figure for a single VOT result:
-    sampled frames with GT bbox (green) and predicted bbox (red) overlaid.
+    Save a grid figure for a single VOT result showing sampled frames with GT
+    bbox (green) and predicted bbox (red) overlaid.
+    sample_rate controls which frames are shown (every Nth frame).
     """
     os.makedirs(save_dir, exist_ok=True)
     seq = result.get("seq_name", "seq")
     exp = result.get("exp_id", "0")
 
-    frames = result.get("frames_pil", [])
-    gt_boxes = result.get("gt_boxes", [])
-    pred_boxes = result.get("boxes", [])
+    frames = result.get("frames_pil", [])[::sample_rate]
+    gt_boxes = result.get("gt_boxes", [])[::sample_rate]
+    pred_boxes = result.get("boxes", [])[::sample_rate]
+    iou_per_frame = result.get("metrics", {}).get("iou_per_frame", [])
     T = len(frames)
     if T == 0:
         return
 
-    n_show = min(max_frames, T)
-    sample_idx = np.linspace(0, T - 1, n_show, dtype=int)
+    num_rows = math.ceil(T / num_columns)
 
-    fig, axes = plt.subplots(1, n_show, figsize=(n_show * 3, 4))
-    if n_show == 1:
-        axes = [axes]
+    fig, axes = plt.subplots(num_rows, num_columns,
+                             figsize=(num_columns * 3, num_rows * 3))
+    axes = np.array(axes).reshape(num_rows, num_columns)
 
-    iou_per_frame = result.get("metrics", {}).get("iou_per_frame", [])
-    for col, t in enumerate(sample_idx):
-        ax = axes[col]
-        frame_arr = np.array(frames[t])
-        gt_b = gt_boxes[t] if t < len(gt_boxes) else None
-        pred_b = pred_boxes[t] if t < len(pred_boxes) else None
-        frame_arr = _overlay_box(frame_arr, gt_b, color=(0, 200, 0), thickness=2)
-        frame_arr = _overlay_box(frame_arr, pred_b, color=(255, 50, 50), thickness=2)
-        iou_val = iou_per_frame[t] if t < len(iou_per_frame) else 0.0
-        ax.imshow(frame_arr)
-        ax.set_title(f"t={t} IoU={iou_val:.2f}", fontsize=7)
+    for t in range(num_rows * num_columns):
+        ax = axes[t // num_columns, t % num_columns]
+        if t < T:
+            frame_arr = np.array(frames[t])
+            gt_b = gt_boxes[t] if t < len(gt_boxes) else None
+            pred_b = pred_boxes[t] if t < len(pred_boxes) else None
+            frame_arr = _overlay_box(frame_arr, gt_b, color=(0, 200, 0), thickness=2)
+            frame_arr = _overlay_box(frame_arr, pred_b, color=(255, 50, 50), thickness=2)
+            iou_val = iou_per_frame[t] if t < len(iou_per_frame) else 0.0
+            ax.imshow(frame_arr)
+            ax.set_title(f"t={t * sample_rate} IoU={iou_val:.2f}", fontsize=7)
         ax.axis("off")
 
     exp_text = result.get("expression", "")[:60]
     mean_iou = result.get("metrics", {}).get("mean_iou", 0.0)
+    mode = result.get("failure", {}).get("primary_failure", "UNKNOWN")
+    color = FAILURE_COLORS.get(mode, "#000000")
     fig.suptitle(
-        f"{seq} | exp={exp} | mean IoU={mean_iou:.3f}\n\"{exp_text}\"",
-        fontsize=10,
+        f"{seq} | exp={exp} | mean IoU={mean_iou:.3f} | {mode}\n\"{exp_text}\"",
+        fontsize=10, color=color,
     )
     fig.tight_layout()
 
-    fname = f"{seq}__exp{exp}__iou{mean_iou:.3f}.png"
+    fname = f"{seq}__exp{exp}__iou{mean_iou:.3f}__{mode}.png"
     fig.savefig(os.path.join(save_dir, fname), dpi=100, bbox_inches="tight")
     plt.close(fig)
 

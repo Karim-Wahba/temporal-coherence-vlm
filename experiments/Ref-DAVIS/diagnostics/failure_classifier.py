@@ -242,6 +242,65 @@ class FailureClassifier:
             notes="; ".join(notes_parts),
         )
 
+    def classify_vot(
+        self,
+        seq_name: str,
+        exp_id: str,
+        expression: str,
+        metrics: dict,
+    ) -> FailureResult:
+        """
+        VOT equivalent of classify(). Uses iou_per_frame / mean_iou / iou_decay /
+        iou_variance in place of J metrics. TAM is not supported for VOT.
+        """
+        iou_per_frame = np.array(metrics["iou_per_frame"])
+        mean_iou = metrics["mean_iou"]
+        iou_decay = metrics["iou_decay"]
+        iou_var = metrics["iou_variance"]
+
+        flags: List[FailureMode] = []
+        notes_parts = []
+
+        first_third = iou_per_frame[:max(1, len(iou_per_frame) // 3)]
+        if first_third.mean() < self.j_never_threshold and mean_iou < 0.1:
+            primary = FailureMode.NEVER_FOUND
+            notes_parts.append(f"First-third mean IoU={first_third.mean():.3f}")
+        elif (
+            iou_per_frame[0] > 0.3
+            and self._consecutive_low(iou_per_frame.tolist(), self.j_lost_threshold)
+        ):
+            primary = FailureMode.LOST_TRACK
+            notes_parts.append(f"IoU[0]={iou_per_frame[0]:.2f} then dropped")
+        elif self.j_never_threshold <= mean_iou < self.j_partial_max:
+            primary = FailureMode.PARTIAL_TRACK
+            notes_parts.append(f"mean_IoU={mean_iou:.3f}")
+        elif iou_var > self.variance_threshold:
+            primary = FailureMode.UNSTABLE
+            notes_parts.append(f"iou_var={iou_var:.3f}")
+        elif mean_iou >= 0.5:
+            primary = FailureMode.SUCCESS
+        else:
+            primary = FailureMode.PARTIAL_TRACK
+            notes_parts.append(f"mean_IoU={mean_iou:.3f} (catch-all)")
+
+        if iou_decay < -0.3:
+            flags.append(FailureMode.LOST_TRACK)
+            notes_parts.append(f"iou_decay={iou_decay:.3f}")
+        if iou_var > self.variance_threshold and primary != FailureMode.UNSTABLE:
+            flags.append(FailureMode.UNSTABLE)
+
+        return FailureResult(
+            seq_name=seq_name,
+            exp_id=exp_id,
+            expression=expression,
+            primary_failure=primary,
+            secondary_flags=flags,
+            mean_J=mean_iou,
+            J_decay=iou_decay,
+            J_variance=iou_var,
+            notes="; ".join(notes_parts),
+        )
+
     def summarize(self, results: List[FailureResult]) -> dict:
         """Aggregate failure mode distribution across all sequences."""
         total = len(results)

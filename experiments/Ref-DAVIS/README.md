@@ -1,21 +1,23 @@
 # Temporal Coherence Benchmark for Qwen3-VL
 
 A dual-arm evaluation framework for diagnosing and quantifying temporal coherence
-failures in Qwen3-VL video-language models.
+failures in Qwen3-VL video-language models on DAVIS.
 
 ```
-temporal_bench/
-├── benchmark.py                  ← Main orchestrator (Ref-DAVIS benchmark)
+Ref-DAVIS/
+├── benchmark.py                  ← Main orchestrator
 ├── run_tam_experiments.py        ← Standalone TAM diagnostic experiments
 ├── compare_models.py             ← Multi-model comparison reports
 ├── benchmark/
-│   ├── ref_davis_loader.py       ← Ref-DAVIS dataset loader
-│   ├── qwen_vos_runner.py        ← Qwen inference + bbox parsing
-│   └── metrics.py                ← J, F, J&F, J-decay, J-variance
+│   ├── ref_davis_loader.py       ← Ref-DAVIS dataset loader (VOS)
+│   ├── davis_vot_loader.py       ← DAVIS VOT dataset loader
+│   ├── qwen_vos_runner.py        ← VOS inference (image / video mode)
+│   ├── qwen_vot_runner.py        ← VOT inference (image / video mode)
+│   └── metrics.py                ← J, F, J&F, IoU, decay, variance
 ├── diagnostics/
 │   ├── tam_runner.py             ← TAM inference wrapper
-│   ├── tam_analyzer.py           ← 5 diagnostic experiments
-│   └── failure_classifier.py    ← Rule-based failure mode classifier
+│   ├── tam_analyzer.py           ← Diagnostic experiments
+│   └── failure_classifier.py    ← Rule-based failure mode classifier (VOS + VOT)
 └── visualization/
     └── visualizer.py             ← All plots and galleries
 ```
@@ -24,88 +26,117 @@ temporal_bench/
 
 ## Step 0: Extend DAVIS → Ref-DAVIS
 
-You only need to download one file — the text annotations:
+Download the text annotations (required for VOS task only):
 
 ```bash
-# Download from MPI-INF
 wget https://www.mpi-inf.mpg.de/fileadmin/inf/d2/Research/OneVOS/davis_text_annotations.zip
-
-# Unzip into your DAVIS root
 cd /path/to/your/davis
 unzip /path/to/davis_text_annotations.zip
 ```
 
-After this, your DAVIS root should contain:
+Expected layout:
 ```
 /your/davis/
-├── JPEGImages/480p/<seq>/<frame>.jpg    ← already have
-├── Annotations/480p/<seq>/<frame>.png   ← already have
-└── davis_text_annotations/              ← NEW
+├── JPEGImages/480p/<seq>/<frame>.jpg
+├── Annotations/480p/<seq>/<frame>.png
+└── davis_text_annotations/
     ├── train/meta_expressions.json
     └── valid/meta_expressions.json
 ```
 
 ---
 
-## Step 1: Run Benchmark (Arm 1 — Quantitative)
+## Step 1: Run Benchmark
+
+### VOS (mask J&F)
 
 ```bash
-# Quick run: 5 sequences, expression 0 only, no TAM
+# Quick run: 5 sequences, image mode (default)
 python benchmark.py \
     --davis_root /path/to/davis \
     --model_id Qwen/Qwen3-VL-8B-Instruct \
-    --save_dir results/qwen3vl_8b \
+    --save_dir results/vos_image \
+    --task vos \
     --split valid \
     --strategy joint \
+    --sample_rate 8 \
     --expressions_per_seq 1 \
     --max_sequences 5
 
-# Full validation set (30 seqs × 4 expressions = 120 items)
+# Native video mode (3D RoPE, official Qwen3-VL evaluation method)
 python benchmark.py \
     --davis_root /path/to/davis \
     --model_id Qwen/Qwen3-VL-8B-Instruct \
-    --save_dir results/qwen3vl_8b \
-    --split valid \
-    --strategy joint \
-    --expressions_per_seq 4
-
-# With TAM diagnostics (adds ~3x time per sequence)
-python benchmark.py \
-    --davis_root /path/to/davis \
-    --model_id Qwen/Qwen3-VL-8B-Instruct \
-    --save_dir results/qwen3vl_8b_tam \
-    --run_tam \
-    --tam_submodule_path /path/to/submodules/TAM \
-    --expressions_per_seq 1
+    --save_dir results/vos_video \
+    --task vos \
+    --video_mode \
+    --sample_rate 8 \
+    --expressions_per_seq 1 \
+    --max_sequences 5
 
 # Resume interrupted run
 python benchmark.py \
+    ... \
+    --checkpoint_json results/vos_video/checkpoint.json
+```
+
+### VOT (bbox IoU)
+
+```bash
+# Image mode
+python benchmark.py \
     --davis_root /path/to/davis \
     --model_id Qwen/Qwen3-VL-8B-Instruct \
-    --save_dir results/qwen3vl_8b \
-    --checkpoint_json results/qwen3vl_8b/checkpoint.json
+    --save_dir results/vot_image \
+    --task vot \
+    --sample_rate 8 \
+    --max_sequences 30
+
+# Video mode
+python benchmark.py \
+    --davis_root /path/to/davis \
+    --model_id Qwen/Qwen3-VL-8B-Instruct \
+    --save_dir results/vot_video \
+    --task vot \
+    --video_mode \
+    --sample_rate 8 \
+    --max_sequences 30
 ```
+
+### Input Modes
+
+| Flag | Description |
+|------|-------------|
+| *(default)* | **Image mode** — frames interleaved with text timestamps, 2D RoPE per frame. Model outputs `{"time": t, "bbox_2d": [...]}`. |
+| `--video_mode` | **Video mode** — all frames as a single `{"type":"video"}` block, 3D RoPE across the sequence. Model outputs `{"frame": i, "bbox_2d": [...]}`. This is the official Qwen3-VL evaluation method. |
+
+In both modes, only sampled frames (every `sample_rate`-th frame) are sent to the model. Evaluation and visualisation are performed on sampled frames only — no nearest-neighbour interpolation is applied. Frames the model skips score IoU/J = 0.
 
 **Outputs:**
 ```
-results/qwen3vl_8b/
-├── metrics.csv              ← per-sequence J, F, J&F, J-decay, J-variance, failure mode
-├── failure_analysis.csv
-├── summary.json             ← aggregate stats + model config
-├── checkpoint.json          ← resume support
+results/<run>/
+├── metrics.csv                          ← per-sequence metrics + failure mode
+├── summary.json                         ← aggregate stats + config
+├── checkpoint.json                      ← resume support
 ├── plots/
-│   ├── j_curves.png         ← J over time per sequence
-│   ├── failure_gallery.png  ← GT vs pred overlays
-│   └── aggregate_summary.png← 4-panel summary
-└── failure_cases/           ← per-sequence failure figures
+│   ├── j_curves.png / iou_curves.png
+│   └── aggregate_summary.png
+├── result_cases/                        ← VOT: per-sequence grids
+│   ├── <seq>__exp<id>__iou<x>__<MODE>.png
+│   └── <seq>__exp<id>__iou<x>__<MODE>__raw.txt
+└── failure_cases/                       ← VOS: per-sequence grids
+    ├── <seq>__exp<id>__<MODE>.png
+    └── <seq>__exp<id>__<MODE>__raw.txt
 ```
+
+The `__raw.txt` file contains the model's verbatim output for that sequence, useful for debugging parse failures and inspecting temporal consistency.
 
 ---
 
 ## Step 2: Run TAM Diagnostics (Arm 2 — Diagnostic)
 
 ```bash
-# Experiment 2: Temporal Collapse (fastest, most revealing)
+# Temporal Collapse (fastest, most revealing)
 python run_tam_experiments.py \
     --davis_root /path/to/davis \
     --model_id Qwen/Qwen3-VL-8B-Instruct \
@@ -114,7 +145,7 @@ python run_tam_experiments.py \
     --save_dir results/tam_collapse \
     --tam_submodule_path /path/to/submodules/TAM
 
-# Experiment 5: Prompt Temporal Binding (key for steerability analysis)
+# Prompt Temporal Binding
 python run_tam_experiments.py \
     --davis_root /path/to/davis \
     --model_id Qwen/Qwen3-VL-8B-Instruct \
@@ -135,88 +166,80 @@ python run_tam_experiments.py \
 - `*_frame_mass.png` — (tokens × frames) attention heatmap — reveals collapse
 - `*_centroid.png` — attention centroid trajectory vs GT — reveals drift
 - `*_binding_scores.png` — binding score per prompt — reveals steerability
-- `exp_<name>_results.json` — all scalar metrics for statistical analysis
+- `exp_<name>_results.json` — all scalar metrics
 
 ---
 
 ## Step 3: Compare Two Models
 
 ```bash
-# After running benchmark.py for two models:
 python compare_models.py \
-    --runs results/qwen3vl_8b results/qwen25vl_7b \
-    --names "Qwen3-VL-8B" "Qwen2.5-VL-7B" \
+    --runs results/vot_image results/vot_video \
+    --names "Image Mode" "Video Mode" \
     --save_dir results/comparison
 ```
 
 **Prints:**
 ```
-Metric                 Qwen3-VL-8B   Qwen2.5-VL-7B      Delta(A-B)
-────────────────────────────────────────────────────────────────────
-  J&F ↑                    0.3821          0.3540    +0.0281 ✓
-  Mean J ↑                 0.3612          0.3301    +0.0311 ✓
-  J-Decay ↑               -0.1823         -0.2441    +0.0618 ✓
-  J-Variance ↓             0.1203          0.1589    -0.0386 ✓
+Metric                 Image Mode    Video Mode      Delta(A-B)
+────────────────────────────────────────────────────────────────
+  Mean IoU ↑               0.2341          0.3012    +0.0671 ✓
+  Success@0.5 ↑            0.1823          0.2441    +0.0618 ✓
+  IoU-Decay ↑             -0.0821         -0.0412    +0.0409 ✓
   ...
 ```
-
-**Saves:**
-- `metric_comparison.png` — grouped bar chart
-- `j_decay_per_sequence.png` — per-sequence J-decay comparison
-- `failure_mode_comparison.png` — side-by-side failure mode pies
 
 ---
 
 ## Metrics Reference
 
-### Standard VOS Metrics (Ref-DAVIS)
+### VOS Metrics (Ref-DAVIS)
 | Metric | Description |
 |--------|-------------|
 | **J** | Region similarity (IoU) between predicted and GT mask |
-| **F** | Boundary F-measure (contour accuracy) |
-| **J&F** | Primary benchmark metric, mean of J and F |
-| **Success@0.5** | % frames with J > 0.5 |
+| **F** | Boundary F-measure |
+| **J&F** | Primary VOS metric |
+| **J-Decay** | Linear slope of J over time. Negative = losing track. |
+| **J-Variance** | Std of per-frame J. High = unstable tracking. |
 
-### Temporal Coherence Metrics (New)
+### VOT Metrics
 | Metric | Description |
 |--------|-------------|
-| **J-Decay** | Linear slope of J over time. Negative = losing track. Comparable across sequences (normalised). |
-| **J-Variance** | Std of per-frame J. High = unstable/oscillating tracking. |
-| **J-First / J-Last** | IoU on first vs last frame. Gap reveals long-term degradation. |
+| **Mean IoU** | Mean bbox IoU over sampled frames |
+| **Success@0.5 / @0.75** | % sampled frames with IoU above threshold |
+| **Precision@20** | % sampled frames with center error < 20px |
+| **IoU-Decay** | Linear slope of IoU over time |
+| **IoU-Variance** | Std of per-frame IoU |
 
-### TAM Diagnostic Metrics (Explanatory)
-| Metric | Experiment | Description |
-|--------|-----------|-------------|
-| **Collapse Rate** | Exp 2 | % tokens where >80% attention on single frame |
-| **Temporal Entropy** | Exp 2 | Normalised entropy of frame attention distribution |
-| **Mean Drift Error** | Exp 1 | Mean L2 distance between TAM centroid and GT centroid |
-| **Binding Score** | Exp 5 | Fraction of attention mass on prompt-targeted frames |
-| **Binding Std** | Exp 5 | Variability of binding across prompts (high = steerable) |
+### TAM Diagnostic Metrics
+| Metric | Description |
+|--------|-------------|
+| **Collapse Rate** | % tokens where >80% attention on a single frame |
+| **Mean Drift Error** | Mean L2 distance between TAM centroid and GT centroid |
+| **Binding Score** | Fraction of attention mass on prompt-targeted frames |
 
 ---
 
 ## Failure Modes
 
+Applied to both VOS (J-based) and VOT (IoU-based):
+
 | Mode | Detection | Meaning |
 |------|-----------|---------|
-| `SUCCESS` | mean J ≥ 0.5 | Model tracked correctly |
-| `NEVER_FOUND` | first-third J ≈ 0 | Never localized the object |
-| `LOST_TRACK` | J[0]>0.3, then 3+ consecutive frames near 0 | Initially tracked, then lost |
-| `PARTIAL_TRACK` | mean J in 0.05–0.4 | Partially correct but imprecise |
-| `TEMPORAL_COLLAPSE` | collapse_rate > 0.5 (TAM) | Attention ignores most frames |
-| `IDENTITY_SWAP` | sudden centroid jump | Switches to wrong object mid-sequence |
-| `ATTENTION_DRIFT` | mean_drift_error > 5px (TAM) | Attention wanders from object |
-| `UNSTABLE` | J-variance > 0.15 | Erratic tracking, no clear cause |
+| `SUCCESS` | mean ≥ 0.5 | Tracked correctly |
+| `NEVER_FOUND` | first-third mean ≈ 0 | Never localized the object |
+| `LOST_TRACK` | score[0] > 0.3, then 3+ consecutive frames near 0 | Initially tracked, then lost |
+| `PARTIAL_TRACK` | mean in 0.05–0.4 | Partially correct but imprecise |
+| `TEMPORAL_COLLAPSE` | collapse_rate > 0.5 (TAM, VOS only) | Attention ignores most frames |
+| `IDENTITY_SWAP` | sudden centroid jump (TAM, VOS only) | Switches to wrong object mid-sequence |
+| `ATTENTION_DRIFT` | mean_drift_error > 5px (TAM, VOS only) | Attention wanders from object |
+| `UNSTABLE` | variance > 0.15 | Erratic tracking, no clear cause |
 
 ---
 
 ## Notes
 
-- **Strategy `joint`**: All frames in one Qwen call. Fastest, most natural.
-- **Strategy `per_frame`**: One Qwen call per frame. Slowest, most controlled baseline.
-- **SAM2**: Not included by default. To add mask quality, wrap `box_to_mask` in
-  `qwen_vos_runner.py` with a SAM2 predictor using the box as prompt.
-- **Checkpoint**: The benchmark auto-saves `checkpoint.json` after each sequence
-  and can resume with `--checkpoint_json`.
-- **TAM path**: TAM must be in your Python path. Pass `--tam_submodule_path`
-  pointing to the directory containing `tam.py` and `qwen_utils.py`.
+- **`--video_mode`** is the official Qwen3-VL evaluation method (native `{"type":"video"}` block, 3D RoPE). Default image-interleaved mode uses 2D RoPE per frame with injected text timestamps.
+- **`--sample_rate N`** sends every Nth frame to the model. Lower = more temporal coverage, less spatial resolution per frame within the token budget. Evaluation is on sampled frames only.
+- **Checkpoint**: Auto-saves after each sequence. Resume with `--checkpoint_json`.
+- **TAM path**: Pass `--tam_submodule_path` pointing to the directory containing `tam.py`.

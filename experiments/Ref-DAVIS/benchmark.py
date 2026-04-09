@@ -162,10 +162,13 @@ def main():
     p.add_argument("--max_sequences", type=int, default=None,
                    help="Cap number of sequences (for debugging)")
     p.add_argument("--max_new_tokens", type=int, default=8192)
-    p.add_argument("--sample_rate", type=int, default=2,
+    p.add_argument("--sample_rate", type=int, default=8,
                    help="Send every Nth frame to model in joint mode (1=all frames, tends to collapse)")
     p.add_argument("--tam_submodule_path", default=None,
                    help="Path to TAM submodule directory")
+    p.add_argument("--video_mode", action="store_true",
+                   help="Use native video input (3D RoPE, frame-index output) instead of "
+                        "image-interleaved mode (2D RoPE, timestamp output)")
     p.add_argument("--compare_csv", default=None,
                    help="CSV from another model run for comparison table")
     p.add_argument("--sequences", nargs="*", default=None,
@@ -177,16 +180,15 @@ def main():
     # ── Setup ─────────────────────────────────────────────────────────────────
     os.makedirs(args.save_dir, exist_ok=True)
     os.makedirs(os.path.join(args.save_dir, "plots"), exist_ok=True)
-    if args.task == "vot":
-        os.makedirs(os.path.join(args.save_dir, "result_cases"), exist_ok=True)
-    else:
-        os.makedirs(os.path.join(args.save_dir, "failure_cases"), exist_ok=True)
+    os.makedirs(os.path.join(args.save_dir, "result_cases"), exist_ok=True)
+    os.makedirs(os.path.join(args.save_dir, "failure_cases"), exist_ok=True)
     if args.run_tam:
         os.makedirs(os.path.join(args.save_dir, "tam"), exist_ok=True)
 
     print(f"=== Ref-DAVIS Temporal Coherence Benchmark ===")
     print(f"  Model   : {args.model_id}")
     print(f"  Task    : {args.task.upper()}")
+    print(f"  Mode    : {'video (3D RoPE)' if args.video_mode else 'image-interleaved (2D RoPE)'}")
     print(f"  Dataset : {args.davis_root} ({args.split})")
     print(f"  Save    : {args.save_dir}")
     print(f"  TAM     : {args.run_tam}")
@@ -240,6 +242,7 @@ def main():
             model, processor,
             max_new_tokens=args.max_new_tokens,
             sample_rate=args.sample_rate,
+            video_mode=args.video_mode,
         )
     else:
         runner = QwenVOSRunner(
@@ -247,6 +250,7 @@ def main():
             strategy=args.strategy,
             max_new_tokens=args.max_new_tokens,
             sample_rate=args.sample_rate,
+            video_mode=args.video_mode,
         )
     classifier = FailureClassifier()
 
@@ -267,18 +271,30 @@ def main():
 
             # ── Run inference ─────────────────────────────────────────────
             t0 = time.time()
-            boxes = runner.run(frames, item.expression)
+            boxes, raw_output = runner.run(frames, item.expression)
             print(f"    Inference: {time.time() - t0:.1f}s  "
                   f"parsed {sum(b is not None for b in boxes)}/{len(boxes)} boxes")
 
             if args.task == "vot":
-                # ── VOT: bbox IoU metrics ─────────────────────────────────
+                # ── VOT: bbox IoU metrics (sampled frames only) ───────────
                 gt_boxes = item.gt_boxes
-                metrics = compute_vot_sequence_metrics(boxes, gt_boxes)
+                sr = args.sample_rate
+                metrics = compute_vot_sequence_metrics(
+                    boxes[::sr], gt_boxes[::sr]
+                )
                 print(f"    IoU={metrics['mean_iou']:.3f}  "
                       f"succ@0.5={metrics['success_rate_50']:.3f}  "
                       f"prec@20={metrics['precision_20']:.3f}  "
                       f"IoU-decay={metrics['iou_decay']:.3f}")
+
+                failure = classifier.classify_vot(
+                    seq_name=item.seq_name,
+                    exp_id=item.exp_id,
+                    expression=item.expression,
+                    metrics=metrics,
+                )
+                print(f"    Failure: {failure.primary_failure.value}  "
+                      f"flags={[f.value for f in failure.secondary_flags]}")
 
                 result = {
                     "seq_name": item.seq_name,
@@ -287,6 +303,7 @@ def main():
                     "obj_id": item.obj_id,
                     "num_frames": item.num_frames,
                     "metrics": metrics,
+                    "failure": failure.to_dict(),
                     "frames_pil": frames,
                     "gt_boxes": [list(b) if b else None for b in gt_boxes],
                     "boxes": [list(b) if b else None for b in boxes],
@@ -295,7 +312,14 @@ def main():
                 save_vot_result_case(
                     result,
                     save_dir=os.path.join(args.save_dir, "result_cases"),
+                    sample_rate=sr,
                 )
+                raw_path = os.path.join(
+                    args.save_dir, "result_cases",
+                    f"{item.seq_name}__exp{item.exp_id}__iou{metrics['mean_iou']:.3f}__{failure.primary_failure.value}__raw.txt"
+                )
+                with open(raw_path, "w") as f:
+                    f.write(raw_output)
 
             else:
                 # ── VOS: mask J&F metrics ─────────────────────────────────
@@ -347,6 +371,12 @@ def main():
                     save_dir=os.path.join(args.save_dir, "failure_cases"),
                     tam_result=tam_result_for_vis,
                 )
+                raw_path = os.path.join(
+                    args.save_dir, "failure_cases",
+                    f"{item.seq_name}__exp{item.exp_id}__{failure.primary_failure.value}__raw.txt"
+                )
+                with open(raw_path, "w") as f:
+                    f.write(raw_output)
 
             all_results.append(result)
 
@@ -380,7 +410,24 @@ def main():
         print(f"  Precision@20 : {agg['precision_20']:.4f}")
         print(f"  IoU-Decay    : {agg['iou_decay']:.4f}  (neg = losing track over time)")
         print(f"  IoU-Variance : {agg['iou_variance']:.4f}")
-        failure_summary = {"total": len(all_results)}
+
+        failure_counts = {}
+        for r in all_results:
+            mode = r.get("failure", {}).get("primary_failure", "UNKNOWN")
+            failure_counts[mode] = failure_counts.get(mode, 0) + 1
+        total = len(all_results)
+        failure_summary = {
+            "total": total,
+            "primary_distribution": {
+                k: {"count": v, "pct": 100 * v / total}
+                for k, v in failure_counts.items()
+            },
+            "success_rate": 100 * failure_counts.get("SUCCESS", 0) / total if total else 0,
+        }
+        print(f"\n=== Failure Mode Distribution ===")
+        for mode, info in sorted(failure_summary.get("primary_distribution", {}).items(),
+                                  key=lambda x: -x[1]["count"]):
+            print(f"  {mode:<22}: {info['count']:>3}  ({info['pct']:.1f}%)")
     else:
         agg = aggregate_metrics(metric_dicts)
         # Add collapse_rate to agg if TAM was run
@@ -435,6 +482,9 @@ def main():
                 "iou_last": m.get("iou_last"),
                 "mean_center_error": m.get("mean_center_error"),
                 "precision_20": m.get("precision_20"),
+                "primary_failure": r.get("failure", {}).get("primary_failure"),
+                "secondary_flags": "|".join(r.get("failure", {}).get("secondary_flags", [])),
+                "notes": r.get("failure", {}).get("notes"),
             })
         else:
             f = r.get("failure", {})
@@ -468,6 +518,7 @@ def main():
         "model_id": args.model_id,
         "task": args.task,
         "split": args.split,
+        "video_mode": args.video_mode,
         "strategy": args.strategy if args.task == "vos" else "joint",
         "expressions_per_seq": args.expressions_per_seq,
         "num_sequences": len(all_results),

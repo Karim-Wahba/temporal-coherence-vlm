@@ -400,6 +400,135 @@ def plot_temporal_binding(
 
 # ─── Save Individual Failure Case ─────────────────────────────────────────────
 
+def plot_iou_curves(
+    results: List[dict],
+    save_path: str,
+    title: str = "Per-Frame IoU over Time",
+    max_seqs: int = 20,
+):
+    """
+    Plot IoU over frame index for each sequence (VOT equivalent of plot_j_curves).
+    """
+    fig, ax = plt.subplots(figsize=(14, 6))
+    for r in results[:max_seqs]:
+        iou = np.array(r["metrics"]["iou_per_frame"])
+        ax.plot(iou, alpha=0.6, linewidth=1.2,
+                label=f"{r['seq_name']}[{r['exp_id']}]")
+
+    all_iou = [r["metrics"]["iou_per_frame"] for r in results if "metrics" in r]
+    if all_iou:
+        min_len = min(len(i) for i in all_iou)
+        mean_iou = np.mean([i[:min_len] for i in all_iou], axis=0)
+        ax.plot(mean_iou, "k--", linewidth=2.5, label="Mean IoU", zorder=10)
+
+    ax.axhline(0.5, color="gray", linestyle=":", linewidth=1, label="IoU=0.5 threshold")
+    ax.set_xlabel("Frame Index")
+    ax.set_ylabel("IoU")
+    ax.set_title(title)
+    ax.set_ylim(0, 1.05)
+    ax.legend(loc="upper right", fontsize=7, ncol=2)
+    fig.tight_layout()
+    fig.savefig(save_path, dpi=120)
+    plt.close(fig)
+
+
+def save_vot_result_case(
+    result: dict,
+    save_dir: str,
+    max_frames: int = 8,
+):
+    """
+    Save a multi-panel figure for a single VOT result:
+    sampled frames with GT bbox (green) and predicted bbox (red) overlaid.
+    """
+    os.makedirs(save_dir, exist_ok=True)
+    seq = result.get("seq_name", "seq")
+    exp = result.get("exp_id", "0")
+
+    frames = result.get("frames_pil", [])
+    gt_boxes = result.get("gt_boxes", [])
+    pred_boxes = result.get("boxes", [])
+    T = len(frames)
+    if T == 0:
+        return
+
+    n_show = min(max_frames, T)
+    sample_idx = np.linspace(0, T - 1, n_show, dtype=int)
+
+    fig, axes = plt.subplots(1, n_show, figsize=(n_show * 3, 4))
+    if n_show == 1:
+        axes = [axes]
+
+    iou_per_frame = result.get("metrics", {}).get("iou_per_frame", [])
+    for col, t in enumerate(sample_idx):
+        ax = axes[col]
+        frame_arr = np.array(frames[t])
+        gt_b = gt_boxes[t] if t < len(gt_boxes) else None
+        pred_b = pred_boxes[t] if t < len(pred_boxes) else None
+        frame_arr = _overlay_box(frame_arr, gt_b, color=(0, 200, 0), thickness=2)
+        frame_arr = _overlay_box(frame_arr, pred_b, color=(255, 50, 50), thickness=2)
+        iou_val = iou_per_frame[t] if t < len(iou_per_frame) else 0.0
+        ax.imshow(frame_arr)
+        ax.set_title(f"t={t} IoU={iou_val:.2f}", fontsize=7)
+        ax.axis("off")
+
+    exp_text = result.get("expression", "")[:60]
+    mean_iou = result.get("metrics", {}).get("mean_iou", 0.0)
+    fig.suptitle(
+        f"{seq} | exp={exp} | mean IoU={mean_iou:.3f}\n\"{exp_text}\"",
+        fontsize=10,
+    )
+    fig.tight_layout()
+
+    fname = f"{seq}__exp{exp}__iou{mean_iou:.3f}.png"
+    fig.savefig(os.path.join(save_dir, fname), dpi=100, bbox_inches="tight")
+    plt.close(fig)
+
+
+def plot_vot_aggregate_summary(
+    agg_metrics: dict,
+    save_path: str,
+    model_name: str = "Qwen3-VL-8B",
+):
+    """
+    2-panel summary for VOT: primary metrics bar + temporal coherence bar.
+    """
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+    fig.suptitle(f"VOT Benchmark Summary — {model_name}", fontsize=14)
+
+    # Panel 1: Primary metrics
+    ax = axes[0]
+    metric_keys = ["mean_iou", "success_rate_50", "success_rate_75", "precision_20"]
+    metric_labels = ["Mean IoU", "Success@50", "Success@75", "Precision@20"]
+    values = [agg_metrics.get(k, 0) for k in metric_keys]
+    bars = ax.bar(metric_labels, values,
+                  color=["#3498db", "#2ecc71", "#e74c3c", "#f39c12"])
+    ax.set_ylim(0, 1.0)
+    ax.set_title("Primary VOT Metrics")
+    for bar, val in zip(bars, values):
+        ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.02,
+                f"{val:.3f}", ha="center", va="bottom", fontsize=9)
+
+    # Panel 2: Temporal coherence metrics
+    ax = axes[1]
+    tc_keys = ["iou_decay", "iou_variance", "iou_first", "iou_last"]
+    tc_labels = ["IoU-Decay\n(neg=bad)", "IoU-Variance\n(high=bad)",
+                 "IoU First Frame", "IoU Last Frame"]
+    tc_values = [agg_metrics.get(k, 0) for k in tc_keys]
+    tc_colors = ["#e74c3c" if v < 0 else "#3498db" for v in tc_values]
+    bars2 = ax.bar(tc_labels, tc_values, color=tc_colors)
+    ax.axhline(0, color="black", linewidth=0.8)
+    ax.set_title("Temporal Coherence Metrics")
+    for bar, val in zip(bars2, tc_values):
+        ypos = val + 0.01 if val >= 0 else val - 0.04
+        ax.text(bar.get_x() + bar.get_width() / 2, ypos,
+                f"{val:.3f}", ha="center", va="bottom", fontsize=9)
+
+    fig.tight_layout()
+    fig.savefig(save_path, dpi=120)
+    plt.close(fig)
+
+
 def save_failure_case(
     result: dict,
     save_dir: str,

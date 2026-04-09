@@ -153,6 +153,110 @@ def compute_sequence_metrics(
     }
 
 
+# ─── VOT Metrics ─────────────────────────────────────────────────────────────
+
+def bbox_iou(pred: tuple, gt: tuple) -> float:
+    """
+    IoU between two (x1, y1, x2, y2) bounding boxes.
+    Returns 0.0 if either box is None or has zero area.
+    """
+    if pred is None or gt is None:
+        return 0.0
+    px1, py1, px2, py2 = pred
+    gx1, gy1, gx2, gy2 = gt
+
+    ix1 = max(px1, gx1)
+    iy1 = max(py1, gy1)
+    ix2 = min(px2, gx2)
+    iy2 = min(py2, gy2)
+
+    inter = max(0, ix2 - ix1) * max(0, iy2 - iy1)
+    area_p = max(0, px2 - px1) * max(0, py2 - py1)
+    area_g = max(0, gx2 - gx1) * max(0, gy2 - gy1)
+    union = area_p + area_g - inter
+    return float(inter) / float(union) if union > 0 else 0.0
+
+
+def center_error(pred: tuple, gt: tuple) -> float:
+    """Euclidean distance between box centers. Returns inf if either is None."""
+    if pred is None or gt is None:
+        return float("inf")
+    cx_p = (pred[0] + pred[2]) / 2.0
+    cy_p = (pred[1] + pred[3]) / 2.0
+    cx_g = (gt[0] + gt[2]) / 2.0
+    cy_g = (gt[1] + gt[3]) / 2.0
+    return float(np.sqrt((cx_p - cx_g) ** 2 + (cy_p - cy_g) ** 2))
+
+
+def compute_vot_sequence_metrics(
+    pred_boxes: list,   # list of Box (x1,y1,x2,y2) or None, length T
+    gt_boxes: list,     # list of Box (x1,y1,x2,y2) or None, length T
+) -> dict:
+    """
+    Compute per-sequence VOT metrics.
+
+    Returns
+    -------
+    dict with keys:
+        iou_per_frame, center_error_per_frame,
+        mean_iou, success_rate_50, success_rate_75,
+        iou_decay, iou_variance, iou_first, iou_last,
+        mean_center_error, precision_20 (fraction of frames with center_error < 20px),
+        num_frames
+    """
+    assert len(pred_boxes) == len(gt_boxes)
+
+    iou_scores = np.array([bbox_iou(p, g) for p, g in zip(pred_boxes, gt_boxes)])
+    ce_scores = np.array([center_error(p, g) for p, g in zip(pred_boxes, gt_boxes)])
+    # Replace inf with large number for averaging; track separately
+    ce_finite = np.where(np.isfinite(ce_scores), ce_scores, np.nan)
+
+    T = len(iou_scores)
+    x = np.arange(T, dtype=float) / max(T - 1, 1)
+    iou_slope = float(np.polyfit(x, iou_scores, 1)[0]) if T >= 2 else 0.0
+
+    return {
+        "iou_per_frame": iou_scores.tolist(),
+        "center_error_per_frame": ce_scores.tolist(),
+        "mean_iou": float(iou_scores.mean()),
+        "success_rate_50": float((iou_scores > 0.5).mean()),
+        "success_rate_75": float((iou_scores > 0.75).mean()),
+        "iou_decay": iou_slope,
+        "iou_variance": float(np.std(iou_scores)),
+        "iou_first": float(iou_scores[0]),
+        "iou_last": float(iou_scores[-1]),
+        "mean_center_error": float(np.nanmean(ce_finite)) if not np.all(np.isnan(ce_finite)) else float("inf"),
+        "precision_20": float(np.sum(ce_scores < 20) / T),
+        "num_frames": T,
+    }
+
+
+def aggregate_vot_metrics(per_sequence: list) -> dict:
+    """
+    Average scalar VOT metrics across sequences.
+
+    Parameters
+    ----------
+    per_sequence : list of dicts from compute_vot_sequence_metrics()
+    """
+    scalar_keys = [
+        "mean_iou", "success_rate_50", "success_rate_75",
+        "iou_decay", "iou_variance", "iou_first", "iou_last",
+        "mean_center_error", "precision_20",
+    ]
+    agg = {}
+    for k in scalar_keys:
+        vals = np.array([r[k] for r in per_sequence if k in r and np.isfinite(r[k])])
+        if len(vals) > 0:
+            agg[k] = float(vals.mean())
+            agg[f"{k}_std"] = float(vals.std())
+        else:
+            agg[k] = float("nan")
+            agg[f"{k}_std"] = float("nan")
+    agg["num_sequences"] = len(per_sequence)
+    return agg
+
+
 def aggregate_metrics(per_sequence: list) -> dict:
     """
     Average scalar metrics across all sequence×expression entries.

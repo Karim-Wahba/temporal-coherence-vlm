@@ -58,16 +58,24 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "diagnostics"))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "visualization"))
 
 from benchmark.ref_davis_loader import RefDAVISLoader
-from benchmark.metrics import compute_sequence_metrics, aggregate_metrics
+from benchmark.davis_vot_loader import DAVISVOTLoader
+from benchmark.metrics import (
+    compute_sequence_metrics, aggregate_metrics,
+    compute_vot_sequence_metrics, aggregate_vot_metrics,
+)
 from benchmark.qwen_vos_runner import QwenVOSRunner, box_to_mask
+from benchmark.qwen_vot_runner import QwenVOTRunner
 from diagnostics.failure_classifier import FailureClassifier
 from visualization.visualizer import (
     plot_j_curves,
+    plot_iou_curves,
     plot_tam_centroids,
     plot_frame_mass_heatmap,
     plot_failure_gallery,
     plot_aggregate_summary,
+    plot_vot_aggregate_summary,
     save_failure_case,
+    save_vot_result_case,
 )
 
 
@@ -143,8 +151,10 @@ def main():
     p.add_argument("--model_id", default="Qwen/Qwen3-VL-8B-Instruct")
     p.add_argument("--save_dir", default="results/benchmark")
     p.add_argument("--split", default="valid", choices=["train", "valid"])
+    p.add_argument("--task", default="vos", choices=["vos", "vot"],
+                   help="vos: mask J&F evaluation; vot: bbox IoU evaluation")
     p.add_argument("--strategy", default="joint", choices=["joint", "per_frame"],
-                   help="VOS inference strategy")
+                   help="VOS inference strategy (ignored for VOT)")
     p.add_argument("--run_tam", action="store_true",
                    help="Also run TAM diagnostics (slow, adds ~3x time per seq)")
     p.add_argument("--expressions_per_seq", type=int, default=1,
@@ -167,24 +177,36 @@ def main():
     # ── Setup ─────────────────────────────────────────────────────────────────
     os.makedirs(args.save_dir, exist_ok=True)
     os.makedirs(os.path.join(args.save_dir, "plots"), exist_ok=True)
-    os.makedirs(os.path.join(args.save_dir, "failure_cases"), exist_ok=True)
+    if args.task == "vot":
+        os.makedirs(os.path.join(args.save_dir, "result_cases"), exist_ok=True)
+    else:
+        os.makedirs(os.path.join(args.save_dir, "failure_cases"), exist_ok=True)
     if args.run_tam:
         os.makedirs(os.path.join(args.save_dir, "tam"), exist_ok=True)
 
     print(f"=== Ref-DAVIS Temporal Coherence Benchmark ===")
     print(f"  Model   : {args.model_id}")
+    print(f"  Task    : {args.task.upper()}")
     print(f"  Dataset : {args.davis_root} ({args.split})")
     print(f"  Save    : {args.save_dir}")
     print(f"  TAM     : {args.run_tam}")
 
     # ── Load dataset ──────────────────────────────────────────────────────────
     seq_filter = args.sequences
-    loader = RefDAVISLoader(
-        args.davis_root,
-        split=args.split,
-        expressions_per_seq=args.expressions_per_seq,
-        sequences=seq_filter,
-    )
+    if args.task == "vot":
+        loader = DAVISVOTLoader(
+            args.davis_root,
+            split=args.split,
+            expressions_per_seq=args.expressions_per_seq,
+            sequences=seq_filter,
+        )
+    else:
+        loader = RefDAVISLoader(
+            args.davis_root,
+            split=args.split,
+            expressions_per_seq=args.expressions_per_seq,
+            sequences=seq_filter,
+        )
     print(f"\nDataset: {len(loader)} items across {len(loader.sequence_names())} sequences")
 
     items = list(loader)
@@ -213,12 +235,19 @@ def main():
 
     # ── Load model ────────────────────────────────────────────────────────────
     model, processor = load_model(args.model_id)
-    runner = QwenVOSRunner(
-        model, processor,
-        strategy=args.strategy,
-        max_new_tokens=args.max_new_tokens,
-        sample_rate=args.sample_rate,
-    )
+    if args.task == "vot":
+        runner = QwenVOTRunner(
+            model, processor,
+            max_new_tokens=args.max_new_tokens,
+            sample_rate=args.sample_rate,
+        )
+    else:
+        runner = QwenVOSRunner(
+            model, processor,
+            strategy=args.strategy,
+            max_new_tokens=args.max_new_tokens,
+            sample_rate=args.sample_rate,
+        )
     classifier = FailureClassifier()
 
     # ── Main evaluation loop ──────────────────────────────────────────────────
@@ -235,66 +264,91 @@ def main():
         try:
             H, W = item.frame_size()
             frames = item.frames_pil
-            gt_masks = item.masks
 
-            # ── Run VOS inference ─────────────────────────────────────────
+            # ── Run inference ─────────────────────────────────────────────
             t0 = time.time()
-            boxes, pred_masks = runner.run_and_get_masks(
-                frames, item.expression, H, W
-            )
+            boxes = runner.run(frames, item.expression)
             print(f"    Inference: {time.time() - t0:.1f}s  "
                   f"parsed {sum(b is not None for b in boxes)}/{len(boxes)} boxes")
 
-            # ── Compute metrics ───────────────────────────────────────────
-            metrics = compute_sequence_metrics(pred_masks, gt_masks)
-            print(f"    J={metrics['mean_J']:.3f}  F={metrics['mean_F']:.3f}  "
-                  f"J&F={metrics['JF']:.3f}  J-decay={metrics['J_decay']:.3f}")
+            if args.task == "vot":
+                # ── VOT: bbox IoU metrics ─────────────────────────────────
+                gt_boxes = item.gt_boxes
+                metrics = compute_vot_sequence_metrics(boxes, gt_boxes)
+                print(f"    IoU={metrics['mean_iou']:.3f}  "
+                      f"succ@0.5={metrics['success_rate_50']:.3f}  "
+                      f"prec@20={metrics['precision_20']:.3f}  "
+                      f"IoU-decay={metrics['iou_decay']:.3f}")
 
-            # ── TAM diagnostics ───────────────────────────────────────────
-            tam_diagnostics = {}
-            if args.run_tam:
-                print("    Running TAM...")
-                tam_diagnostics = run_tam_diagnostics(
-                    model, processor, item, pred_masks,
-                    save_dir_tam=os.path.join(args.save_dir, "tam"),
-                    tam_submodule_path=args.tam_submodule_path,
+                result = {
+                    "seq_name": item.seq_name,
+                    "exp_id": item.exp_id,
+                    "expression": item.expression,
+                    "obj_id": item.obj_id,
+                    "num_frames": item.num_frames,
+                    "metrics": metrics,
+                    "frames_pil": frames,
+                    "gt_boxes": [list(b) if b else None for b in gt_boxes],
+                    "boxes": [list(b) if b else None for b in boxes],
+                }
+
+                save_vot_result_case(
+                    result,
+                    save_dir=os.path.join(args.save_dir, "result_cases"),
                 )
 
-            # ── Classify failure ──────────────────────────────────────────
-            failure = classifier.classify(
-                seq_name=item.seq_name,
-                exp_id=item.exp_id,
-                expression=item.expression,
-                metrics=metrics,
-                tam_collapse=tam_diagnostics.get("collapse"),
-                tam_drift=tam_diagnostics.get("drift"),
-            )
-            print(f"    Failure: {failure.primary_failure.value}  "
-                  f"flags={[f.value for f in failure.secondary_flags]}")
+            else:
+                # ── VOS: mask J&F metrics ─────────────────────────────────
+                gt_masks = item.masks
+                pred_masks = [box_to_mask(b, H, W) for b in boxes]
+                metrics = compute_sequence_metrics(pred_masks, gt_masks)
+                print(f"    J={metrics['mean_J']:.3f}  F={metrics['mean_F']:.3f}  "
+                      f"J&F={metrics['JF']:.3f}  J-decay={metrics['J_decay']:.3f}")
 
-            # ── Collect result ────────────────────────────────────────────
-            result = {
-                "seq_name": item.seq_name,
-                "exp_id": item.exp_id,
-                "expression": item.expression,
-                "obj_id": item.obj_id,
-                "num_frames": item.num_frames,
-                "metrics": metrics,
-                "failure": failure.to_dict(),
-                "frames_pil": frames,
-                "gt_masks": gt_masks,
-                "pred_masks": pred_masks,
-                "boxes": [list(b) if b else None for b in boxes],
-            }
+                # ── TAM diagnostics ───────────────────────────────────────
+                tam_diagnostics = {}
+                if args.run_tam:
+                    print("    Running TAM...")
+                    tam_diagnostics = run_tam_diagnostics(
+                        model, processor, item, pred_masks,
+                        save_dir_tam=os.path.join(args.save_dir, "tam"),
+                        tam_submodule_path=args.tam_submodule_path,
+                    )
+
+                # ── Classify failure ──────────────────────────────────────
+                failure = classifier.classify(
+                    seq_name=item.seq_name,
+                    exp_id=item.exp_id,
+                    expression=item.expression,
+                    metrics=metrics,
+                    tam_collapse=tam_diagnostics.get("collapse"),
+                    tam_drift=tam_diagnostics.get("drift"),
+                )
+                print(f"    Failure: {failure.primary_failure.value}  "
+                      f"flags={[f.value for f in failure.secondary_flags]}")
+
+                result = {
+                    "seq_name": item.seq_name,
+                    "exp_id": item.exp_id,
+                    "expression": item.expression,
+                    "obj_id": item.obj_id,
+                    "num_frames": item.num_frames,
+                    "metrics": metrics,
+                    "failure": failure.to_dict(),
+                    "frames_pil": frames,
+                    "gt_masks": gt_masks,
+                    "pred_masks": pred_masks,
+                    "boxes": [list(b) if b else None for b in boxes],
+                }
+
+                tam_result_for_vis = tam_diagnostics.get("tam_result") if args.run_tam else None
+                save_failure_case(
+                    result,
+                    save_dir=os.path.join(args.save_dir, "failure_cases"),
+                    tam_result=tam_result_for_vis,
+                )
+
             all_results.append(result)
-
-            # ── Save failure case visualization ───────────────────────────
-            tam_result_for_vis = tam_diagnostics.get("tam_result") if args.run_tam else None
-            save_failure_case(
-                result,
-                save_dir=os.path.join(args.save_dir, "failure_cases"),
-                tam_result=tam_result_for_vis,
-            )
 
         except Exception as e:
             print(f"    ERROR: {e}")
@@ -316,75 +370,94 @@ def main():
 
     # ── Aggregate metrics ──────────────────────────────────────────────────────
     metric_dicts = [r["metrics"] for r in all_results if "metrics" in r]
-    failure_dicts = [r["failure"] for r in all_results if "failure" in r]
 
-    agg = aggregate_metrics(metric_dicts)
-    # Add collapse_rate to agg if TAM was run
-    if args.run_tam:
-        collapse_rates = [r.get("failure", {}).get("collapse_rate", 0)
-                         for r in all_results]
-        agg["collapse_rate"] = float(np.mean(collapse_rates)) if collapse_rates else 0.0
+    if args.task == "vot":
+        agg = aggregate_vot_metrics(metric_dicts)
+        print(f"\n=== Aggregate VOT Results ===")
+        print(f"  Mean IoU     : {agg['mean_iou']:.4f}")
+        print(f"  Success@0.5  : {agg['success_rate_50']:.4f}")
+        print(f"  Success@0.75 : {agg['success_rate_75']:.4f}")
+        print(f"  Precision@20 : {agg['precision_20']:.4f}")
+        print(f"  IoU-Decay    : {agg['iou_decay']:.4f}  (neg = losing track over time)")
+        print(f"  IoU-Variance : {agg['iou_variance']:.4f}")
+        failure_summary = {"total": len(all_results)}
+    else:
+        agg = aggregate_metrics(metric_dicts)
+        # Add collapse_rate to agg if TAM was run
+        if args.run_tam:
+            collapse_rates = [r.get("failure", {}).get("collapse_rate", 0)
+                             for r in all_results]
+            agg["collapse_rate"] = float(np.mean(collapse_rates)) if collapse_rates else 0.0
 
-    failure_summary = classifier.summarize(
-        [type('FR', (), r["failure"])() if False else
-         type('FR', (), {**r["failure"],
-                          "primary_failure": type('FM', (), {"value": r["failure"]["primary_failure"]})(),
-                          "secondary_flags": []})()
-         for r in all_results if "failure" in r]
-    )
+        # Count failure modes
+        failure_counts = {}
+        for r in all_results:
+            mode = r.get("failure", {}).get("primary_failure", "UNKNOWN")
+            failure_counts[mode] = failure_counts.get(mode, 0) + 1
+        total = len(all_results)
+        failure_summary = {
+            "total": total,
+            "primary_distribution": {
+                k: {"count": v, "pct": 100 * v / total}
+                for k, v in failure_counts.items()
+            },
+            "success_rate": 100 * failure_counts.get("SUCCESS", 0) / total if total else 0,
+        }
 
-    # Simpler: just count directly
-    failure_counts = {}
-    for r in all_results:
-        mode = r.get("failure", {}).get("primary_failure", "UNKNOWN")
-        failure_counts[mode] = failure_counts.get(mode, 0) + 1
-    total = len(all_results)
-    failure_summary = {
-        "total": total,
-        "primary_distribution": {
-            k: {"count": v, "pct": 100 * v / total}
-            for k, v in failure_counts.items()
-        },
-        "success_rate": 100 * failure_counts.get("SUCCESS", 0) / total if total else 0,
-    }
-
-    print(f"\n=== Aggregate Results ===")
-    print(f"  J&F          : {agg['JF']:.4f}")
-    print(f"  Mean J       : {agg['mean_J']:.4f}")
-    print(f"  Mean F       : {agg['mean_F']:.4f}")
-    print(f"  J-Decay      : {agg['J_decay']:.4f}  (neg = losing track over time)")
-    print(f"  J-Variance   : {agg['J_variance']:.4f}")
-    print(f"  Success@0.5  : {agg['success_rate_50']:.4f}")
-    print(f"\n=== Failure Mode Distribution ===")
-    for mode, info in sorted(failure_summary["primary_distribution"].items(),
-                              key=lambda x: -x[1]["count"]):
-        print(f"  {mode:<22}: {info['count']:>3}  ({info['pct']:.1f}%)")
+        print(f"\n=== Aggregate VOS Results ===")
+        print(f"  J&F          : {agg['JF']:.4f}")
+        print(f"  Mean J       : {agg['mean_J']:.4f}")
+        print(f"  Mean F       : {agg['mean_F']:.4f}")
+        print(f"  J-Decay      : {agg['J_decay']:.4f}  (neg = losing track over time)")
+        print(f"  J-Variance   : {agg['J_variance']:.4f}")
+        print(f"  Success@0.5  : {agg['success_rate_50']:.4f}")
+        print(f"\n=== Failure Mode Distribution ===")
+        for mode, info in sorted(failure_summary.get("primary_distribution", {}).items(),
+                                  key=lambda x: -x[1]["count"]):
+            print(f"  {mode:<22}: {info['count']:>3}  ({info['pct']:.1f}%)")
 
     # ── Save CSV ──────────────────────────────────────────────────────────────
     rows = []
     for r in all_results:
         m = r.get("metrics", {})
-        f = r.get("failure", {})
-        rows.append({
-            "seq_name": r["seq_name"],
-            "exp_id": r["exp_id"],
-            "expression": r["expression"],
-            "num_frames": r["num_frames"],
-            "mean_J": m.get("mean_J"),
-            "mean_F": m.get("mean_F"),
-            "JF": m.get("JF"),
-            "J_decay": m.get("J_decay"),
-            "J_variance": m.get("J_variance"),
-            "J_first": m.get("J_first"),
-            "J_last": m.get("J_last"),
-            "success_rate_50": m.get("success_rate_50"),
-            "success_rate_75": m.get("success_rate_75"),
-            "primary_failure": f.get("primary_failure"),
-            "secondary_flags": "|".join(f.get("secondary_flags", [])),
-            "collapse_rate": f.get("collapse_rate"),
-            "mean_drift_error": f.get("mean_drift_error"),
-            "notes": f.get("notes"),
-        })
+        if args.task == "vot":
+            rows.append({
+                "seq_name": r["seq_name"],
+                "exp_id": r["exp_id"],
+                "expression": r["expression"],
+                "num_frames": r["num_frames"],
+                "mean_iou": m.get("mean_iou"),
+                "success_rate_50": m.get("success_rate_50"),
+                "success_rate_75": m.get("success_rate_75"),
+                "iou_decay": m.get("iou_decay"),
+                "iou_variance": m.get("iou_variance"),
+                "iou_first": m.get("iou_first"),
+                "iou_last": m.get("iou_last"),
+                "mean_center_error": m.get("mean_center_error"),
+                "precision_20": m.get("precision_20"),
+            })
+        else:
+            f = r.get("failure", {})
+            rows.append({
+                "seq_name": r["seq_name"],
+                "exp_id": r["exp_id"],
+                "expression": r["expression"],
+                "num_frames": r["num_frames"],
+                "mean_J": m.get("mean_J"),
+                "mean_F": m.get("mean_F"),
+                "JF": m.get("JF"),
+                "J_decay": m.get("J_decay"),
+                "J_variance": m.get("J_variance"),
+                "J_first": m.get("J_first"),
+                "J_last": m.get("J_last"),
+                "success_rate_50": m.get("success_rate_50"),
+                "success_rate_75": m.get("success_rate_75"),
+                "primary_failure": f.get("primary_failure"),
+                "secondary_flags": "|".join(f.get("secondary_flags", [])),
+                "collapse_rate": f.get("collapse_rate"),
+                "mean_drift_error": f.get("mean_drift_error"),
+                "notes": f.get("notes"),
+            })
     df = pd.DataFrame(rows)
     csv_path = os.path.join(args.save_dir, "metrics.csv")
     df.to_csv(csv_path, index=False)
@@ -393,8 +466,9 @@ def main():
     # ── Save summary JSON ─────────────────────────────────────────────────────
     summary = {
         "model_id": args.model_id,
+        "task": args.task,
         "split": args.split,
-        "strategy": args.strategy,
+        "strategy": args.strategy if args.task == "vos" else "joint",
         "expressions_per_seq": args.expressions_per_seq,
         "num_sequences": len(all_results),
         "aggregate_metrics": agg,
@@ -407,21 +481,33 @@ def main():
     print("Generating plots...")
     plots_dir = os.path.join(args.save_dir, "plots")
 
-    plot_j_curves(
-        all_results,
-        os.path.join(plots_dir, "j_curves.png"),
-        title=f"Per-Frame J over Time — {args.model_id}",
-    )
-    plot_failure_gallery(
-        all_results,
-        os.path.join(plots_dir, "failure_gallery.png"),
-    )
-    plot_aggregate_summary(
-        agg,
-        failure_summary,
-        os.path.join(plots_dir, "aggregate_summary.png"),
-        model_name=args.model_id,
-    )
+    if args.task == "vos":
+        plot_j_curves(
+            all_results,
+            os.path.join(plots_dir, "j_curves.png"),
+            title=f"Per-Frame J over Time — {args.model_id}",
+        )
+        plot_failure_gallery(
+            all_results,
+            os.path.join(plots_dir, "failure_gallery.png"),
+        )
+        plot_aggregate_summary(
+            agg,
+            failure_summary,
+            os.path.join(plots_dir, "aggregate_summary.png"),
+            model_name=args.model_id,
+        )
+    else:
+        plot_iou_curves(
+            all_results,
+            os.path.join(plots_dir, "iou_curves.png"),
+            title=f"Per-Frame IoU over Time — {args.model_id}",
+        )
+        plot_vot_aggregate_summary(
+            agg,
+            os.path.join(plots_dir, "aggregate_summary.png"),
+            model_name=args.model_id,
+        )
 
     # ── Comparison table ──────────────────────────────────────────────────────
     if args.compare_csv:
@@ -431,12 +517,16 @@ def main():
 
 
 def _print_comparison_table(csv_a: str, csv_b: str, model_a_name: str):
-    """Print a side-by-side comparison of two model CSVs."""
+    """Print a side-by-side comparison of two model CSVs (auto-detects VOS vs VOT)."""
     df_a = pd.read_csv(csv_a)
     df_b = pd.read_csv(csv_b)
 
-    metrics = ["mean_J", "mean_F", "JF", "J_decay", "J_variance",
-               "success_rate_50", "success_rate_75"]
+    if "mean_iou" in df_a.columns:
+        metrics = ["mean_iou", "success_rate_50", "success_rate_75",
+                   "iou_decay", "iou_variance", "precision_20", "mean_center_error"]
+    else:
+        metrics = ["mean_J", "mean_F", "JF", "J_decay", "J_variance",
+                   "success_rate_50", "success_rate_75"]
 
     print(f"\n{'Metric':<22} {'Model A':>12} {'Model B':>12} {'Delta':>10}")
     print("-" * 60)

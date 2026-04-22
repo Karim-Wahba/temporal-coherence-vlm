@@ -76,6 +76,11 @@ from visualization.visualizer import (
     plot_vot_aggregate_summary,
     save_failure_case,
     save_vot_result_case,
+    plot_tam_summary_grid,
+    plot_tam_selected_words,
+    save_tam_word_strips,
+    plot_tam_coherence_summary,
+    plot_gam_over_time,
 )
 
 
@@ -95,36 +100,108 @@ def load_model(model_id: str, device: str = "auto"):
 def run_tam_diagnostics(
     model, processor, item, pred_masks, save_dir_tam: str,
     tam_submodule_path: Optional[str] = None,
+    tam_result: Optional[dict] = None,
+    gt_masks_override: Optional[list] = None,
+    video_mode: bool = False,
 ) -> dict:
-    """Run TAM diagnostics for one sequence item."""
-    from diagnostics.tam_runner import TAMRunner
-    from diagnostics.tam_analyzer import attention_drift, temporal_collapse
+    """Run TAM diagnostics for one sequence item.
 
-    tam_runner = TAMRunner(model, processor, tam_submodule_path=tam_submodule_path)
+    Parameters
+    ----------
+    tam_result : dict or None
+        Pre-computed TAM result from run_with_tam() on the inference pass.
+        If None, a separate forward pass is run with a descriptive prompt.
+    gt_masks_override : list or None
+        GT masks aligned to the frames in tam_result (e.g. item.masks[::sr]).
+        If None, item.masks is used directly.
 
-    # Use a simple describe-the-object prompt for TAM (not bbox prompt)
-    tam_prompt = f"Describe where '{item.expression}' is located in each frame of this video."
+    Saves:
+      <seq_prefix>_frame_mass.png        — tokens × frames attention-mass heatmap
+      <seq_prefix>_centroid.png          — attention centroid vs GT centroid
+      <seq_prefix>_coherence.png         — Pearson coherence plot (target noun + all words)
+      <seq_prefix>_gam.png               — GT Attention Mass over time
+      <seq_prefix>_tam_summary_grid.png  — all words × frames overlay grid
+      <seq_prefix>_tam_selected_words.png — meaningful words × frames overlay grid
+      <seq_prefix>_words/               — per-word horizontal frame strips
+    """
+    from diagnostics.tam_analyzer import (
+        attention_drift, temporal_collapse,
+        pearson_temporal_coherence, pearson_coherence_in_gt_region,
+        attention_mass_in_gt,
+    )
 
-    try:
-        tam_result = tam_runner.run(
-            frames_pil=item.frames_pil,
-            expression=tam_prompt,
-            max_new_tokens=128,
-        )
-    except Exception as e:
-        print(f"    TAM failed: {e}")
-        return {}
+    if tam_result is None:
+        from diagnostics.tam_runner import TAMRunner
+        tam_runner = TAMRunner(model, processor, tam_submodule_path=tam_submodule_path)
+        if video_mode:
+            tam_prompt = (
+                f'Given the query "{item.expression}", for each frame, detect and localize '
+                f'the visual content described in JSON format. If not present, skip. '
+                f'Each entry must have a unique frame index. '
+                f'Output Format: [{{"frame": 0, "bbox_2d": [x_min, y_min, x_max, y_max], "label": "..."}}]'
+            )
+        else:
+            tam_prompt = (
+                f'Given the query "{item.expression}", for each frame, detect and localize '
+                f'the visual content described in JSON format. If not present, skip. '
+                f'Output Format: [{{"time": 0.0, "bbox_2d": [x_min, y_min, x_max, y_max], "label": ""}}, ...]'
+            )
+        try:
+            tam_result = tam_runner.run(
+                frames_pil=item.frames_pil,
+                expression=tam_prompt,
+                max_new_tokens=128,
+            )
+        except Exception as e:
+            print(f"    TAM failed: {e}")
+            return {}
+
+    # GT masks to use for region-based metrics — caller provides the subset
+    # that aligns with the frames TAM actually saw (e.g. item.masks[::sr]).
+    gt_masks = gt_masks_override if gt_masks_override is not None else item.masks
 
     H, W = item.frame_size()
     drift_result = attention_drift(
         tam_result,
-        gt_masks=item.masks,
+        gt_masks=gt_masks,
         frame_size=(H, W),
     )
     collapse_result = temporal_collapse(tam_result)
 
-    # Save TAM plots
+    # ── Pearson temporal coherence (full frame) ───────────────────────────────
+    try:
+        coherence_result = pearson_temporal_coherence(tam_result)
+        coherence_score = coherence_result.get("coherence_score")
+        print(f"    Temporal coherence (full): {coherence_score:.4f}"
+              f"  (target: \"{coherence_result.get('target_word')}\""
+              f", {tam_result['vision_shape'][0]} frames)")
+    except Exception as e:
+        print(f"    Pearson coherence failed: {e}")
+        coherence_result = {}
+        coherence_score = None
+
+    # ── Pearson temporal coherence (inside GT region) ─────────────────────────
+    gt_coherence_result = {}
+    coherence_score_in_gt = None
+    try:
+        if coherence_result and gt_masks:
+            gt_coherence_result = pearson_coherence_in_gt_region(
+                coherence_result=coherence_result,
+                gt_masks=gt_masks,
+                frame_size=item.frame_size(),
+                vision_shape=tam_result["vision_shape"],
+            )
+            coherence_score_in_gt = gt_coherence_result.get("target_coherence_in_gt")
+            print(f"    Temporal coherence (in GT): {coherence_score_in_gt:.4f}"
+                  if coherence_score_in_gt is not None
+                  else "    Temporal coherence (in GT): N/A")
+    except Exception as e:
+        print(f"    Pearson coherence in GT failed: {e}")
+
+    # ── Save TAM plots ────────────────────────────────────────────────────────
     seq_prefix = f"{item.seq_name}_exp{item.exp_id}"
+    frames_for_vis = tam_result.get("frames_pil", item.frames_pil)
+
     plot_frame_mass_heatmap(
         tam_result,
         os.path.join(save_dir_tam, f"{seq_prefix}_frame_mass.png"),
@@ -133,15 +210,98 @@ def run_tam_diagnostics(
     )
     plot_tam_centroids(
         drift_result,
-        item.frames_pil,
+        frames_for_vis,
         os.path.join(save_dir_tam, f"{seq_prefix}_centroid.png"),
         seq_name=item.seq_name,
     )
+
+    # ── GT Attention Mass (GAM) ───────────────────────────────────────────────
+    gam_result = {}
+    try:
+        if coherence_result and gt_masks:
+            gam_result = attention_mass_in_gt(
+                coherence_result=coherence_result,
+                gt_masks=gt_masks,
+                frame_size=item.frame_size(),
+                vision_shape=tam_result["vision_shape"],
+            )
+            print(f"    GAM mean={gam_result['mean_gam']:.3f}  "
+                  f"decay={gam_result['gam_decay']:+.4f}/frame  "
+                  f"lost={gam_result['lost_track_rate']:.1%}")
+    except Exception as e:
+        print(f"    GAM failed: {e}")
+
+    # ── New: Pearson coherence plot (full-frame + in-GT overlay) ─────────────
+    if coherence_result:
+        try:
+            plot_tam_coherence_summary(
+                coherence_result,
+                os.path.join(save_dir_tam, f"{seq_prefix}_coherence.png"),
+                seq_name=item.seq_name,
+                expression=item.expression,
+                gt_coherence_result=gt_coherence_result if gt_coherence_result else None,
+            )
+        except Exception as e:
+            print(f"    coherence plot failed: {e}")
+
+    # ── New: GAM over time plot ───────────────────────────────────────────────
+    if gam_result:
+        try:
+            plot_gam_over_time(
+                gam_result,
+                os.path.join(save_dir_tam, f"{seq_prefix}_gam.png"),
+                seq_name=item.seq_name,
+                expression=item.expression,
+                target_word=coherence_result.get("target_word", ""),
+            )
+        except Exception as e:
+            print(f"    GAM plot failed: {e}")
+
+    # ── New: summary grid (all words × frames) ────────────────────────────────
+    if coherence_result:
+        try:
+            plot_tam_summary_grid(
+                coherence_result,
+                frames_for_vis,
+                os.path.join(save_dir_tam, f"{seq_prefix}_tam_summary_grid.png"),
+                seq_name=item.seq_name,
+                expression=item.expression,
+            )
+        except Exception as e:
+            print(f"    TAM summary grid failed: {e}")
+
+    # ── New: selected meaningful words × frames grid ──────────────────────────
+    if coherence_result:
+        try:
+            plot_tam_selected_words(
+                coherence_result,
+                frames_for_vis,
+                os.path.join(save_dir_tam, f"{seq_prefix}_tam_selected_words.png"),
+                seq_name=item.seq_name,
+            )
+        except Exception as e:
+            print(f"    TAM selected words failed: {e}")
+
+    # ── New: per-word horizontal frame strips ─────────────────────────────────
+    if coherence_result:
+        try:
+            words_dir = os.path.join(save_dir_tam, f"{seq_prefix}_words")
+            save_tam_word_strips(coherence_result, frames_for_vis, words_dir)
+        except Exception as e:
+            print(f"    TAM word strips failed: {e}")
 
     return {
         "tam_result": tam_result,
         "drift": drift_result,
         "collapse": collapse_result,
+        "coherence": coherence_result,
+        "coherence_score": coherence_score,
+        "gt_coherence": gt_coherence_result,
+        "coherence_score_in_gt": coherence_score_in_gt,
+        "gam": gam_result,
+        "mean_gam": gam_result.get("mean_gam"),
+        "gam_decay": gam_result.get("gam_decay"),
+        "lost_track_rate_gam": gam_result.get("lost_track_rate"),
     }
 
 
@@ -151,7 +311,7 @@ def main():
     p.add_argument("--model_id", default="Qwen/Qwen3-VL-8B-Instruct")
     p.add_argument("--save_dir", default="results/benchmark")
     p.add_argument("--split", default="valid", choices=["train", "valid"])
-    p.add_argument("--task", default="vos", choices=["vos", "vot"],
+    p.add_argument("--task", default="vot", choices=["vos", "vot"],
                    help="vos: mask J&F evaluation; vot: bbox IoU evaluation")
     p.add_argument("--strategy", default="joint", choices=["joint", "per_frame"],
                    help="VOS inference strategy (ignored for VOT)")
@@ -269,16 +429,22 @@ def main():
             H, W = item.frame_size()
             frames = item.frames_pil
 
-            # ── Run inference ─────────────────────────────────────────────
+            # ── Run inference (+ TAM on same pass if requested) ──────────
             t0 = time.time()
-            boxes, raw_output = runner.run(frames, item.expression)
+            sr = args.sample_rate
+            precomputed_tam = None
+            if args.run_tam:
+                boxes, raw_output, precomputed_tam = runner.run_with_tam(
+                    frames, item.expression
+                )
+            else:
+                boxes, raw_output = runner.run(frames, item.expression)
             print(f"    Inference: {time.time() - t0:.1f}s  "
                   f"parsed {sum(b is not None for b in boxes)}/{len(boxes)} boxes")
 
             if args.task == "vot":
                 # ── VOT: bbox IoU metrics (sampled frames only) ───────────
                 gt_boxes = item.gt_boxes
-                sr = args.sample_rate
                 metrics = compute_vot_sequence_metrics(
                     boxes[::sr], gt_boxes[::sr]
                 )
@@ -321,6 +487,25 @@ def main():
                 with open(raw_path, "w") as f:
                     f.write(raw_output)
 
+                # ── TAM diagnostics (VOT) ─────────────────────────────────
+                tam_diagnostics = {}
+                if args.run_tam:
+                    # GT masks aligned to the frames TAM saw (sampled subset)
+                    tam_gt_masks = item.masks[::sr]
+                    tam_diagnostics = run_tam_diagnostics(
+                        model, processor, item, pred_masks=None,
+                        save_dir_tam=os.path.join(args.save_dir, "tam"),
+                        tam_submodule_path=args.tam_submodule_path,
+                        tam_result=precomputed_tam,
+                        gt_masks_override=tam_gt_masks,
+                        video_mode=args.video_mode,
+                    )
+                    result["coherence_score"] = tam_diagnostics.get("coherence_score")
+                    result["coherence_score_in_gt"] = tam_diagnostics.get("coherence_score_in_gt")
+                    result["mean_gam"] = tam_diagnostics.get("mean_gam")
+                    result["gam_decay"] = tam_diagnostics.get("gam_decay")
+                    result["lost_track_rate_gam"] = tam_diagnostics.get("lost_track_rate_gam")
+
             else:
                 # ── VOS: mask J&F metrics ─────────────────────────────────
                 gt_masks = item.masks
@@ -332,11 +517,15 @@ def main():
                 # ── TAM diagnostics ───────────────────────────────────────
                 tam_diagnostics = {}
                 if args.run_tam:
-                    print("    Running TAM...")
+                    # GT masks aligned to the frames TAM saw (sampled subset)
+                    tam_gt_masks = item.masks[::sr]
                     tam_diagnostics = run_tam_diagnostics(
                         model, processor, item, pred_masks,
                         save_dir_tam=os.path.join(args.save_dir, "tam"),
                         tam_submodule_path=args.tam_submodule_path,
+                        tam_result=precomputed_tam,
+                        gt_masks_override=tam_gt_masks,
+                        video_mode=args.video_mode,
                     )
 
                 # ── Classify failure ──────────────────────────────────────
@@ -364,6 +553,13 @@ def main():
                     "pred_masks": pred_masks,
                     "boxes": [list(b) if b else None for b in boxes],
                 }
+
+                if args.run_tam:
+                    result["coherence_score"] = tam_diagnostics.get("coherence_score")
+                    result["coherence_score_in_gt"] = tam_diagnostics.get("coherence_score_in_gt")
+                    result["mean_gam"] = tam_diagnostics.get("mean_gam")
+                    result["gam_decay"] = tam_diagnostics.get("gam_decay")
+                    result["lost_track_rate_gam"] = tam_diagnostics.get("lost_track_rate_gam")
 
                 tam_result_for_vis = tam_diagnostics.get("tam_result") if args.run_tam else None
                 save_failure_case(
@@ -403,6 +599,29 @@ def main():
 
     if args.task == "vot":
         agg = aggregate_vot_metrics(metric_dicts)
+
+        if args.run_tam:
+            coherence_scores = [r.get("coherence_score") for r in all_results
+                                if r.get("coherence_score") is not None]
+            agg["mean_coherence"] = float(np.mean(coherence_scores)) if coherence_scores else None
+
+            coherence_scores_gt = [r.get("coherence_score_in_gt") for r in all_results
+                                   if r.get("coherence_score_in_gt") is not None]
+            agg["mean_coherence_in_gt"] = (float(np.mean(coherence_scores_gt))
+                                           if coherence_scores_gt else None)
+
+            gam_vals = [r.get("mean_gam") for r in all_results
+                        if r.get("mean_gam") is not None]
+            agg["mean_gam"] = float(np.mean(gam_vals)) if gam_vals else None
+
+            gam_decays = [r.get("gam_decay") for r in all_results
+                          if r.get("gam_decay") is not None]
+            agg["mean_gam_decay"] = float(np.mean(gam_decays)) if gam_decays else None
+
+            ltr = [r.get("lost_track_rate_gam") for r in all_results
+                   if r.get("lost_track_rate_gam") is not None]
+            agg["mean_lost_track_rate_gam"] = float(np.mean(ltr)) if ltr else None
+
         print(f"\n=== Aggregate VOT Results ===")
         print(f"  Mean IoU     : {agg['mean_iou']:.4f}")
         print(f"  Success@0.5  : {agg['success_rate_50']:.4f}")
@@ -410,6 +629,14 @@ def main():
         print(f"  Precision@20 : {agg['precision_20']:.4f}")
         print(f"  IoU-Decay    : {agg['iou_decay']:.4f}  (neg = losing track over time)")
         print(f"  IoU-Variance : {agg['iou_variance']:.4f}")
+        if args.run_tam and agg.get("mean_coherence") is not None:
+            print(f"  Coherence    : {agg['mean_coherence']:.4f}  (Pearson, full frame)")
+        if args.run_tam and agg.get("mean_coherence_in_gt") is not None:
+            print(f"  Coherence GT : {agg['mean_coherence_in_gt']:.4f}  (Pearson, inside GT box)")
+        if args.run_tam and agg.get("mean_gam") is not None:
+            print(f"  Mean GAM     : {agg['mean_gam']:.4f}  (attention mass on-target)")
+            print(f"  GAM decay    : {agg['mean_gam_decay']:+.5f}/frame  (neg = losing track)")
+            print(f"  Lost-track   : {agg['mean_lost_track_rate_gam']:.1%}  (frames w/ GAM < 0.25)")
 
         failure_counts = {}
         for r in all_results:
@@ -430,11 +657,32 @@ def main():
             print(f"  {mode:<22}: {info['count']:>3}  ({info['pct']:.1f}%)")
     else:
         agg = aggregate_metrics(metric_dicts)
-        # Add collapse_rate to agg if TAM was run
+        # Add TAM-derived aggregate metrics if TAM was run
         if args.run_tam:
             collapse_rates = [r.get("failure", {}).get("collapse_rate", 0)
                              for r in all_results]
             agg["collapse_rate"] = float(np.mean(collapse_rates)) if collapse_rates else 0.0
+
+            coherence_scores = [r.get("coherence_score") for r in all_results
+                                if r.get("coherence_score") is not None]
+            agg["mean_coherence"] = float(np.mean(coherence_scores)) if coherence_scores else None
+
+            coherence_scores_gt = [r.get("coherence_score_in_gt") for r in all_results
+                                   if r.get("coherence_score_in_gt") is not None]
+            agg["mean_coherence_in_gt"] = (float(np.mean(coherence_scores_gt))
+                                           if coherence_scores_gt else None)
+
+            gam_vals = [r.get("mean_gam") for r in all_results
+                        if r.get("mean_gam") is not None]
+            agg["mean_gam"] = float(np.mean(gam_vals)) if gam_vals else None
+
+            gam_decays = [r.get("gam_decay") for r in all_results
+                          if r.get("gam_decay") is not None]
+            agg["mean_gam_decay"] = float(np.mean(gam_decays)) if gam_decays else None
+
+            ltr = [r.get("lost_track_rate_gam") for r in all_results
+                   if r.get("lost_track_rate_gam") is not None]
+            agg["mean_lost_track_rate_gam"] = float(np.mean(ltr)) if ltr else None
 
         # Count failure modes
         failure_counts = {}
@@ -458,6 +706,14 @@ def main():
         print(f"  J-Decay      : {agg['J_decay']:.4f}  (neg = losing track over time)")
         print(f"  J-Variance   : {agg['J_variance']:.4f}")
         print(f"  Success@0.5  : {agg['success_rate_50']:.4f}")
+        if args.run_tam and agg.get("mean_coherence") is not None:
+            print(f"  Coherence    : {agg['mean_coherence']:.4f}  (Pearson, full frame)")
+        if args.run_tam and agg.get("mean_coherence_in_gt") is not None:
+            print(f"  Coherence GT : {agg['mean_coherence_in_gt']:.4f}  (Pearson, inside GT box)")
+        if args.run_tam and agg.get("mean_gam") is not None:
+            print(f"  Mean GAM     : {agg['mean_gam']:.4f}  (attention mass on-target)")
+            print(f"  GAM decay    : {agg['mean_gam_decay']:+.5f}/frame  (neg = losing track)")
+            print(f"  Lost-track   : {agg['mean_lost_track_rate_gam']:.1%}  (frames w/ GAM < 0.25)")
         print(f"\n=== Failure Mode Distribution ===")
         for mode, info in sorted(failure_summary.get("primary_distribution", {}).items(),
                                   key=lambda x: -x[1]["count"]):
@@ -484,6 +740,11 @@ def main():
                 "precision_20": m.get("precision_20"),
                 "primary_failure": r.get("failure", {}).get("primary_failure"),
                 "secondary_flags": "|".join(r.get("failure", {}).get("secondary_flags", [])),
+                "coherence_score": r.get("coherence_score"),
+                "coherence_score_in_gt": r.get("coherence_score_in_gt"),
+                "mean_gam": r.get("mean_gam"),
+                "gam_decay": r.get("gam_decay"),
+                "lost_track_rate_gam": r.get("lost_track_rate_gam"),
                 "notes": r.get("failure", {}).get("notes"),
             })
         else:
@@ -506,6 +767,11 @@ def main():
                 "secondary_flags": "|".join(f.get("secondary_flags", [])),
                 "collapse_rate": f.get("collapse_rate"),
                 "mean_drift_error": f.get("mean_drift_error"),
+                "coherence_score": r.get("coherence_score"),
+                "coherence_score_in_gt": r.get("coherence_score_in_gt"),
+                "mean_gam": r.get("mean_gam"),
+                "gam_decay": r.get("gam_decay"),
+                "lost_track_rate_gam": r.get("lost_track_rate_gam"),
                 "notes": f.get("notes"),
             })
     df = pd.DataFrame(rows)

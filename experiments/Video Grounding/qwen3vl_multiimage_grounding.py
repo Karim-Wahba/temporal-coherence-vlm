@@ -34,7 +34,6 @@ def process_davis_locally(sequence_name, prompt_text, sample_rate=2):
     # 2. Build the Interleaved Message List
     content_list = []
     for i, frame_path in enumerate(sampled_frames):
-        # KEY FIX: Use actual frame index, not sampled index
         actual_frame_idx = i * sample_rate
         timestamp = actual_frame_idx / 24.0  # DAVIS is 24 FPS
         

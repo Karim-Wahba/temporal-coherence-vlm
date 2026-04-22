@@ -24,10 +24,10 @@ from typing import List, Optional, Tuple
 import cv2
 import numpy as np
 from PIL import Image
+from tqdm import tqdm
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parents[3] / 'submodules' / 'TAM'))
-
+sys.path.insert(0, str(Path(__file__).resolve().parents[3] / 'submodules' / 'TAM'))
 
 from tam import TAM
 from qwen_utils import process_vision_info
@@ -198,7 +198,7 @@ class TAMRunner:
 
         with tempfile.TemporaryDirectory() as tmpdir:
             all_gen_ids = generated_ids[0].cpu().tolist()
-            for i in range(len(logits)):
+            for i in tqdm(range(len(logits)), desc="    TAM tokens", leave=False):
                 out_path = os.path.join(tmpdir, f"{i}.jpg")
                 img_map = TAM(
                     all_gen_ids,
@@ -211,6 +211,7 @@ class TAMRunner:
                     i,
                     raw_map_records,
                     False,
+                    skip_latex=True,
                 )
                 tam_maps.append(img_map if isinstance(img_map, np.ndarray) else None)
 
@@ -232,3 +233,148 @@ class TAMRunner:
             "vision_shape": vision_shape, # (T, H_tam, W_tam)
             "frames_pil": frames_pil[:T],
         }
+
+
+def extract_tam_from_generation(
+    inputs,
+    outputs,
+    sampled_frames,
+    model,
+    processor,
+) -> dict:
+    """
+    Extract TAM attention maps from an already-completed generation.
+
+    Use this to run TAM diagnostics on the same forward pass as bbox
+    generation — the attention maps then explain the actual predictions
+    rather than a separate descriptive prompt.
+
+    Parameters
+    ----------
+    inputs : BatchFeature
+        Processor output that was fed to model.generate (on model device).
+        Must contain video_grid_thw (video mode) or image_grid_thw (image mode).
+    outputs : GenerateDecoderOnlyOutput
+        Output of model.generate(..., output_hidden_states=True,
+        return_dict_in_generate=True).
+    sampled_frames : List[PIL.Image]
+        The frames that were passed to the model (used for visualization).
+    model : Qwen3VLForConditionalGeneration
+    processor : AutoProcessor
+
+    Returns
+    -------
+    dict with same keys as TAMRunner.run():
+        gen_text, gen_tokens, gen_ids, tam_maps, frame_mass, vision_shape, frames_pil
+    """
+    import torch
+
+    logits = [model.lm_head(feats[-1]) for feats in outputs.hidden_states]
+    generated_ids = outputs.sequences
+    input_len = inputs.input_ids.shape[1]
+    gen_ids = generated_ids[0][input_len:].cpu().tolist()
+    gen_tokens = [
+        processor.tokenizer.decode([t], skip_special_tokens=False)
+        for t in gen_ids
+    ]
+    gen_text = processor.tokenizer.decode(gen_ids, skip_special_tokens=True)
+
+    token_ids = inputs.input_ids[0].cpu().tolist()
+    token_strs = [
+        processor.tokenizer.decode([t], skip_special_tokens=False)
+        for t in token_ids
+    ]
+
+    vision_start_id = vision_end_id = video_pad_id = None
+    for tid, ts in zip(token_ids, token_strs):
+        if "<|vision_start|>" in ts:
+            vision_start_id = tid
+        elif "<|vision_end|>" in ts:
+            vision_end_id = tid
+        elif "<|video_pad|>" in ts or "<|image_pad|>" in ts:
+            if video_pad_id is None:
+                video_pad_id = tid
+
+    im_end_id = im_start_id = None
+    for tid, ts in zip(token_ids, token_strs):
+        if "<|im_end|>" in ts:
+            im_end_id = tid
+        if "<|im_start|>" in ts:
+            im_start_id = tid
+
+    answer_start_positions = [
+        i for i in range(len(token_ids) - 1) if token_ids[i] == im_start_id
+    ]
+    assistant_header_pos = (
+        answer_start_positions[-1] if answer_start_positions
+        else len(token_ids) - 1
+    )
+    answer_boundary = token_ids[assistant_header_pos:input_len]
+
+    special_ids = {
+        "img_id": [video_pad_id],
+        "prompt_id": [[vision_end_id], answer_boundary],
+        "answer_id": [answer_boundary, -1],
+    }
+
+    # Determine vision_shape from whichever grid tensor is present
+    if "video_grid_thw" in inputs:
+        vision_shape = (
+            inputs["video_grid_thw"][0, 0].item(),
+            inputs["video_grid_thw"][0, 1].item() // 2,
+            inputs["video_grid_thw"][0, 2].item() // 2,
+        )
+    elif "image_grid_thw" in inputs:
+        # Image-interleaved mode: T = number of images, all share (H_tam, W_tam)
+        H_tam = inputs["image_grid_thw"][0, 1].item() // 2
+        W_tam = inputs["image_grid_thw"][0, 2].item() // 2
+        T_img = inputs["image_grid_thw"].shape[0]
+        vision_shape = (T_img, H_tam, W_tam)
+    else:
+        raise ValueError(
+            "Processor inputs contain neither video_grid_thw nor image_grid_thw. "
+            "TAM requires a vision input."
+        )
+
+    T = vision_shape[0]
+    vis_inputs = [list(sampled_frames[:T])]
+
+    raw_map_records = []
+    tam_maps = []
+    all_gen_ids = generated_ids[0].cpu().tolist()
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        for i in tqdm(range(len(logits)), desc="    TAM tokens", leave=False):
+            out_path = os.path.join(tmpdir, f"{i}.jpg")
+            img_map = TAM(
+                all_gen_ids,
+                vision_shape,
+                logits,
+                special_ids,
+                vis_inputs,
+                processor,
+                out_path,
+                i,
+                raw_map_records,
+                False,
+                skip_latex=True,
+            )
+            tam_maps.append(img_map if isinstance(img_map, np.ndarray) else None)
+
+    frame_mass = np.zeros((len(tam_maps), T), dtype=np.float32)
+    for i, m in enumerate(tam_maps):
+        if m is not None and m.ndim == 3 and m.shape[0] == T:
+            total = m.sum()
+            if total > 0:
+                for t in range(T):
+                    frame_mass[i, t] = m[t].sum() / total
+
+    return {
+        "gen_text": gen_text,
+        "gen_tokens": gen_tokens,
+        "gen_ids": gen_ids,
+        "tam_maps": tam_maps,
+        "frame_mass": frame_mass,
+        "vision_shape": vision_shape,
+        "frames_pil": list(sampled_frames[:T]),
+    }

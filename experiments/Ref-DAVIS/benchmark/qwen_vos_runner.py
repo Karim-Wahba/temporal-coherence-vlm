@@ -221,11 +221,20 @@ class QwenVOSRunner:
         self.sample_rate = sample_rate
         self.video_mode = video_mode
 
-    def _generate(self, messages: list, is_video: bool = False) -> str:
+    def _generate(self, messages: list, is_video: bool = False,
+                  return_hidden_states: bool = False):
         """
         One forward pass.
         image mode: process_vision_info with image_patch_size=16, do_resize=False
         video mode: process_vision_info without image_patch_size, no do_resize
+
+        Parameters
+        ----------
+        return_hidden_states : bool
+            If True, generate with output_hidden_states=True and
+            return_dict_in_generate=True.  Returns (text, inputs, outputs)
+            so the caller can run TAM on the same pass.
+            If False (default), returns just the decoded text string.
         """
         text = self.processor.apply_chat_template(
             messages, tokenize=False, add_generation_prompt=True
@@ -256,19 +265,27 @@ class QwenVOSRunner:
 
         inputs = self.processor(**proc_kwargs).to(self.model.device)
 
-        generated_ids = self.model.generate(
-            **inputs,
-            max_new_tokens=self.max_new_tokens,
-        )
+        generate_kwargs = dict(max_new_tokens=self.max_new_tokens)
+        if return_hidden_states:
+            generate_kwargs["output_hidden_states"] = True
+            generate_kwargs["return_dict_in_generate"] = True
+
+        outputs = self.model.generate(**inputs, **generate_kwargs)
+
+        seq = outputs.sequences if return_hidden_states else outputs
         generated_ids_trimmed = [
             out_ids[len(in_ids):]
-            for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
+            for in_ids, out_ids in zip(inputs.input_ids, seq)
         ]
-        return self.processor.batch_decode(
+        decoded = self.processor.batch_decode(
             generated_ids_trimmed,
             skip_special_tokens=True,
             clean_up_tokenization_spaces=False,
         )[0]
+
+        if return_hidden_states:
+            return decoded, inputs, outputs
+        return decoded
 
     def run_joint(self, frames: List[Image.Image], expression: str) -> Tuple[List[Box], str]:
         """
@@ -341,6 +358,69 @@ class QwenVOSRunner:
         if self.video_mode:
             return self.run_joint_video(frames, expression)
         return self.run_joint(frames, expression)
+
+    def run_with_tam(self, frames: List[Image.Image], expression: str):
+        """
+        Run VOS inference and extract TAM maps from the same forward pass.
+
+        The TAM maps reflect the attention patterns that drove the actual
+        bbox predictions, not a separate descriptive prompt.
+
+        Only supported for joint strategies (not per_frame).
+
+        Returns
+        -------
+        boxes      : List[Box]
+        raw_text   : str
+        tam_result : dict  (same schema as TAMRunner.run())
+        """
+        if self.strategy == "per_frame":
+            raise NotImplementedError(
+                "TAM on the inference pass is not supported for per_frame strategy. "
+                "Use strategy='joint' or 'joint_video'."
+            )
+
+        import sys, os
+        sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "diagnostics"))
+        from tam_runner import extract_tam_from_generation
+
+        N = len(frames)
+        W, H = frames[0].size
+        sampled_frames = frames[::self.sample_rate]
+
+        if self.video_mode:
+            effective_fps = self.fps / self.sample_rate
+            messages = [{"role": "user", "content": [
+                {"type": "video", "video": sampled_frames, "fps": effective_fps},
+                {"type": "text", "text": JOINT_PROMPT_VIDEO.format(expression=expression)},
+            ]}]
+            raw, inputs, outputs = self._generate(
+                messages, is_video=True, return_hidden_states=True
+            )
+            detections = _parse_frame_detections(raw)
+            boxes = _map_frame_detections_to_frames(detections, N, W, H, self.sample_rate)
+        else:
+            content_list = []
+            for i, frame in enumerate(sampled_frames):
+                actual_idx = i * self.sample_rate
+                timestamp = actual_idx / self.fps
+                content_list.append({"type": "text", "text": f"<{timestamp:.2f} seconds>"})
+                content_list.append({"type": "image", "image": frame})
+            content_list.append({"sample_fps": DAVIS_FPS})
+            content_list.append({"type": "text", "text": JOINT_PROMPT.format(expression=expression)})
+            messages = [{"role": "user", "content": content_list}]
+            raw, inputs, outputs = self._generate(
+                messages, is_video=False, return_hidden_states=True
+            )
+            detections = _parse_time_detections(raw)
+            boxes = _map_detections_to_frames(
+                detections, N, W, H, fps=self.fps, sample_rate=self.sample_rate
+            )
+
+        tam_result = extract_tam_from_generation(
+            inputs, outputs, sampled_frames, self.model, self.processor
+        )
+        return boxes, raw, tam_result
 
     def run_and_get_masks(
         self, frames: List[Image.Image], expression: str, H: int, W: int

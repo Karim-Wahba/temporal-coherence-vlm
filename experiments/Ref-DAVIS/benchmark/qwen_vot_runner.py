@@ -172,7 +172,19 @@ class QwenVOTRunner:
         self.sample_rate = sample_rate
         self.video_mode = video_mode
 
-    def _generate(self, messages: list, is_video: bool = False) -> str:
+    def _generate(self, messages: list, is_video: bool = False,
+                  return_hidden_states: bool = False):
+        """
+        Run one forward pass.
+
+        Parameters
+        ----------
+        return_hidden_states : bool
+            If True, generate with output_hidden_states=True and
+            return_dict_in_generate=True.  Returns (text, inputs, outputs)
+            so the caller can run TAM on the same pass.
+            If False (default), returns just the decoded text string.
+        """
         text = self.processor.apply_chat_template(
             messages, tokenize=False, add_generation_prompt=True
         )
@@ -202,39 +214,36 @@ class QwenVOTRunner:
 
         inputs = self.processor(**proc_kwargs).to(self.model.device)
 
-        generated_ids = self.model.generate(
-            **inputs,
-            max_new_tokens=self.max_new_tokens,
-        )
+        generate_kwargs = dict(max_new_tokens=self.max_new_tokens)
+        if return_hidden_states:
+            generate_kwargs["output_hidden_states"] = True
+            generate_kwargs["return_dict_in_generate"] = True
+
+        outputs = self.model.generate(**inputs, **generate_kwargs)
+
+        seq = outputs.sequences if return_hidden_states else outputs
         generated_ids_trimmed = [
             out_ids[len(in_ids):]
-            for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
+            for in_ids, out_ids in zip(inputs.input_ids, seq)
         ]
-        return self.processor.batch_decode(
+        decoded = self.processor.batch_decode(
             generated_ids_trimmed,
             skip_special_tokens=True,
             clean_up_tokenization_spaces=False,
         )[0]
 
-    def run(self, frames: List[Image.Image], expression: str) -> Tuple[List[Box], str]:
-        """Run VOT inference on a full video sequence. Returns (boxes, raw_text)."""
-        N = len(frames)
-        W, H = frames[0].size
-        sampled_frames = frames[::self.sample_rate]
+        if return_hidden_states:
+            return decoded, inputs, outputs
+        return decoded
 
+    def _build_messages(self, sampled_frames: List[Image.Image], expression: str):
+        """Build the message list for inference (shared by run and run_with_tam)."""
         if self.video_mode:
             effective_fps = self.fps / self.sample_rate
-            messages = [{"role": "user", "content": [
-                {
-                    "type": "video",
-                    "video": sampled_frames,
-                    "fps": effective_fps,
-                },
+            return [{"role": "user", "content": [
+                {"type": "video", "video": sampled_frames, "fps": effective_fps},
                 {"type": "text", "text": JOINT_PROMPT_VIDEO.format(expression=expression)},
-            ]}]
-            raw = self._generate(messages, is_video=True)
-            detections = _parse_frame_detections(raw)
-            return _map_frame_detections_to_frames(detections, N, W, H, self.sample_rate), raw
+            ]}], True   # (messages, is_video)
         else:
             content_list = []
             for i, frame in enumerate(sampled_frames):
@@ -244,7 +253,54 @@ class QwenVOTRunner:
                 content_list.append({"type": "image", "image": frame})
             content_list.append({"sample_fps": DAVIS_FPS})
             content_list.append({"type": "text", "text": JOINT_PROMPT.format(expression=expression)})
-            messages = [{"role": "user", "content": content_list}]
-            raw = self._generate(messages, is_video=False)
+            return [{"role": "user", "content": content_list}], False
+
+    def run(self, frames: List[Image.Image], expression: str) -> Tuple[List[Box], str]:
+        """Run VOT inference on a full video sequence. Returns (boxes, raw_text)."""
+        N = len(frames)
+        W, H = frames[0].size
+        sampled_frames = frames[::self.sample_rate]
+        messages, is_video = self._build_messages(sampled_frames, expression)
+        raw = self._generate(messages, is_video=is_video)
+        if self.video_mode:
+            detections = _parse_frame_detections(raw)
+            return _map_frame_detections_to_frames(detections, N, W, H, self.sample_rate), raw
+        else:
             detections = _parse_time_detections(raw)
             return _map_detections_to_frames(detections, N, W, H, fps=self.fps, sample_rate=self.sample_rate), raw
+
+    def run_with_tam(self, frames: List[Image.Image], expression: str):
+        """
+        Run VOT inference and extract TAM maps from the same forward pass.
+
+        The TAM maps reflect the attention patterns that drove the actual
+        bbox predictions, not a separate descriptive prompt.
+
+        Returns
+        -------
+        boxes    : List[Box]
+        raw_text : str
+        tam_result : dict  (same schema as TAMRunner.run())
+        """
+        import sys, os
+        sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "diagnostics"))
+        from tam_runner import extract_tam_from_generation
+
+        N = len(frames)
+        W, H = frames[0].size
+        sampled_frames = frames[::self.sample_rate]
+        messages, is_video = self._build_messages(sampled_frames, expression)
+        raw, inputs, outputs = self._generate(
+            messages, is_video=is_video, return_hidden_states=True
+        )
+        if self.video_mode:
+            detections = _parse_frame_detections(raw)
+            boxes = _map_frame_detections_to_frames(detections, N, W, H, self.sample_rate)
+        else:
+            detections = _parse_time_detections(raw)
+            boxes = _map_detections_to_frames(detections, N, W, H, fps=self.fps, sample_rate=self.sample_rate)
+
+        tam_result = extract_tam_from_generation(
+            inputs, outputs, sampled_frames, self.model, self.processor
+        )
+        return boxes, raw, tam_result

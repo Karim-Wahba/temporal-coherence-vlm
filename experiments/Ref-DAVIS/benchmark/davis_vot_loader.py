@@ -58,6 +58,27 @@ class DAVISVOTItem:
         img = Image.open(self.frame_paths[0])
         return img.height, img.width
 
+    @property
+    def masks(self) -> List[np.ndarray]:
+        """Binary masks (H, W) uint8 derived from GT bounding boxes.
+
+        Provides the same interface as ``RefDAVISItem.masks`` so that
+        ``run_tam_diagnostics`` can be called on VOT items unchanged.
+        Frames with no GT box get an all-zero mask.
+        """
+        H, W = self.frame_size()
+        result = []
+        for box in self.gt_boxes:
+            m = np.zeros((H, W), dtype=np.uint8)
+            if box is not None:
+                x1, y1, x2, y2 = (int(round(v)) for v in box)
+                x1, y1 = max(0, x1), max(0, y1)
+                x2, y2 = min(W, x2), min(H, y2)
+                if x2 > x1 and y2 > y1:
+                    m[y1:y2, x1:x2] = 1
+            result.append(m)
+        return result
+
 
 class DAVISVOTLoader:
     """

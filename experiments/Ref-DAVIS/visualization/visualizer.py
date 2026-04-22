@@ -69,12 +69,15 @@ def _overlay_box(frame_arr: np.ndarray, box: Tuple, color=(255, 0, 0),
 
 
 def _overlay_tam(frame_arr: np.ndarray, tam_map: np.ndarray, alpha=0.5) -> np.ndarray:
-    """Overlay TAM heatmap (2D) on frame array."""
+    """Overlay TAM heatmap (2D) on frame array.
+
+    Raw values are used without per-frame normalisation so relative intensities
+    are preserved across frames.
+    """
     h, w = frame_arr.shape[:2]
-    smooth = cv2.resize(tam_map.astype(np.float32), (w, h), interpolation=cv2.INTER_CUBIC)
-    smooth = (smooth - smooth.min()) / (smooth.max() - smooth.min() + 1e-8)
-    smooth = (smooth * 255).astype(np.uint8)
-    colored = cv2.applyColorMap(smooth, cv2.COLORMAP_JET)
+    smooth = cv2.resize(np.clip(tam_map.astype(np.float32), 0, 255),
+                        (w, h), interpolation=cv2.INTER_CUBIC)
+    colored = cv2.applyColorMap(smooth.astype(np.uint8), cv2.COLORMAP_JET)
     colored = cv2.cvtColor(colored, cv2.COLOR_BGR2RGB)
     return (frame_arr * (1 - alpha) + colored * alpha).astype(np.uint8)
 
@@ -531,6 +534,430 @@ def plot_vot_aggregate_summary(
 
     fig.tight_layout()
     fig.savefig(save_path, dpi=120)
+    plt.close(fig)
+
+
+# ─── TAM Visualizations (words × frames grids, word strips) ──────────────────
+
+def _overlay_heatmap_tam(frame_arr: np.ndarray, heatmap_2d: np.ndarray,
+                         alpha: float = 0.55) -> np.ndarray:
+    """Overlay a 2-D TAM heatmap on a frame using JET colormap (smooth resize).
+
+    The raw TAM values are used as-is (no per-frame normalisation or clipping),
+    so the colour scale is consistent across frames and words — a dim frame
+    stays dim relative to brighter ones.  Values are expected in [0, 255] as
+    returned by TAM's multimodal_process; floats outside that range are simply
+    clipped on conversion to uint8.
+    """
+    h, w = frame_arr.shape[:2]
+    # Use raw values — just ensure float32 and clip to valid uint8 range.
+    hmap = np.clip(heatmap_2d.astype(np.float32), 0, 255)
+    smooth = cv2.resize(hmap.astype(np.uint8), (w, h), interpolation=cv2.INTER_CUBIC)
+    colored = cv2.applyColorMap(smooth, cv2.COLORMAP_JET)
+    colored = cv2.cvtColor(colored, cv2.COLOR_BGR2RGB)
+    return (frame_arr * (1 - alpha) + colored * alpha).astype(np.uint8)
+
+
+def plot_tam_summary_grid(
+    coherence_result: dict,
+    frames_pil: List[Image.Image],
+    save_path: str,
+    seq_name: str = "",
+    expression: str = "",
+    max_words: int = 20,
+):
+    """
+    Summary grid: rows = words, columns = frames, cells = TAM heatmap overlay.
+
+    Mirrors the ``tam_summary_grid.png`` produced by tam_qwen3vl_video.py.
+
+    Args:
+        coherence_result: Output of ``pearson_temporal_coherence()``.
+        frames_pil:       List of PIL frames (one per temporal slot).
+        save_path:        Where to write the PNG.
+        seq_name / expression: Used in the figure title.
+        max_words:        Cap on number of word rows.
+    """
+    word_groups = coherence_result.get("word_groups", [])
+    word_maps = coherence_result.get("word_maps", [])
+    valid = [(wg, wm) for wg, wm in zip(word_groups, word_maps) if wm is not None]
+    if not valid:
+        return
+
+    T = len(frames_pil)
+    n_words = min(max_words, len(valid))
+    n_frames = T
+    if n_words == 0 or n_frames == 0:
+        return
+
+    label_col_w = 1.2
+    fig_w = label_col_w + 3 * n_frames
+    fig_h = 3.5 * n_words
+    fig, axes = plt.subplots(n_words, n_frames,
+                             figsize=(fig_w, fig_h),
+                             squeeze=False)
+    fig.suptitle(
+        f"TAM: Words × Frames — {seq_name}\n\"{expression[:80]}\"",
+        fontsize=11, fontweight="bold",
+    )
+
+    target_idx = coherence_result.get("target_word_idx", -1)
+
+    for row, (wg, wm) in enumerate(valid[:n_words]):
+        word_label = wg["word"]
+        if len(word_label) > 14:
+            word_label = word_label[:12] + "…"
+        is_target = (row == target_idx)
+        for col in range(n_frames):
+            frame_arr = np.array(frames_pil[col] if col < len(frames_pil) else frames_pil[-1])
+            per_frame = wm[col].astype(np.uint8)  # TAM values are in [0, 255] float32
+            overlaid = _overlay_heatmap_tam(frame_arr, per_frame.astype(np.float32))
+            axes[row, col].imshow(overlaid)
+            axes[row, col].axis("off")
+        color = "#e74c3c" if is_target else "black"
+        axes[row, 0].text(
+            -0.05, 0.5, f'"{word_label}"',
+            transform=axes[row, 0].transAxes,
+            fontsize=8, fontweight="bold" if is_target else "normal",
+            color=color, ha="right", va="center",
+        )
+
+    for col in range(n_frames):
+        axes[0, col].set_title(f"t={col}", fontsize=7)
+
+    fig.subplots_adjust(left=label_col_w / fig_w)
+    fig.savefig(save_path, dpi=100, bbox_inches="tight")
+    plt.close(fig)
+
+
+def plot_tam_selected_words(
+    coherence_result: dict,
+    frames_pil: List[Image.Image],
+    save_path: str,
+    seq_name: str = "",
+    max_words: int = 12,
+):
+    """
+    Like ``plot_tam_summary_grid`` but filtered to meaningful content words only.
+
+    Mirrors ``tam_selected_words.png`` from tam_qwen3vl_video.py.
+    """
+    STOPWORDS = {
+        "the", "and", "for", "are", "was", "has", "its", "this", "that",
+        "with", "from", "they", "their", "which", "have", "been", "also",
+        "into", "can", "not", "but", "all", "some", "more", "very",
+    }
+
+    word_groups = coherence_result.get("word_groups", [])
+    word_maps = coherence_result.get("word_maps", [])
+
+    meaningful = []
+    seen: set = set()
+    for wg, wm in zip(word_groups, word_maps):
+        w = wg["word"]
+        wl = w.lower()
+        if (wm is not None
+                and len(w) > 2
+                and w.replace("-", "").replace("'", "").isalpha()
+                and wl not in seen
+                and wl not in STOPWORDS):
+            meaningful.append((wg, wm))
+            seen.add(wl)
+
+    if not meaningful:
+        return
+
+    T = len(frames_pil)
+    n_m = min(max_words, len(meaningful))
+    target_idx = coherence_result.get("target_word_idx", -1)
+    # Remap target_idx to position in meaningful list
+    target_word = coherence_result.get("target_word", "")
+
+    label_col_w = 1.4
+    fig_w = label_col_w + 3 * T
+    fig_h = 4 * n_m
+    fig, axes = plt.subplots(n_m, T, figsize=(fig_w, fig_h), squeeze=False)
+    fig.suptitle(
+        f"TAM: Selected Meaningful Words × Frames — {seq_name}",
+        fontsize=13, fontweight="bold",
+    )
+
+    for row, (wg, wm) in enumerate(meaningful[:n_m]):
+        word_label = wg["word"]
+        if len(word_label) > 14:
+            word_label = word_label[:12] + "…"
+        is_target = (word_label.rstrip("…") in target_word or target_word in word_label)
+        for col in range(T):
+            frame_arr = np.array(frames_pil[col] if col < len(frames_pil) else frames_pil[-1])
+            per_frame = wm[col].astype(np.uint8)  # TAM values are in [0, 255] float32
+            overlaid = _overlay_heatmap_tam(frame_arr, per_frame.astype(np.float32))
+            axes[row, col].imshow(overlaid)
+            axes[row, col].axis("off")
+        color = "#e74c3c" if is_target else "black"
+        axes[row, 0].text(
+            -0.05, 0.5, f'"{word_label}"',
+            transform=axes[row, 0].transAxes,
+            fontsize=9, fontweight="bold" if is_target else "normal",
+            color=color, ha="right", va="center",
+        )
+
+    for col in range(T):
+        axes[0, col].set_title(f"t={col}", fontsize=8)
+
+    fig.subplots_adjust(left=label_col_w / fig_w)
+    fig.savefig(save_path, dpi=100, bbox_inches="tight")
+    plt.close(fig)
+
+
+def save_tam_word_strips(
+    coherence_result: dict,
+    frames_pil: List[Image.Image],
+    save_dir: str,
+):
+    """
+    Save a horizontal frame-strip image for each word (all frames side-by-side).
+
+    Mirrors the ``words/`` directory from tam_qwen3vl_video.py.
+    Files are named ``<idx>_<word>.jpg``.
+    """
+    os.makedirs(save_dir, exist_ok=True)
+    word_groups = coherence_result.get("word_groups", [])
+    word_maps = coherence_result.get("word_maps", [])
+    T = len(frames_pil)
+
+    for i, (wg, wm) in enumerate(zip(word_groups, word_maps)):
+        if wm is None:
+            continue
+        strips = []
+        for col in range(T):
+            frame_arr = np.array(frames_pil[col] if col < len(frames_pil) else frames_pil[-1])
+            per_frame = wm[col].astype(np.uint8)  # TAM values are in [0, 255] float32
+            overlaid = _overlay_heatmap_tam(frame_arr, per_frame.astype(np.float32))
+            strips.append(cv2.cvtColor(overlaid, cv2.COLOR_RGB2BGR))
+        strip = np.concatenate(strips, axis=1)
+        safe = wg["word"].replace("/", "_").replace(" ", "_").replace("'", "")
+        safe = safe.replace("|", "").replace("<", "").replace(">", "")[:20]
+        if not safe:
+            safe = "empty"
+        cv2.imwrite(os.path.join(save_dir, f"{i:03d}_{safe}.jpg"), strip)
+
+
+def plot_tam_coherence_summary(
+    coherence_result: dict,
+    save_path: str,
+    seq_name: str = "",
+    expression: str = "",
+    gt_coherence_result: Optional[dict] = None,
+):
+    """
+    Three-panel plot (two if no GT coherence provided):
+      left   — per-consecutive-frame Pearson for the target noun
+               (full-frame vs inside GT region, if available)
+      middle — per-word coherence bar chart, full-frame (top 15, sorted)
+      right  — per-word coherence bar chart, inside GT bbox (if available)
+
+    Parameters
+    ----------
+    coherence_result   : output of ``pearson_temporal_coherence()``
+    gt_coherence_result: output of ``pearson_coherence_in_gt_region()``, or None
+    """
+    per_pair = coherence_result.get("per_pair_corr", [])
+    target_word = coherence_result.get("target_word", "?")
+    word_groups = coherence_result.get("word_groups", [])
+    word_maps = coherence_result.get("word_maps", [])
+
+    has_gt = gt_coherence_result is not None and bool(
+        gt_coherence_result.get("word_scores_in_gt")
+    )
+    per_pair_gt = (gt_coherence_result or {}).get("target_per_pair_in_gt", [])
+
+    n_panels = 3 if has_gt else 2
+    fig, axes = plt.subplots(1, n_panels, figsize=(6 * n_panels, 4.5))
+    fig.suptitle(
+        f"Temporal Coherence (Pearson) — {seq_name}\n\"{expression[:60]}\"",
+        fontsize=11,
+    )
+
+    # ── Left panel: per-pair trace for target noun ────────────────────────────
+    ax = axes[0]
+    if per_pair:
+        xs = list(range(len(per_pair)))
+        ax.plot(xs, per_pair, "o-", color="#3498db", linewidth=1.8, markersize=5,
+                label=f"full-frame  mean={np.mean(per_pair):.3f}")
+        ax.axhline(np.mean(per_pair), color="#3498db", linestyle="--", linewidth=1,
+                   alpha=0.5)
+    if per_pair_gt:
+        ax.plot(xs[:len(per_pair_gt)], per_pair_gt, "s--", color="#e74c3c",
+                linewidth=1.6, markersize=5,
+                label=f"inside GT   mean={np.mean(per_pair_gt):.3f}")
+        ax.axhline(np.mean(per_pair_gt), color="#e74c3c", linestyle=":", linewidth=1,
+                   alpha=0.5)
+    ax.set_ylim(0, 1.05)
+    ax.set_xlabel("Frame pair (t → t+1)")
+    ax.set_ylabel("Pearson [0, 1]")
+    ax.set_title(f'Target noun: "{target_word}"')
+    if per_pair or per_pair_gt:
+        ax.legend(fontsize=8)
+    if not per_pair:
+        ax.text(0.5, 0.5, "No data", ha="center", va="center", transform=ax.transAxes)
+
+    # ── Helper: build per-word score list ─────────────────────────────────────
+    def _word_scores_full():
+        scores = []
+        for wg, wm in zip(word_groups, word_maps):
+            if wm is None or wm.shape[0] < 2:
+                continue
+            T_w = wm.shape[0]
+            corrs = []
+            for t in range(T_w - 1):
+                m1 = wm[t].astype(np.float64).flatten()
+                m2 = wm[t + 1].astype(np.float64).flatten()
+                m1c, m2c = m1 - m1.mean(), m2 - m2.mean()
+                n1, n2 = np.linalg.norm(m1c), np.linalg.norm(m2c)
+                if n1 < 1e-8 or n2 < 1e-8:
+                    corrs.append(0.0)
+                else:
+                    corrs.append((float(np.dot(m1c, m2c) / (n1 * n2)) + 1.0) / 2.0)
+            scores.append((wg["word"], float(np.mean(corrs))))
+        scores.sort(key=lambda x: -x[1])
+        return scores[:15]
+
+    def _draw_bar_panel(ax_bar, word_scores, title):
+        if not word_scores:
+            ax_bar.text(0.5, 0.5, "No data", ha="center", va="center",
+                        transform=ax_bar.transAxes)
+            return
+        labels = [w for w, _ in word_scores]
+        vals = [s for _, s in word_scores]
+        colors = ["#e74c3c" if lbl == target_word else "#3498db" for lbl in labels]
+        bars = ax_bar.barh(range(len(labels)), vals, color=colors)
+        ax_bar.set_yticks(range(len(labels)))
+        ax_bar.set_yticklabels([f'"{l}"' for l in labels], fontsize=8)
+        ax_bar.set_xlim(0, 1.05)
+        ax_bar.invert_yaxis()
+        ax_bar.set_xlabel("Mean Pearson coherence [0,1]")
+        ax_bar.set_title(title)
+        for bar, val in zip(bars, vals):
+            ax_bar.text(val + 0.01, bar.get_y() + bar.get_height() / 2,
+                        f"{val:.3f}", va="center", fontsize=7)
+
+    # ── Middle panel: full-frame per-word coherence ───────────────────────────
+    _draw_bar_panel(axes[1], _word_scores_full(),
+                   "Per-word coherence — full frame\n(red = target noun)")
+
+    # ── Right panel: in-GT per-word coherence ─────────────────────────────────
+    if has_gt:
+        gt_scores_raw = gt_coherence_result["word_scores_in_gt"]
+        gt_word_scores = [
+            (wg["word"], s)
+            for wg, s in zip(word_groups, gt_scores_raw)
+            if s is not None
+        ]
+        gt_word_scores.sort(key=lambda x: -x[1])
+        _draw_bar_panel(axes[2], gt_word_scores[:15],
+                       "Per-word coherence — inside GT box\n(red = target noun)")
+
+    fig.tight_layout()
+    fig.savefig(save_path, dpi=120, bbox_inches="tight")
+    plt.close(fig)
+
+
+def plot_gam_over_time(
+    gam_result: dict,
+    save_path: str,
+    seq_name: str = "",
+    expression: str = "",
+    target_word: str = "",
+    lost_track_threshold: float = 0.25,
+    max_words: int = 10,
+):
+    """
+    Plot GT Attention Mass (GAM) over frames.
+
+    Two panels:
+      left  — per-frame GAM: mean across content words (thick blue) +
+               target noun (red dashed) + shaded lost-track zone
+      right — per-word GAM traces (top N most variable/informative words)
+
+    GAM = fraction of total attention mass inside the GT bounding box.
+    A drop toward zero means the model is no longer looking at the object.
+    """
+    per_frame_gam = np.asarray(gam_result.get("per_frame_gam", []))
+    target_gam    = np.asarray(gam_result.get("target_per_frame_gam", []))
+    word_traces   = gam_result.get("word_per_frame_gam", {})
+    mean_gam      = gam_result.get("mean_gam", 0.0)
+    gam_decay     = gam_result.get("gam_decay", 0.0)
+    lost_rate     = gam_result.get("lost_track_rate", 0.0)
+    T = len(per_frame_gam)
+
+    fig, axes = plt.subplots(1, 2, figsize=(13, 4.5))
+    fig.suptitle(
+        f"GT Attention Mass (GAM) — {seq_name}\n\"{expression[:60]}\"",
+        fontsize=11,
+    )
+
+    # ── Left: mean GAM + target noun trace ────────────────────────────────────
+    ax = axes[0]
+    xs = np.arange(T)
+
+    if T > 0:
+        # Shaded lost-track zone
+        ax.axhspan(0, lost_track_threshold, color="#e74c3c", alpha=0.08,
+                   label=f"lost-track zone (<{lost_track_threshold:.2f})")
+
+        ax.plot(xs, per_frame_gam, "o-", color="#3498db", linewidth=2, markersize=4,
+                label=f"mean content words  avg={mean_gam:.3f}")
+
+        if len(target_gam) == T and target_word:
+            ax.plot(xs, target_gam, "s--", color="#e74c3c", linewidth=1.6, markersize=4,
+                    label=f'target: "{target_word}"  avg={target_gam.mean():.3f}')
+
+        # Trend line
+        if T > 2:
+            trend = np.poly1d(np.polyfit(xs, per_frame_gam, 1))
+            ax.plot(xs, trend(xs), ":", color="#2c3e50", linewidth=1.3,
+                    label=f"trend  slope={gam_decay:+.4f}/frame")
+
+        ax.axhline(lost_track_threshold, color="#e74c3c", linestyle="--",
+                   linewidth=0.8, alpha=0.6)
+
+    ax.set_ylim(-0.05, 1.05)
+    ax.set_xlabel("Frame index")
+    ax.set_ylabel("GAM  (attention inside GT / total attention)")
+    ax.set_title(
+        f"Attention on-target over time\n"
+        f"lost-track rate: {lost_rate:.1%}  |  decay: {gam_decay:+.4f}/frame"
+    )
+    ax.legend(fontsize=8, loc="lower left")
+
+    # ── Right: per-word traces (most variable words) ───────────────────────────
+    ax2 = axes[1]
+    if word_traces and T > 0:
+        # Pick words with highest variance — they tell the most interesting story
+        word_var = {w: np.var(v) for w, v in word_traces.items() if len(v) == T}
+        top_words = sorted(word_var, key=lambda w: -word_var[w])[:max_words]
+
+        cmap = plt.cm.tab10
+        for i, w in enumerate(top_words):
+            trace = word_traces[w]
+            lw = 2.2 if w == target_word else 1.0
+            ls = "-" if w == target_word else "--"
+            ax2.plot(xs, trace, ls, color=cmap(i % 10), linewidth=lw,
+                     label=f'"{w}"  avg={trace.mean():.2f}')
+
+        ax2.axhline(lost_track_threshold, color="#e74c3c", linestyle=":",
+                    linewidth=0.8, alpha=0.7)
+        ax2.set_ylim(-0.05, 1.05)
+        ax2.set_xlabel("Frame index")
+        ax2.set_ylabel("GAM")
+        ax2.set_title(f"Per-word GAM (top {len(top_words)} by variance)")
+        ax2.legend(fontsize=7, loc="lower left", ncol=2)
+    else:
+        ax2.text(0.5, 0.5, "No word traces", ha="center", va="center",
+                 transform=ax2.transAxes)
+
+    fig.tight_layout()
+    fig.savefig(save_path, dpi=120, bbox_inches="tight")
     plt.close(fig)
 
 

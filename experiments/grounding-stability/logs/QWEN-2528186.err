@@ -1,0 +1,23 @@
+/var/spool/slurmd/job2528186/slurm_script: line 16: /usr/etc/profile.d/conda.sh: No such file or directory
+
+CommandNotFoundError: Your shell has not been properly configured to use 'conda activate'.
+To initialize your shell, run
+
+    $ conda init <SHELL_NAME>
+
+Currently supported shells are:
+  - bash
+  - fish
+  - tcsh
+  - xonsh
+  - zsh
+  - powershell
+
+See 'conda init --help' for more information and options.
+
+IMPORTANT: You may need to close and restart your shell after running 'conda init'.
+
+
+[2026-04-25T03:39:54.187] error: execve(): python: No such file or directory
+srun: error: galvani-cn229: task 0: Exited with exit code 2
+srun: Terminating StepId=2528186.0

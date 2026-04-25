@@ -18,6 +18,9 @@ Research on temporal coherence, visual grounding, and interpretability in Vision
 | Folder | Method | Model | Description |
 |--------|--------|-------|-------------|
 | `experiments/TAM` | [TAM](https://github.com/xmed-lab/TAM) | Qwen3-VL-8B | Token Activation Map visual grounding |
+| `experiments/Ref-DAVIS` | TAM + Ref-DAVIS | Qwen3-VL-8B | VOT benchmarking on Ref-DAVIS with natural language expressions |
+| `experiments/grounding-stability` | TAM | Qwen3-VL-8B | Temporal stability of TAM heatmaps and correlation with grounding quality |
+| `experiments/token-ablation` | TAM | Qwen3-VL-8B | Ablation of token selection strategies for object localisation via TAM |
 
 ## Submodules
 

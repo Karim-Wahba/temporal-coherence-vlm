@@ -1,0 +1,23 @@
+```json
+[
+	{"time": 0.0, "bbox_2d": [268, 11, 500, 937], "label": "A man in a red sweatshirt performing breakdance."},
+	{"time": 0.17, "bbox_2d": [268, 11, 500, 937], "label": "A man in a red sweatshirt performing breakdance."},
+	{"time": 0.33, "bbox_2d": [268, 11, 500, 937], "label": "A man in a red sweatshirt performing breakdance."},
+	{"time": 0.5, "bbox_2d": [268, 11, 500, 937], "label": "A man in a red sweatshirt performing breakdance."},
+	{"time": 0.67, "bbox_2d": [268, 11, 500, 937], "label": "A man in a red sweatshirt performing breakdance."},
+	{"time": 0.83, "bbox_2d": [268, 11, 500, 937], "label": "A man in a red sweatshirt performing breakdance."},
+	{"time": 1.0, "bbox_2d": [268, 11, 500, 937], "label": "A man in a red sweatshirt performing breakdance."},
+	{"time": 1.17, "bbox_2d": [268, 11, 500, 937], "label": "A man in a red sweatshirt performing breakdance."},
+	{"time": 1.33, "bbox_2d": [268, 11, 500, 937], "label": "A man in a red sweatshirt performing breakdance."},
+	{"time": 1.5, "bbox_2d": [268, 11, 500, 937], "label": "A man in a red sweatshirt performing breakdance."},
+	{"time": 1.67, "bbox_2d": [268, 11, 500, 937], "label": "A man in a red sweatshirt performing breakdance."},
+	{"time": 1.83, "bbox_2d": [268, 11, 500, 937], "label": "A man in a red sweatshirt performing breakdance."},
+	{"time": 2.0, "bbox_2d": [268, 11, 500, 937], "label": "A man in a red sweatshirt performing breakdance."},
+	{"time": 2.17, "bbox_2d": [268, 11, 500, 937], "label": "A man in a red sweatshirt performing breakdance."},
+	{"time": 2.33, "bbox_2d": [268, 11, 500, 937], "label": "A man in a red sweatshirt performing breakdance."},
+	{"time": 2.5, "bbox_2d": [268, 11, 500, 937], "label": "A man in a red sweatshirt performing breakdance."},
+	{"time": 2.67, "bbox_2d": [268, 11, 500, 937], "label": "A man in a red sweatshirt performing breakdance."},
+	{"time": 2.83, "bbox_2d": [268, 11, 500, 937], "label": "A man in a red sweatshirt performing breakdance."},
+	{"time": 3.0, "bbox_2d": [268, 11, 500, 937], "label": "A man in a red sweatshirt performing breakdance."}
+]
+```

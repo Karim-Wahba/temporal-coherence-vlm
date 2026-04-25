@@ -1,0 +1,24 @@
+```json
+[
+	{"frame": 0, "bbox_2d": [277, 11, 503, 930], "label": "A man in a red sweatshirt performing breakdance."},
+	{"frame": 1, "bbox_2d": [259, 16, 479, 919], "label": "A man in a red sweatshirt performing breakdance."},
+	{"frame": 2, "bbox_2d": [252, 16, 477, 917], "label": "A man in a red sweatshirt performing breakdance."},
+	{"frame": 3, "bbox_2d": [213, 19, 488, 922], "label": "A man in a red sweatshirt performing breakdance."},
+	{"frame": 4, "bbox_2d": [177, 20, 505, 917], "label": "A man in a red sweatshirt performing breakdance."},
+	{"frame": 5, "bbox_2d": [202, 19, 538, 917], "label": "A man in a red sweatshirt performing breakdance."},
+	{"frame": 6, "bbox_2d": [279, 11, 527, 925], "label": "A man in a red sweatshirt performing breakdance."},
+	{"frame": 7, "bbox_2d": [320, 16, 623, 930], "label": "A man in a red sweatshirt performing breakdance."},
+	{"frame": 8, "bbox_2d": [358, 19, 643, 925], "label": "A man in a red sweatshirt performing breakdance."},
+	{"frame": 9, "bbox_2d": [366, 22, 653, 925], "label": "A man in a red sweatshirt performing breakdance."},
+	{"frame": 10, "bbox_2d": [358, 20, 653, 925], "label": "A man in a red sweatshirt performing breakdance."},
+	{"frame": 11, "bbox_2d": [302, 22, 625, 922], "label": "A man in a red sweatshirt performing breakdance."},
+	{"frame": 12, "bbox_2d": [252, 20, 577, 919], "label": "A man in a red sweatshirt performing breakdance."},
+	{"frame": 13, "bbox_2d": [237, 20, 569, 919], "label": "A man in a red sweatshirt performing breakdance."},
+	{"frame": 14, "bbox_2d": [238, 19, 577, 919], "label": "A man in a red sweatshirt performing breakdance."},
+	{"frame": 15, "bbox_2d": [237, 19, 577, 919], "label": "A man in a red sweatshirt performing breakdance."},
+	{"frame": 16, "bbox_2d": [227, 16, 566, 919], "label": "A man in a red sweatshirt performing breakdance."},
+	{"frame": 17, "bbox_2d": [227, 16, 566, 919], "label": "A man in a red sweatshirt performing breakdance."},
+	{"frame": 18, "bbox_2d": [227, 16, 566, 919], "label": "A man in a red sweatshirt performing breakdance."},
+	{"frame": 19, "bbox_2d": [227, 16, 566, 919], "label": "A man in a red sweatshirt performing breakdance."}
+]
+```

@@ -1,10 +1,6 @@
 # Experiment outputs
 experiments/**/results/
 
-# Versioned/draft scripts (keep locally, not in repo)
-experiments/**/*_v*.py
-experiments/**/*_initial.py
-
 # Python
 __pycache__/
 *.py[cod]

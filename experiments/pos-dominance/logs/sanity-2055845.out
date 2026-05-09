@@ -1,0 +1,168 @@
+JobId=2055845 JobName=POS-SANITY
+   UserId=wahba(2286) GroupId=ra_staff(5011) MCS_label=N/A
+   Priority=400 Nice=0 Account=l40s QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:01 TimeLimit=04:00:00 TimeMin=N/A
+   SubmitTime=2026-05-02T00:06:57 EligibleTime=2026-05-02T00:06:57
+   AccrueTime=2026-05-02T00:06:57
+   StartTime=2026-05-02T00:06:57 EndTime=2026-05-02T04:06:57 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-05-02T00:06:57 Scheduler=Main
+   Partition=L40Sday AllocNode:Sid=tcml-login3:341370
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=tcml-node3
+   BatchHost=tcml-node3
+   NumNodes=1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=1,mem=100G,node=1,billing=19,gres/gpu=1
+   AllocTRES=cpu=1,mem=100G,node=1,billing=19,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryCPU=100G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/mnt/beegfs/home/wahba/git/temporal-coherence-vlm/experiments/pos-dominance/sbatch_sanity.sh
+   WorkDir=/mnt/beegfs/home/wahba/git/temporal-coherence-vlm/experiments/pos-dominance
+   StdErr=/mnt/beegfs/home/wahba/git/temporal-coherence-vlm/experiments/pos-dominance/logs/sanity-2055845.err
+   StdIn=/dev/null
+   StdOut=/mnt/beegfs/home/wahba/git/temporal-coherence-vlm/experiments/pos-dominance/logs/sanity-2055845.out
+   TresPerNode=gres/gpu:1
+   
+
+Sat May  2 00:06:58 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.126.09             Driver Version: 580.126.09     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA L40S                    Off |   00000000:01:00.0 Off |                    0 |
+| N/A   31C    P8             33W /  350W |       0MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Loading model: Qwen/Qwen3-VL-8B-Instruct
+Sanity check on 30 sequences (POS tagger queued).
+
+[1/30] bike-packing  "a black bike"
+  recorded 5 frames (noun_tokens=4, all_tokens=171)
+
+[2/30] blackswan  "a black swan"
+  [SKIP] no label_noun tokens (pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'swan': 'label_noun'})
+
+[3/30] bmx-trees  "a red bmx bike"
+  recorded 5 frames (noun_tokens=4, all_tokens=179)
+
+[4/30] breakdance  "a man in a red sweatshirt performing breakdance"
+  recorded 6 frames (noun_tokens=5, all_tokens=245)
+
+[5/30] camel  "a brown camel in the front"
+  recorded 6 frames (noun_tokens=12, all_tokens=271)
+
+[6/30] car-roundabout  "a black car"
+  recorded 5 frames (noun_tokens=4, all_tokens=171)
+
+[7/30] car-shadow  "a silver car"
+  recorded 3 frames (noun_tokens=6, all_tokens=130)
+
+[8/30] cows  "a cow with a bell around its neck"
+  recorded 7 frames (noun_tokens=21, all_tokens=329)
+
+[9/30] dance-twirl  "a girl with blonde hair dressed in blue"
+  recorded 6 frames (noun_tokens=15, all_tokens=237)
+
+[10/30] dog  "a golden retriever walking in the grass"
+  recorded 4 frames (noun_tokens=8, all_tokens=191)
+
+[11/30] dogs-jump  "a white dog with black patches"
+  recorded 5 frames (noun_tokens=8, all_tokens=182)
+
+[12/30] drift-chicane  "a red and white car"
+  recorded 4 frames (noun_tokens=3, all_tokens=136)
+
+[13/30] drift-straight  "a drift car on a straight road"
+  recorded 4 frames (noun_tokens=12, all_tokens=186)
+
+[14/30] goat  "a goat walking on rocks"
+  recorded 6 frames (noun_tokens=10, all_tokens=222)
+
+[15/30] gold-fish  "a largest orange goldfish"
+  recorded 5 frames (noun_tokens=4, all_tokens=179)
+
+[16/30] horsejump-high  "a horse doing high jumps"
+  recorded 4 frames (noun_tokens=6, all_tokens=135)
+
+[17/30] india  "a woman in a yellow salwar suit"
+  recorded 6 frames (noun_tokens=12, all_tokens=283)
+
+[18/30] judo  "a man with a blue belt on the right"
+  recorded 3 frames (noun_tokens=9, all_tokens=148)
+
+[19/30] kite-surf  "a power kite with blue handles"
+  recorded 4 frames (noun_tokens=9, all_tokens=139)
+
+[20/30] lab-coat  "a white cell phone in a left hand"
+  recorded 3 frames (noun_tokens=6, all_tokens=99)
+
+[21/30] libby  "a dog running in the garden"
+  recorded 4 frames (noun_tokens=6, all_tokens=139)
+
+[22/30] loading  "a fat man on the right in a black jacket"
+  recorded 4 frames (noun_tokens=12, all_tokens=199)
+
+[23/30] mbike-trick  "a biker man in a white tshirt"
+  recorded 5 frames (noun_tokens=5, all_tokens=242)
+
+[24/30] motocross-jump  "a man riding a motorbike"
+  recorded 3 frames (noun_tokens=3, all_tokens=137)
+
+[25/30] paragliding-launch  "a black harness with an airbag"
+  recorded 5 frames (noun_tokens=4, all_tokens=187)
+
+[26/30] parkour  "a man jumping across fences"
+  recorded 7 frames (noun_tokens=12, all_tokens=265)
+
+[27/30] pigs  "a brown and white colored piglet"
+  recorded 5 frames (noun_tokens=4, all_tokens=179)
+
+[28/30] scooter-black  "a man in a suit riding a scooter"
+  recorded 3 frames (noun_tokens=9, all_tokens=145)
+
+[29/30] shooting  "a black shooting gun"
+  recorded 3 frames (noun_tokens=6, all_tokens=133)
+
+[30/30] soapbox  "a blue wooden car"
+  recorded 7 frames (noun_tokens=12, all_tokens=259)
+
+================================================================
+Sanity check: noun-only TAM vs standard TAM
+  137 frames over 29 sequences
+  skipped 1 sequences with no noun tokens: ['blackswan']
+  POS tagger: NLTK
+================================================================
+
+— Mass-in-GT —
+  standard:    mean = 0.1527   median = 0.1413
+  noun-only:   mean = 0.2200   median = 0.1945
+  delta:       mean = +0.0673   median = +0.0401
+  win rate:    noun > std in 71.5% of frames
+  tie rate:    noun = std in 0.7% of frames
+
+— Thresholded IoU (heatmap >= 0.5 × peak  →  bbox) —
+  standard:    mean = 0.1502   median = 0.1412
+  noun-only:   mean = 0.1749   median = 0.1345
+  delta:       mean = +0.0247   median = +0.0046
+  win rate:    noun > std in 54.0% of frames
+  tie rate:    noun = std in 6.6% of frames
+
+— Paired Wilcoxon (H1: noun > std) —
+  mass-in-GT:  W =       7709   p = 1.709e-11
+  iou:         W =       4775   p = 6.194e-02
+
+Raw → results/sanity_check/sanity_check_results.json

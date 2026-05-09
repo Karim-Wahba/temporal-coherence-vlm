@@ -1,0 +1,562 @@
+JobId=2107493 JobName=EXPR-VAR-QWEN
+   UserId=wahba(2286) GroupId=ra_staff(5011) MCS_label=N/A
+   Priority=447 Nice=0 Account=l40s QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:01 TimeLimit=23:00:00 TimeMin=N/A
+   SubmitTime=2026-05-07T20:36:57 EligibleTime=2026-05-07T20:36:57
+   AccrueTime=2026-05-07T20:36:57
+   StartTime=2026-05-07T20:36:57 EndTime=2026-05-08T19:36:57 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-05-07T20:36:57 Scheduler=Main
+   Partition=L40Sday AllocNode:Sid=tcml-login3:1689367
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=tcml-node15
+   BatchHost=tcml-node15
+   NumNodes=1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=1,mem=100G,node=1,billing=19,gres/gpu=1
+   AllocTRES=cpu=1,mem=100G,node=1,billing=19,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryCPU=100G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/mnt/beegfs/home/wahba/git/temporal-coherence-vlm/experiments/expression-variance/sbatch_run.sh
+   WorkDir=/mnt/beegfs/home/wahba/git/temporal-coherence-vlm/experiments/expression-variance
+   StdErr=/mnt/beegfs/home/wahba/git/temporal-coherence-vlm/experiments/expression-variance/logs/EXPR-VAR-QWEN-2107493.err
+   StdIn=/dev/null
+   StdOut=/mnt/beegfs/home/wahba/git/temporal-coherence-vlm/experiments/expression-variance/logs/EXPR-VAR-QWEN-2107493.out
+   TresPerNode=gres/gpu:1
+   
+
+Thu May  7 20:36:58 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.126.09             Driver Version: 580.126.09     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA L40S                    Off |   00000000:21:00.0 Off |                    0 |
+| N/A   33C    P8             32W /  350W |       0MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Loading model: Qwen/Qwen3-VL-8B-Instruct
+Running expression-variance on 244 items (61 (seq,obj) groups)
+[1/244] bike-packing obj1 exp0
+  Running bike-packing_obj1_exp0 | "a black bike"
+[2/244] bike-packing obj1 exp1
+  Running bike-packing_obj1_exp1 | "black and white coloured bike"
+[3/244] bike-packing obj1 exp2
+  Running bike-packing_obj1_exp2 | "a black bike upside-down"
+[4/244] bike-packing obj1 exp3
+  Running bike-packing_obj1_exp3 | "an upside-down bike"
+[5/244] bike-packing obj2 exp4
+  Running bike-packing_obj2_exp4 | "a man wearing a cap"
+[6/244] bike-packing obj2 exp5
+  Running bike-packing_obj2_exp5 | "a man holding a bike"
+[7/244] bike-packing obj2 exp6
+  Running bike-packing_obj2_exp6 | "a man"
+[8/244] bike-packing obj2 exp7
+  Running bike-packing_obj2_exp7 | "a man wearing a cap and shorts"
+[9/244] blackswan obj1 exp0
+  Running blackswan_obj1_exp0 | "a black swan"
+[10/244] blackswan obj1 exp1
+  Running blackswan_obj1_exp1 | "a black feathered swan"
+[11/244] blackswan obj1 exp2
+  Running blackswan_obj1_exp2 | "a swan"
+[12/244] blackswan obj1 exp3
+  Running blackswan_obj1_exp3 | "a black swan"
+[13/244] bmx-trees obj1 exp0
+  Running bmx-trees_obj1_exp0 | "a red bmx bike"
+[14/244] bmx-trees obj1 exp1
+  Running bmx-trees_obj1_exp1 | "a black bike"
+[15/244] bmx-trees obj1 exp2
+  Running bmx-trees_obj1_exp2 | "a bmx bike"
+[16/244] bmx-trees obj1 exp3
+  Running bmx-trees_obj1_exp3 | "a bicycle"
+[17/244] bmx-trees obj2 exp4
+  Running bmx-trees_obj2_exp4 | "a boy wearing a white tshirt"
+[18/244] bmx-trees obj2 exp5
+  Running bmx-trees_obj2_exp5 | "a boy riding a bicycle"
+[19/244] bmx-trees obj2 exp6
+  Running bmx-trees_obj2_exp6 | "a boy riding a bmx bike"
+[20/244] bmx-trees obj2 exp7
+  Running bmx-trees_obj2_exp7 | "a man in a white shirt and shorts"
+[21/244] breakdance obj1 exp0
+  Running breakdance_obj1_exp0 | "a man in a red sweatshirt performing breakdance"
+[22/244] breakdance obj1 exp1
+  Running breakdance_obj1_exp1 | "a boy in a red tshirt performing a breakdance"
+[23/244] breakdance obj1 exp2
+  Running breakdance_obj1_exp2 | "a man performing a headspin"
+[24/244] breakdance obj1 exp3
+  Running breakdance_obj1_exp3 | "a guy in a brown shirt and blue jeans breakdancing"
+[25/244] camel obj1 exp0
+  Running camel_obj1_exp0 | "a brown camel in the front"
+[26/244] camel obj1 exp1
+  Running camel_obj1_exp1 | "a camel moving"
+[27/244] camel obj1 exp2
+  Running camel_obj1_exp2 | "a camel walking"
+[28/244] camel obj1 exp3
+  Running camel_obj1_exp3 | "a brown camel walking"
+[29/244] car-roundabout obj1 exp0
+  Running car-roundabout_obj1_exp0 | "a black car"
+[30/244] car-roundabout obj1 exp1
+  Running car-roundabout_obj1_exp1 | "a black car moving through a roundabout"
+[31/244] car-roundabout obj1 exp2
+  Running car-roundabout_obj1_exp2 | "a black car"
+[32/244] car-roundabout obj1 exp3
+  Running car-roundabout_obj1_exp3 | "a space-grey car in a roundabout"
+[33/244] car-shadow obj1 exp0
+  Running car-shadow_obj1_exp0 | "a silver car"
+[34/244] car-shadow obj1 exp1
+  Running car-shadow_obj1_exp1 | "a white car crossing a signal"
+[35/244] car-shadow obj1 exp2
+  Running car-shadow_obj1_exp2 | "a car on the road"
+[36/244] car-shadow obj1 exp3
+  Running car-shadow_obj1_exp3 | "a sliver car going from shade to sunlight"
+[37/244] cows obj1 exp0
+  Running cows_obj1_exp0 | "a cow with a bell around its neck"
+[38/244] cows obj1 exp1
+  Running cows_obj1_exp1 | "a cow in the field"
+[39/244] cows obj1 exp2
+  Running cows_obj1_exp2 | "a white cow with brown patches"
+[40/244] cows obj1 exp3
+  Running cows_obj1_exp3 | "a brown and white cow"
+[41/244] dance-twirl obj1 exp0
+  Running dance-twirl_obj1_exp0 | "a girl with blonde hair dressed in blue"
+[42/244] dance-twirl obj1 exp1
+  Running dance-twirl_obj1_exp1 | "a girl in a blue dress twirling"
+[43/244] dance-twirl obj1 exp2
+  Running dance-twirl_obj1_exp2 | "girl dancing in blue"
+[44/244] dance-twirl obj1 exp3
+  Running dance-twirl_obj1_exp3 | "a blonde haired girl dancing in a blue dress"
+[45/244] dog obj1 exp0
+  Running dog_obj1_exp0 | "a golden retriever walking in the grass"
+[46/244] dog obj1 exp1
+  Running dog_obj1_exp1 | "a dog walking"
+[47/244] dog obj1 exp2
+  Running dog_obj1_exp2 | "a dog with a ball in its mouth"
+[48/244] dog obj1 exp3
+  Running dog_obj1_exp3 | "a dog looking for something "
+[49/244] dogs-jump obj1 exp0
+  Running dogs-jump_obj1_exp0 | "a white dog with black patches"
+[50/244] dogs-jump obj1 exp1
+  Running dogs-jump_obj1_exp1 | "a white dog with black patches"
+[51/244] dogs-jump obj1 exp2
+  Running dogs-jump_obj1_exp2 | "a white dog with black patches"
+[52/244] dogs-jump obj1 exp3
+  Running dogs-jump_obj1_exp3 | "a dog jumping for a snack going to the left"
+[53/244] dogs-jump obj2 exp4
+  Running dogs-jump_obj2_exp4 | "a white dog with gray patches"
+[54/244] dogs-jump obj2 exp5
+  Running dogs-jump_obj2_exp5 | "a white dog with grey patches"
+[55/244] dogs-jump obj2 exp6
+  Running dogs-jump_obj2_exp6 | "a white dog with grey patches"
+[56/244] dogs-jump obj2 exp7
+  Running dogs-jump_obj2_exp7 | "a dog jumping for a snack going to the right"
+[57/244] dogs-jump obj3 exp8
+  Running dogs-jump_obj3_exp8 | "a woman in a yellow jacket"
+[58/244] dogs-jump obj3 exp9
+  Running dogs-jump_obj3_exp9 | "a woman in a yellow jacket and mustered trousers"
+[59/244] dogs-jump obj3 exp10
+  Running dogs-jump_obj3_exp10 | "a woman"
+[60/244] dogs-jump obj3 exp11
+  Running dogs-jump_obj3_exp11 | "a woman in a yellow shirt throwing dog snacks"
+[61/244] drift-chicane obj1 exp0
+  Running drift-chicane_obj1_exp0 | "a red and white car"
+[62/244] drift-chicane obj1 exp1
+  Running drift-chicane_obj1_exp1 | "a car racing"
+[63/244] drift-chicane obj1 exp2
+  Running drift-chicane_obj1_exp2 | "a sport car"
+[64/244] drift-chicane obj1 exp3
+  Running drift-chicane_obj1_exp3 | "a white sport car drifting at turns"
+[65/244] drift-straight obj1 exp0
+  Running drift-straight_obj1_exp0 | "a drift car on a straight road"
+[66/244] drift-straight obj1 exp1
+  Running drift-straight_obj1_exp1 | "a car in a racing track"
+[67/244] drift-straight obj1 exp2
+  Running drift-straight_obj1_exp2 | "a red car"
+[68/244] drift-straight obj1 exp3
+  Running drift-straight_obj1_exp3 | "a red sport car drifting on a race track"
+[69/244] goat obj1 exp0
+  Running goat_obj1_exp0 | "a goat walking on rocks"
+[70/244] goat obj1 exp1
+  Running goat_obj1_exp1 | "a goat walking in the hilly area"
+[71/244] goat obj1 exp2
+  Running goat_obj1_exp2 | "a gray goat"
+[72/244] goat obj1 exp3
+  Running goat_obj1_exp3 | "a grey colored mountain goat"
+[73/244] gold-fish obj1 exp0
+  Running gold-fish_obj1_exp0 | "a largest orange goldfish"
+[74/244] gold-fish obj1 exp1
+  Running gold-fish_obj1_exp1 | "the largest orange goldfish"
+[75/244] gold-fish obj1 exp2
+  Running gold-fish_obj1_exp2 | "the biggest goldfish"
+[76/244] gold-fish obj1 exp3
+  Running gold-fish_obj1_exp3 | "a gold fish facing towards the top right of the frame"
+[77/244] gold-fish obj2 exp4
+  Running gold-fish_obj2_exp4 | "an orange goldfish in the center next to the largest fish"
+[78/244] gold-fish obj2 exp5
+  Running gold-fish_obj2_exp5 | "an orange goldfish with a white stripe in the center"
+[79/244] gold-fish obj2 exp6
+  Running gold-fish_obj2_exp6 | "an orange goldfish in the center next to the largest fish"
+[80/244] gold-fish obj2 exp7
+  Running gold-fish_obj2_exp7 | "a gold fish swimming towards the camera"
+[81/244] gold-fish obj3 exp8
+  Running gold-fish_obj3_exp8 | "a smallest goldfish"
+[82/244] gold-fish obj3 exp9
+  Running gold-fish_obj3_exp9 | "a smallest goldfish on the bottom half"
+[83/244] gold-fish obj3 exp10
+  Running gold-fish_obj3_exp10 | "the smallest goldfish"
+[84/244] gold-fish obj3 exp11
+  Running gold-fish_obj3_exp11 | "a gold fish in the middle swimming towards down-right"
+[85/244] gold-fish obj4 exp12
+  Running gold-fish_obj4_exp12 | "a goldfish at the end"
+[86/244] gold-fish obj4 exp13
+  Running gold-fish_obj4_exp13 | "a small orange goldfish on the top half"
+[87/244] gold-fish obj4 exp14
+  Running gold-fish_obj4_exp14 | "a small goldfish in the end"
+[88/244] gold-fish obj4 exp15
+  Running gold-fish_obj4_exp15 | "a gold fish on the left swimming towards the top right"
+[89/244] gold-fish obj5 exp16
+  Running gold-fish_obj5_exp16 | "a goldfish at the bottom"
+[90/244] gold-fish obj5 exp17
+  Running gold-fish_obj5_exp17 | "a goldfish at the bottom"
+[91/244] gold-fish obj5 exp18
+  Running gold-fish_obj5_exp18 | "goldfish on the bottom"
+[92/244] gold-fish obj5 exp19
+  Running gold-fish_obj5_exp19 | "a gold fish in the middle swimming bottom right and leaving "
+[93/244] horsejump-high obj1 exp0
+  Running horsejump-high_obj1_exp0 | "a horse doing high jumps"
+[94/244] horsejump-high obj1 exp1
+  Running horsejump-high_obj1_exp1 | "a horse jumping over obstacles"
+[95/244] horsejump-high obj1 exp2
+  Running horsejump-high_obj1_exp2 | "a horse ridden by a woman"
+[96/244] horsejump-high obj1 exp3
+  Running horsejump-high_obj1_exp3 | "a brown colored horse"
+[97/244] horsejump-high obj2 exp4
+  Running horsejump-high_obj2_exp4 | "a woman riding a horse"
+[98/244] horsejump-high obj2 exp5
+  Running horsejump-high_obj2_exp5 | "a jockey wearing a white uniform"
+[99/244] horsejump-high obj2 exp6
+  Running horsejump-high_obj2_exp6 | "a girl riding a horse"
+[100/244] horsejump-high obj2 exp7
+  Running horsejump-high_obj2_exp7 | "a woman in a black and white dress riding a horse"
+[101/244] india obj1 exp0
+  Running india_obj1_exp0 | "a woman in a yellow salwar suit"
+[102/244] india obj1 exp1
+  Running india_obj1_exp1 | "a woman on the left wearing a yellow dress"
+[103/244] india obj1 exp2
+  Running india_obj1_exp2 | "a woman in a yellow sari"
+[104/244] india obj1 exp3
+  Running india_obj1_exp3 | "a woman in yellow on the left"
+[105/244] india obj2 exp4
+  Running india_obj2_exp4 | "a woman in a red sari in the middle"
+[106/244] india obj2 exp5
+  Running india_obj2_exp5 | "a woman in the middle wearing a red dress"
+[107/244] india obj2 exp6
+  Running india_obj2_exp6 | "a woman in a red sari"
+[108/244] india obj2 exp7
+  Running india_obj2_exp7 | "a woman in a red dress in the middle"
+[109/244] india obj3 exp8
+  Running india_obj3_exp8 | "a lady in a black salwar on the right"
+[110/244] india obj3 exp9
+  Running india_obj3_exp9 | "a woman on right wearing a black dress"
+[111/244] india obj3 exp10
+  Running india_obj3_exp10 | "a woman in black on the right"
+[112/244] india obj3 exp11
+  Running india_obj3_exp11 | "a woman on the right wearing a pink and black dress carrying"
+[113/244] judo obj1 exp0
+  Running judo_obj1_exp0 | "a man with a blue belt on the right"
+[114/244] judo obj1 exp1
+  Running judo_obj1_exp1 | "a man with a blue belt on the right"
+[115/244] judo obj1 exp2
+  Running judo_obj1_exp2 | "a man fighting on the right"
+[116/244] judo obj1 exp3
+  Running judo_obj1_exp3 | "a man in the middle wearing a blue belt teaching judo"
+[117/244] judo obj2 exp4
+  Running judo_obj2_exp4 | "a bald man with a black belt in the center"
+[118/244] judo obj2 exp5
+  Running judo_obj2_exp5 | "a bald man with a black belt in the center of the mat"
+[119/244] judo obj2 exp6
+  Running judo_obj2_exp6 | "a man fighting on the left"
+[120/244] judo obj2 exp7
+  Running judo_obj2_exp7 | "a bald man in the middle wearing a black belt falling down"
+[121/244] kite-surf obj1 exp0
+  Running kite-surf_obj1_exp0 | "a power kite with blue handles"
+[122/244] kite-surf obj1 exp1
+  Running kite-surf_obj1_exp1 | "a power kite with blue handles"
+[123/244] kite-surf obj1 exp2
+  Running kite-surf_obj1_exp2 | "a kite"
+[124/244] kite-surf obj1 exp3
+  Running kite-surf_obj1_exp3 | "a surfing rope attached to a person"
+[125/244] kite-surf obj2 exp4
+  Running kite-surf_obj2_exp4 | "a surf-board"
+[126/244] kite-surf obj2 exp5
+  Running kite-surf_obj2_exp5 | "a surf-board"
+[127/244] kite-surf obj2 exp6
+  Running kite-surf_obj2_exp6 | "a surf-board"
+[128/244] kite-surf obj2 exp7
+  Running kite-surf_obj2_exp7 | "a surfboard"
+[129/244] kite-surf obj3 exp8
+  Running kite-surf_obj3_exp8 | "a man wearing a black vest"
+[130/244] kite-surf obj3 exp9
+  Running kite-surf_obj3_exp9 | "a person surfing"
+[131/244] kite-surf obj3 exp10
+  Running kite-surf_obj3_exp10 | "a man in a black vest"
+[132/244] kite-surf obj3 exp11
+  Running kite-surf_obj3_exp11 | "a person wearing a black helmet surfing"
+[133/244] lab-coat obj1 exp0
+  Running lab-coat_obj1_exp0 | "a white cell phone in a left hand"
+[134/244] lab-coat obj1 exp1
+  Running lab-coat_obj1_exp1 | "a pink cell phone in a girl's hand"
+[135/244] lab-coat obj1 exp2
+  Running lab-coat_obj1_exp2 | "a pink cell phone"
+[136/244] lab-coat obj1 exp3
+  Running lab-coat_obj1_exp3 | "a white colored mobile phone on the left"
+[137/244] lab-coat obj2 exp4
+  Running lab-coat_obj2_exp4 | "a pink cell phone in a girl's hand"
+[138/244] lab-coat obj2 exp5
+  Running lab-coat_obj2_exp5 | "a white cell phone in a left hand"
+[139/244] lab-coat obj2 exp6
+  Running lab-coat_obj2_exp6 | "a white cell phone"
+[140/244] lab-coat obj2 exp7
+  Running lab-coat_obj2_exp7 | "a pink colored mobile phone in the hands of the girl on the "
+[141/244] lab-coat obj3 exp8
+  Running lab-coat_obj3_exp8 | "a girl on the right with blonde hair"
+[142/244] lab-coat obj3 exp9
+  Running lab-coat_obj3_exp9 | "a girl on the right with blonde hair"
+[143/244] lab-coat obj3 exp10
+  Running lab-coat_obj3_exp10 | "a girl on the right"
+[144/244] lab-coat obj3 exp11
+  Running lab-coat_obj3_exp11 | "a girl on the right wearing light brown boots"
+[145/244] lab-coat obj4 exp12
+  Running lab-coat_obj4_exp12 | "a girl in the middle wearing a lab-coat and a black shirt"
+[146/244] lab-coat obj4 exp13
+  Running lab-coat_obj4_exp13 | "a girl in the middle wearing a lab-coat and a black shirt"
+[147/244] lab-coat obj4 exp14
+  Running lab-coat_obj4_exp14 | "a girl in the middle"
+[148/244] lab-coat obj4 exp15
+  Running lab-coat_obj4_exp15 | "a girl in the middle wearing dark brown boots and a black sh"
+[149/244] lab-coat obj5 exp16
+  Running lab-coat_obj5_exp16 | "a girl on the left holding 2 cell phones"
+[150/244] lab-coat obj5 exp17
+  Running lab-coat_obj5_exp17 | "a girl on the left holding two cell phones"
+[151/244] lab-coat obj5 exp18
+  Running lab-coat_obj5_exp18 | "a girl on the left"
+[152/244] lab-coat obj5 exp19
+  Running lab-coat_obj5_exp19 | "a girl on the left with goggles on her forehead"
+[153/244] libby obj1 exp0
+  Running libby_obj1_exp0 | "a dog running in the garden"
+[154/244] libby obj1 exp1
+  Running libby_obj1_exp1 | "a dog running"
+[155/244] libby obj1 exp2
+  Running libby_obj1_exp2 | "a dog"
+[156/244] libby obj1 exp3
+  Running libby_obj1_exp3 | "a black and brown dog running"
+[157/244] loading obj1 exp0
+  Running loading_obj1_exp0 | "a fat man on the right in a black jacket"
+[158/244] loading obj1 exp1
+  Running loading_obj1_exp1 | "a big man on the right in a black jacket"
+[159/244] loading obj1 exp2
+  Running loading_obj1_exp2 | "a man on the right"
+[160/244] loading obj1 exp3
+  Running loading_obj1_exp3 | "a man in a black jacket wearing glasses"
+[161/244] loading obj2 exp4
+  Running loading_obj2_exp4 | "a cardboard box held by a man"
+[162/244] loading obj2 exp5
+  Running loading_obj2_exp5 | "a cardboard box held by a man"
+[163/244] loading obj2 exp6
+  Running loading_obj2_exp6 | "a cardboard box held by a man"
+[164/244] loading obj2 exp7
+  Running loading_obj2_exp7 | "a box in the hands of a man wearing glasses"
+[165/244] loading obj3 exp8
+  Running loading_obj3_exp8 | "a man on the left with a beard wearing jeans"
+[166/244] loading obj3 exp9
+  Running loading_obj3_exp9 | "a man on the left with a beard wearing jeans"
+[167/244] loading obj3 exp10
+  Running loading_obj3_exp10 | "a man on the left"
+[168/244] loading obj3 exp11
+  Running loading_obj3_exp11 | "a man in the center wearing a blue and black jacket"
+[169/244] mbike-trick obj1 exp0
+  Running mbike-trick_obj1_exp0 | "a biker man in a white tshirt"
+[170/244] mbike-trick obj1 exp1
+  Running mbike-trick_obj1_exp1 | "a person performing bike tricks"
+[171/244] mbike-trick obj1 exp2
+  Running mbike-trick_obj1_exp2 | "a man on a bike"
+[172/244] mbike-trick obj1 exp3
+  Running mbike-trick_obj1_exp3 | "a person in a white helmet riding a bike"
+[173/244] mbike-trick obj2 exp4
+  Running mbike-trick_obj2_exp4 | "a black stunt bike"
+[174/244] mbike-trick obj2 exp5
+  Running mbike-trick_obj2_exp5 | "a black bike moving"
+[175/244] mbike-trick obj2 exp6
+  Running mbike-trick_obj2_exp6 | "a bike"
+[176/244] mbike-trick obj2 exp7
+  Running mbike-trick_obj2_exp7 | "a black motorbike with golden rims"
+[177/244] motocross-jump obj1 exp0
+  Running motocross-jump_obj1_exp0 | "a man riding a motorbike"
+[178/244] motocross-jump obj1 exp1
+  Running motocross-jump_obj1_exp1 | "a man riding a motorbike"
+[179/244] motocross-jump obj1 exp2
+  Running motocross-jump_obj1_exp2 | "a man riding a motorbike"
+[180/244] motocross-jump obj1 exp3
+  Running motocross-jump_obj1_exp3 | "a man wearing a green helmet"
+[181/244] motocross-jump obj2 exp4
+  Running motocross-jump_obj2_exp4 | "a green motorbike"
+[182/244] motocross-jump obj2 exp5
+  Running motocross-jump_obj2_exp5 | "a green motorbike"
+[183/244] motocross-jump obj2 exp6
+  Running motocross-jump_obj2_exp6 | "a motorbike"
+[184/244] motocross-jump obj2 exp7
+  Running motocross-jump_obj2_exp7 | "a motor-bike"
+[185/244] paragliding-launch obj1 exp0
+  Running paragliding-launch_obj1_exp0 | "a black harness with an airbag"
+[186/244] paragliding-launch obj1 exp1
+  Running paragliding-launch_obj1_exp1 | "a black harness"
+[187/244] paragliding-launch obj1 exp2
+  Running paragliding-launch_obj1_exp2 | "a harness"
+[188/244] paragliding-launch obj1 exp3
+  Running paragliding-launch_obj1_exp3 | "a backpack"
+[189/244] paragliding-launch obj2 exp4
+  Running paragliding-launch_obj2_exp4 | "a man launching a paraglider"
+[190/244] paragliding-launch obj2 exp5
+  Running paragliding-launch_obj2_exp5 | "a person launching paragliding"
+[191/244] paragliding-launch obj2 exp6
+  Running paragliding-launch_obj2_exp6 | "a man with the paraglider"
+[192/244] paragliding-launch obj2 exp7
+  Running paragliding-launch_obj2_exp7 | "a person wearing a backpack"
+[193/244] paragliding-launch obj3 exp8
+  Running paragliding-launch_obj3_exp8 | "wing risers with cascade"
+[194/244] paragliding-launch obj3 exp9
+  Running paragliding-launch_obj3_exp9 | "paraglider lines"
+[195/244] paragliding-launch obj3 exp10
+  Running paragliding-launch_obj3_exp10 | "paraglider lines"
+[196/244] paragliding-launch obj3 exp11
+  Running paragliding-launch_obj3_exp11 | "strings of a parachute"
+[197/244] parkour obj1 exp0
+  Running parkour_obj1_exp0 | "a man jumping across fences"
+[198/244] parkour obj1 exp1
+  Running parkour_obj1_exp1 | "a person crossing over obstacles"
+[199/244] parkour obj1 exp2
+  Running parkour_obj1_exp2 | "a parkour guy"
+[200/244] parkour obj1 exp3
+  Running parkour_obj1_exp3 | "a person in a greyish blue shirt"
+[201/244] pigs obj1 exp0
+  Running pigs_obj1_exp0 | "a brown and white colored piglet"
+[202/244] pigs obj1 exp1
+  Running pigs_obj1_exp1 | "a brown and white coloured piglet"
+[203/244] pigs obj1 exp2
+  Running pigs_obj1_exp2 | "a brown and white colored piglet"
+[204/244] pigs obj1 exp3
+  Running pigs_obj1_exp3 | "a brown and white pig"
+[205/244] pigs obj2 exp4
+  Running pigs_obj2_exp4 | "a brown piglet in the middle"
+[206/244] pigs obj2 exp5
+  Running pigs_obj2_exp5 | "a brown piglet"
+[207/244] pigs obj2 exp6
+  Running pigs_obj2_exp6 | "a brown piglet in the middle"
+[208/244] pigs obj2 exp7
+  Running pigs_obj2_exp7 | "a fully brown pig in the centre"
+[209/244] pigs obj3 exp8
+  Running pigs_obj3_exp8 | "an adult pig on the right"
+[210/244] pigs obj3 exp9
+  Running pigs_obj3_exp9 | "an adult pig"
+[211/244] pigs obj3 exp10
+  Running pigs_obj3_exp10 | "a pig on the right"
+[212/244] pigs obj3 exp11
+  Running pigs_obj3_exp11 | "a black colored pig"
+[213/244] scooter-black obj1 exp0
+  Running scooter-black_obj1_exp0 | "a man in a suit riding a scooter"
+[214/244] scooter-black obj1 exp1
+  Running scooter-black_obj1_exp1 | "a man in a suit riding on a black scooter"
+[215/244] scooter-black obj1 exp2
+  Running scooter-black_obj1_exp2 | "a man riding a scooter"
+[216/244] scooter-black obj1 exp3
+  Running scooter-black_obj1_exp3 | "a man wearing a white helmet riding a scooter"
+[217/244] scooter-black obj2 exp4
+  Running scooter-black_obj2_exp4 | "a black scooter ridden by a man"
+[218/244] scooter-black obj2 exp5
+  Running scooter-black_obj2_exp5 | "a black scooter being ridden in a street"
+[219/244] scooter-black obj2 exp6
+  Running scooter-black_obj2_exp6 | "a black scooter"
+[220/244] scooter-black obj2 exp7
+  Running scooter-black_obj2_exp7 | "a black heavy bike with a bmw logo in the middle of the road"
+[221/244] shooting obj1 exp0
+  Running shooting_obj1_exp0 | "a black shooting gun"
+[222/244] shooting obj1 exp1
+  Running shooting_obj1_exp1 | "a black rifle"
+[223/244] shooting obj1 exp2
+  Running shooting_obj1_exp2 | "a gun"
+[224/244] shooting obj1 exp3
+  Running shooting_obj1_exp3 | "an automatic rifle"
+[225/244] shooting obj2 exp4
+  Running shooting_obj2_exp4 | "a black man"
+[226/244] shooting obj2 exp5
+  Running shooting_obj2_exp5 | "a person shooting with a rifle"
+[227/244] shooting obj2 exp6
+  Running shooting_obj2_exp6 | "a man"
+[228/244] shooting obj2 exp7
+  Running shooting_obj2_exp7 | "a person holding a rifle"
+[229/244] shooting obj3 exp8
+  Running shooting_obj3_exp8 | "a rope"
+[230/244] shooting obj3 exp9
+  Running shooting_obj3_exp9 | "a rope which the guy is hanging on"
+[231/244] shooting obj3 exp10
+  Running shooting_obj3_exp10 | "a rope"
+[232/244] shooting obj3 exp11
+  Running shooting_obj3_exp11 | "a rope"
+[233/244] soapbox obj1 exp0
+  Running soapbox_obj1_exp0 | "a blue wooden car"
+[234/244] soapbox obj1 exp1
+  Running soapbox_obj1_exp1 | "a blue wooden car"
+[235/244] soapbox obj1 exp2
+  Running soapbox_obj1_exp2 | "a blue car"
+[236/244] soapbox obj1 exp3
+  Running soapbox_obj1_exp3 | "a go-cart type car"
+[237/244] soapbox obj2 exp4
+  Running soapbox_obj2_exp4 | "a man in a white helmet driving a wooden car"
+[238/244] soapbox obj2 exp5
+  Running soapbox_obj2_exp5 | "a man in a white helmet driving a wooden car"
+[239/244] soapbox obj2 exp6
+  Running soapbox_obj2_exp6 | "a man driving a car"
+[240/244] soapbox obj2 exp7
+  Running soapbox_obj2_exp7 | "a person driving the go cart"
+[241/244] soapbox obj3 exp8
+  Running soapbox_obj3_exp8 | "a man wearing a white shirt on a wooden car without a helmet"
+[242/244] soapbox obj3 exp9
+  Running soapbox_obj3_exp9 | "a man wearing a white shirt on a wooden car without a helmet"
+[243/244] soapbox obj3 exp10
+  Running soapbox_obj3_exp10 | "a man in a white shirt standing on a car"
+[244/244] soapbox obj3 exp11
+  Running soapbox_obj3_exp11 | "person at the back of the go-cart without a helmet"
+Wrote results/expression_variance/results.json  (244 rows)
+Wrote results/expression_variance/grouped_stats.json
+Wrote results/expression_variance/summary.json
+
+=== Dataset-level summary ===
+  groups: 61
+  iou:
+    mean within-group std:    0.0382
+    mean within-group range:  0.0901
+    mean best - worst gap:    0.0901
+    mean(worst) → mean(best): 0.4762 → 0.5663
+  mass_in_gt:
+    mean within-group std:    0.0174
+    mean within-group range:  0.0429
+    mean best - worst gap:    0.0429
+    mean(worst) → mean(best): 0.1636 → 0.2064
+  mass_in_pred:
+    mean within-group std:    0.0209
+    mean within-group range:  0.0515
+    mean best - worst gap:    0.0515
+    mean(worst) → mean(best): 0.1430 → 0.1945
+
+Wrote 4 figures to results/expression_variance/figures

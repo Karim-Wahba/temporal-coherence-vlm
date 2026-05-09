@@ -1,0 +1,798 @@
+JobId=2107474 JobName=POS-DOM-QWEN
+   UserId=wahba(2286) GroupId=ra_staff(5011) MCS_label=N/A
+   Priority=447 Nice=0 Account=l40s QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:01 TimeLimit=23:00:00 TimeMin=N/A
+   SubmitTime=2026-05-07T19:01:40 EligibleTime=2026-05-07T19:01:40
+   AccrueTime=2026-05-07T19:01:40
+   StartTime=2026-05-07T19:01:40 EndTime=2026-05-08T18:01:40 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-05-07T19:01:40 Scheduler=Backfill
+   Partition=L40Sday AllocNode:Sid=tcml-login3:1689367
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=tcml-node15
+   BatchHost=tcml-node15
+   NumNodes=1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=1,mem=100G,node=1,billing=19,gres/gpu=1
+   AllocTRES=cpu=1,mem=100G,node=1,billing=19,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryCPU=100G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/mnt/beegfs/home/wahba/git/temporal-coherence-vlm/experiments/pos-dominance/sbatch_run.sh
+   WorkDir=/mnt/beegfs/home/wahba/git/temporal-coherence-vlm/experiments/pos-dominance
+   StdErr=/mnt/beegfs/home/wahba/git/temporal-coherence-vlm/experiments/pos-dominance/logs/pos_dominance-2107474.err
+   StdIn=/dev/null
+   StdOut=/mnt/beegfs/home/wahba/git/temporal-coherence-vlm/experiments/pos-dominance/logs/pos_dominance-2107474.out
+   TresPerNode=gres/gpu:1
+   
+
+Thu May  7 19:01:41 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.126.09             Driver Version: 580.126.09     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA L40S                    Off |   00000000:A1:00.0 Off |                    0 |
+| N/A   30C    P8             32W /  350W |       0MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Loading model: Qwen/Qwen3-VL-8B-Instruct
+
+[1/236] bike-packing  "a black bike"
+  bike-packing exp0: 5 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'bike': 'label_noun'}
+
+[2/236] bike-packing  "black and white coloured bike"
+  bike-packing exp1: 5 frames  primary=json_structure  pos_map={'black': 'label_adj', 'and': 'label_other_pos', 'white': 'label_adj', 'coloured': 'label_verb', 'bike': 'label_noun'}
+
+[3/236] bike-packing  "a black bike upside-down"
+  bike-packing exp2: 5 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'bike': 'label_noun', 'upside-down': 'label_adj'}
+
+[4/236] bike-packing  "an upside-down bike"
+  bike-packing exp3: 5 frames  primary=json_structure  pos_map={'an': 'label_other_pos', 'upside-down': 'label_adj', 'bike': 'label_noun'}
+
+[5/236] bike-packing  "a man wearing a cap"
+  bike-packing exp4: 5 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'wearing': 'label_verb', 'cap': 'label_noun'}
+
+[6/236] bike-packing  "a man holding a bike"
+  bike-packing exp5: 5 frames  primary=label_verb  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'holding': 'label_verb', 'bike': 'label_noun'}
+
+[7/236] bike-packing  "a man"
+  bike-packing exp6: 5 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'man': 'label_noun'}
+
+[8/236] bike-packing  "a man wearing a cap and shorts"
+  bike-packing exp7: 5 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'wearing': 'label_verb', 'cap': 'label_noun', 'and': 'label_other_pos', 'shorts': 'label_noun'}
+
+[9/236] blackswan  "a black swan"
+  blackswan exp0: 4 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'swan': 'label_noun'}
+
+[10/236] blackswan  "a black feathered swan"
+  blackswan exp1: 4 frames  primary=other_content  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'feathered': 'label_adj', 'swan': 'label_noun'}
+
+[11/236] blackswan  "a swan"
+  blackswan exp2: 4 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'swan': 'label_noun'}
+
+[12/236] blackswan  "a black swan"
+  blackswan exp3: 4 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'swan': 'label_noun'}
+
+[13/236] bmx-trees  "a red bmx bike"
+  bmx-trees exp0: 5 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'red': 'label_adj', 'bmx': 'label_noun', 'bike': 'label_noun'}
+
+[14/236] bmx-trees  "a black bike"
+  bmx-trees exp1: 5 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'bike': 'label_noun'}
+
+[15/236] bmx-trees  "a bmx bike"
+  bmx-trees exp2: 5 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'bmx': 'label_noun', 'bike': 'label_noun'}
+
+[16/236] bmx-trees  "a bicycle"
+  bmx-trees exp3: 5 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'bicycle': 'label_noun'}
+
+[17/236] bmx-trees  "a boy wearing a white tshirt"
+  bmx-trees exp4: 5 frames  primary=other_content  pos_map={'a': 'label_other_pos', 'boy': 'label_noun', 'wearing': 'label_verb', 'white': 'label_adj', 'tshirt': 'label_noun'}
+
+[18/236] bmx-trees  "a boy riding a bicycle"
+  bmx-trees exp5: 5 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'boy': 'label_noun', 'riding': 'label_verb', 'bicycle': 'label_noun'}
+
+[19/236] bmx-trees  "a boy riding a bmx bike"
+  bmx-trees exp6: 5 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'boy': 'label_noun', 'riding': 'label_verb', 'bmx': 'label_noun', 'bike': 'label_noun'}
+
+[20/236] bmx-trees  "a man in a white shirt and shorts"
+  bmx-trees exp7: 5 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'in': 'label_other_pos', 'white': 'label_adj', 'shirt': 'label_noun', 'and': 'label_other_pos', 'shorts': 'label_noun'}
+
+[21/236] breakdance  "a man in a red sweatshirt performing breakdance"
+  breakdance exp0: 6 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'in': 'label_other_pos', 'red': 'label_adj', 'sweatshirt': 'label_noun', 'performing': 'label_verb', 'breakdance': 'label_noun'}
+
+[22/236] breakdance  "a boy in a red tshirt performing a breakdance"
+  breakdance exp1: 6 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'boy': 'label_noun', 'in': 'label_other_pos', 'red': 'label_adj', 'tshirt': 'label_noun', 'performing': 'label_verb', 'breakdance': 'label_noun'}
+
+[23/236] breakdance  "a man performing a headspin"
+  breakdance exp2: 6 frames  primary=other_content  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'performing': 'label_verb', 'headspin': 'label_noun'}
+
+[24/236] breakdance  "a guy in a brown shirt and blue jeans breakdancing"
+  breakdance exp3: 6 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'guy': 'label_noun', 'in': 'label_other_pos', 'brown': 'label_adj', 'shirt': 'label_noun', 'and': 'label_other_pos', 'blue': 'label_adj', 'jeans': 'label_noun', 'breakdancing': 'label_verb'}
+
+[25/236] camel  "a brown camel in the front"
+  camel exp0: 6 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'brown': 'label_adj', 'camel': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'front': 'label_noun'}
+
+[26/236] camel  "a camel moving"
+  camel exp1: 6 frames  primary=frame_index  pos_map={'a': 'label_other_pos', 'camel': 'label_noun', 'moving': 'label_verb'}
+
+[27/236] camel  "a camel walking"
+  camel exp2: 6 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'camel': 'label_noun', 'walking': 'label_noun'}
+
+[28/236] camel  "a brown camel walking"
+  camel exp3: 6 frames  primary=frame_index  pos_map={'a': 'label_other_pos', 'brown': 'label_adj', 'camel': 'label_noun', 'walking': 'label_verb'}
+
+[29/236] car-roundabout  "a black car"
+  car-roundabout exp0: 5 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'car': 'label_noun'}
+
+[30/236] car-roundabout  "a black car moving through a roundabout"
+  car-roundabout exp1: 5 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'car': 'label_noun', 'moving': 'label_verb', 'through': 'label_other_pos', 'roundabout': 'label_noun'}
+
+[31/236] car-roundabout  "a black car"
+  car-roundabout exp2: 5 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'car': 'label_noun'}
+
+[32/236] car-roundabout  "a space-grey car in a roundabout"
+  car-roundabout exp3: 5 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'space-grey': 'label_adj', 'car': 'label_noun', 'in': 'label_other_pos', 'roundabout': 'label_noun'}
+
+[33/236] car-shadow  "a silver car"
+  car-shadow exp0: 3 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'silver': 'label_noun', 'car': 'label_noun'}
+
+[34/236] car-shadow  "a white car crossing a signal"
+  car-shadow exp1: 3 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'white': 'label_adj', 'car': 'label_noun', 'crossing': 'label_verb', 'signal': 'label_noun'}
+
+[35/236] car-shadow  "a car on the road"
+  car-shadow exp2: 3 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'car': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'road': 'label_noun'}
+
+[36/236] car-shadow  "a sliver car going from shade to sunlight"
+  car-shadow exp3: 3 frames  primary=other_content  pos_map={'a': 'label_other_pos', 'sliver': 'label_noun', 'car': 'label_noun', 'going': 'label_verb', 'from': 'label_other_pos', 'shade': 'label_verb', 'to': 'label_other_pos', 'sunlight': 'label_verb'}
+
+[37/236] cows  "a cow with a bell around its neck"
+  cows exp0: 7 frames  primary=label_function  pos_map={'a': 'label_other_pos', 'cow': 'label_noun', 'with': 'label_other_pos', 'bell': 'label_noun', 'around': 'label_other_pos', 'its': 'label_other_pos', 'neck': 'label_noun'}
+
+[38/236] cows  "a cow in the field"
+  cows exp1: 7 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'cow': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'field': 'label_noun'}
+
+[39/236] cows  "a white cow with brown patches"
+  cows exp2: 7 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'white': 'label_adj', 'cow': 'label_noun', 'with': 'label_other_pos', 'brown': 'label_adj', 'patches': 'label_noun'}
+
+[40/236] cows  "a brown and white cow"
+  cows exp3: 7 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'brown': 'label_noun', 'and': 'label_other_pos', 'white': 'label_adj', 'cow': 'label_noun'}
+
+[41/236] dance-twirl  "a girl with blonde hair dressed in blue"
+  dance-twirl exp0: 6 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'girl': 'label_noun', 'with': 'label_other_pos', 'blonde': 'label_adj', 'hair': 'label_noun', 'dressed': 'label_verb', 'in': 'label_other_pos', 'blue': 'label_noun'}
+
+[42/236] dance-twirl  "a girl in a blue dress twirling"
+  dance-twirl exp1: 6 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'girl': 'label_noun', 'in': 'label_other_pos', 'blue': 'label_adj', 'dress': 'label_noun', 'twirling': 'label_verb'}
+
+[43/236] dance-twirl  "girl dancing in blue"
+  dance-twirl exp2: 6 frames  primary=label_noun  pos_map={'girl': 'label_noun', 'dancing': 'label_verb', 'in': 'label_other_pos', 'blue': 'label_noun'}
+
+[44/236] dance-twirl  "a blonde haired girl dancing in a blue dress"
+  dance-twirl exp3: 6 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'blonde': 'label_noun', 'haired': 'label_verb', 'girl': 'label_adj', 'dancing': 'label_noun', 'in': 'label_other_pos', 'blue': 'label_adj', 'dress': 'label_noun'}
+
+[45/236] dog  "a golden retriever walking in the grass"
+  dog exp0: 4 frames  primary=other_content  pos_map={'a': 'label_other_pos', 'golden': 'label_adj', 'retriever': 'label_noun', 'walking': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'grass': 'label_noun'}
+
+[46/236] dog  "a dog walking"
+  dog exp1: 4 frames  primary=other_content  pos_map={'a': 'label_other_pos', 'dog': 'label_noun', 'walking': 'label_noun'}
+
+[47/236] dog  "a dog with a ball in its mouth"
+  dog exp2: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'dog': 'label_noun', 'with': 'label_other_pos', 'ball': 'label_noun', 'in': 'label_other_pos', 'its': 'label_other_pos', 'mouth': 'label_noun'}
+
+[48/236] dog  "a dog looking for something "
+  dog exp3: 4 frames  primary=other_content  pos_map={'a': 'label_other_pos', 'dog': 'label_noun', 'looking': 'label_verb', 'for': 'label_other_pos', 'something': 'label_noun'}
+
+[49/236] dogs-jump  "a white dog with black patches"
+  dogs-jump exp0: 5 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'white': 'label_adj', 'dog': 'label_noun', 'with': 'label_other_pos', 'black': 'label_adj', 'patches': 'label_noun'}
+
+[50/236] dogs-jump  "a white dog with black patches"
+  dogs-jump exp1: 5 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'white': 'label_adj', 'dog': 'label_noun', 'with': 'label_other_pos', 'black': 'label_adj', 'patches': 'label_noun'}
+
+[51/236] dogs-jump  "a white dog with black patches"
+  dogs-jump exp2: 5 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'white': 'label_adj', 'dog': 'label_noun', 'with': 'label_other_pos', 'black': 'label_adj', 'patches': 'label_noun'}
+
+[52/236] dogs-jump  "a dog jumping for a snack going to the left"
+  dogs-jump exp3: 5 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'dog': 'label_noun', 'jumping': 'label_noun', 'for': 'label_other_pos', 'snack': 'label_noun', 'going': 'label_verb', 'to': 'label_other_pos', 'the': 'label_other_pos', 'left': 'label_noun'}
+
+[53/236] dogs-jump  "a white dog with gray patches"
+  dogs-jump exp4: 5 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'white': 'label_adj', 'dog': 'label_noun', 'with': 'label_other_pos', 'gray': 'label_adj', 'patches': 'label_noun'}
+
+[54/236] dogs-jump  "a white dog with grey patches"
+  dogs-jump exp5: 5 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'white': 'label_adj', 'dog': 'label_noun', 'with': 'label_other_pos', 'grey': 'label_noun', 'patches': 'label_noun'}
+
+[55/236] dogs-jump  "a white dog with grey patches"
+  dogs-jump exp6: 5 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'white': 'label_adj', 'dog': 'label_noun', 'with': 'label_other_pos', 'grey': 'label_noun', 'patches': 'label_noun'}
+
+[56/236] dogs-jump  "a dog jumping for a snack going to the right"
+  dogs-jump exp7: 5 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'dog': 'label_noun', 'jumping': 'label_noun', 'for': 'label_other_pos', 'snack': 'label_noun', 'going': 'label_verb', 'to': 'label_other_pos', 'the': 'label_other_pos', 'right': 'label_noun'}
+
+[57/236] dogs-jump  "a woman in a yellow jacket"
+  dogs-jump exp8: 5 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'woman': 'label_noun', 'in': 'label_other_pos', 'yellow': 'label_adj', 'jacket': 'label_noun'}
+
+[58/236] dogs-jump  "a woman in a yellow jacket and mustered trousers"
+  dogs-jump exp9: 5 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'woman': 'label_noun', 'in': 'label_other_pos', 'yellow': 'label_adj', 'jacket': 'label_noun', 'and': 'label_other_pos', 'mustered': 'label_verb', 'trousers': 'label_noun'}
+
+[59/236] dogs-jump  "a woman"
+  dogs-jump exp10: 5 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'woman': 'label_noun'}
+
+[60/236] dogs-jump  "a woman in a yellow shirt throwing dog snacks"
+  dogs-jump exp11: 5 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'woman': 'label_noun', 'in': 'label_other_pos', 'yellow': 'label_adj', 'shirt': 'label_noun', 'throwing': 'label_verb', 'dog': 'label_noun', 'snacks': 'label_noun'}
+
+[61/236] drift-chicane  "a red and white car"
+  drift-chicane exp0: 4 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'red': 'label_adj', 'and': 'label_other_pos', 'white': 'label_adj', 'car': 'label_noun'}
+
+[62/236] drift-chicane  "a car racing"
+  drift-chicane exp1: 4 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'car': 'label_noun', 'racing': 'label_noun'}
+
+[63/236] drift-chicane  "a sport car"
+  drift-chicane exp2: 4 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'sport': 'label_noun', 'car': 'label_noun'}
+
+[64/236] drift-chicane  "a white sport car drifting at turns"
+  drift-chicane exp3: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'white': 'label_adj', 'sport': 'label_noun', 'car': 'label_noun', 'drifting': 'label_verb', 'at': 'label_other_pos', 'turns': 'label_noun'}
+
+[65/236] drift-straight  "a drift car on a straight road"
+  drift-straight exp0: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'drift': 'label_noun', 'car': 'label_noun', 'on': 'label_other_pos', 'straight': 'label_adj', 'road': 'label_noun'}
+
+[66/236] drift-straight  "a car in a racing track"
+  drift-straight exp1: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'car': 'label_noun', 'in': 'label_other_pos', 'racing': 'label_noun', 'track': 'label_noun'}
+
+[67/236] drift-straight  "a red car"
+  drift-straight exp2: 4 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'red': 'label_adj', 'car': 'label_noun'}
+
+[68/236] drift-straight  "a red sport car drifting on a race track"
+  drift-straight exp3: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'red': 'label_adj', 'sport': 'label_noun', 'car': 'label_noun', 'drifting': 'label_verb', 'on': 'label_other_pos', 'race': 'label_noun', 'track': 'label_noun'}
+
+[69/236] goat  "a goat walking on rocks"
+  goat exp0: 6 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'goat': 'label_noun', 'walking': 'label_verb', 'on': 'label_other_pos', 'rocks': 'label_noun'}
+
+[70/236] goat  "a goat walking in the hilly area"
+  goat exp1: 6 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'goat': 'label_noun', 'walking': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'hilly': 'label_adv', 'area': 'label_noun'}
+
+[71/236] goat  "a gray goat"
+  goat exp2: 6 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'gray': 'label_adj', 'goat': 'label_noun'}
+
+[72/236] goat  "a grey colored mountain goat"
+  goat exp3: 6 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'grey': 'label_noun', 'colored': 'label_verb', 'mountain': 'label_noun', 'goat': 'label_noun'}
+
+[73/236] gold-fish  "a largest orange goldfish"
+  gold-fish exp0: 5 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'largest': 'label_adj', 'orange': 'label_noun', 'goldfish': 'label_noun'}
+
+[74/236] gold-fish  "the largest orange goldfish"
+  gold-fish exp1: 5 frames  primary=label_adj  pos_map={'the': 'label_other_pos', 'largest': 'label_adj', 'orange': 'label_noun', 'goldfish': 'label_noun'}
+
+[75/236] gold-fish  "the biggest goldfish"
+  gold-fish exp2: 5 frames  primary=label_adj  pos_map={'the': 'label_other_pos', 'biggest': 'label_adj', 'goldfish': 'label_noun'}
+
+[76/236] gold-fish  "a gold fish facing towards the top right of the frame"
+  gold-fish exp3: 5 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'gold': 'label_noun', 'fish': 'label_noun', 'facing': 'label_noun', 'towards': 'label_other_pos', 'the': 'label_other_pos', 'top': 'label_adj', 'right': 'label_noun', 'of': 'label_other_pos', 'frame': 'label_noun'}
+
+[77/236] gold-fish  "an orange goldfish in the center next to the largest fish"
+  gold-fish exp4: 5 frames  primary=json_structure  pos_map={'an': 'label_other_pos', 'orange': 'label_noun', 'goldfish': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'center': 'label_noun', 'next': 'label_other_pos', 'to': 'label_other_pos', 'largest': 'label_adj', 'fish': 'label_noun'}
+
+[78/236] gold-fish  "an orange goldfish with a white stripe in the center"
+  gold-fish exp5: 5 frames  primary=label_adj  pos_map={'an': 'label_other_pos', 'orange': 'label_noun', 'goldfish': 'label_noun', 'with': 'label_other_pos', 'a': 'label_other_pos', 'white': 'label_adj', 'stripe': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'center': 'label_noun'}
+
+[79/236] gold-fish  "an orange goldfish in the center next to the largest fish"
+  gold-fish exp6: 5 frames  primary=json_structure  pos_map={'an': 'label_other_pos', 'orange': 'label_noun', 'goldfish': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'center': 'label_noun', 'next': 'label_other_pos', 'to': 'label_other_pos', 'largest': 'label_adj', 'fish': 'label_noun'}
+
+[80/236] gold-fish  "a gold fish swimming towards the camera"
+  gold-fish exp7: 5 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'gold': 'label_noun', 'fish': 'label_adj', 'swimming': 'label_noun', 'towards': 'label_other_pos', 'the': 'label_other_pos', 'camera': 'label_noun'}
+
+[81/236] gold-fish  "a smallest goldfish"
+  gold-fish exp8: 5 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'smallest': 'label_adj', 'goldfish': 'label_noun'}
+
+[82/236] gold-fish  "a smallest goldfish on the bottom half"
+  gold-fish exp9: 5 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'smallest': 'label_adj', 'goldfish': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'bottom': 'label_adj', 'half': 'label_noun'}
+
+[83/236] gold-fish  "the smallest goldfish"
+  gold-fish exp10: 5 frames  primary=json_structure  pos_map={'the': 'label_other_pos', 'smallest': 'label_adj', 'goldfish': 'label_adj'}
+
+[84/236] gold-fish  "a gold fish in the middle swimming towards down-right"
+  gold-fish exp11: 5 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'gold': 'label_adj', 'fish': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'middle': 'label_adj', 'swimming': 'label_noun', 'towards': 'label_noun', 'down-right': 'label_noun'}
+
+[85/236] gold-fish  "a goldfish at the end"
+  gold-fish exp12: 5 frames  primary=other_content  pos_map={'a': 'label_other_pos', 'goldfish': 'label_noun', 'at': 'label_other_pos', 'the': 'label_other_pos', 'end': 'label_noun'}
+
+[86/236] gold-fish  "a small orange goldfish on the top half"
+  gold-fish exp13: 5 frames  primary=other_content  pos_map={'a': 'label_other_pos', 'small': 'label_adj', 'orange': 'label_noun', 'goldfish': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'top': 'label_adj', 'half': 'label_noun'}
+
+[87/236] gold-fish  "a small goldfish in the end"
+  gold-fish exp14: 5 frames  primary=other_content  pos_map={'a': 'label_other_pos', 'small': 'label_adj', 'goldfish': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'end': 'label_noun'}
+
+[88/236] gold-fish  "a gold fish on the left swimming towards the top right"
+  gold-fish exp15: 5 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'gold': 'label_adj', 'fish': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'left': 'label_adj', 'swimming': 'label_noun', 'towards': 'label_other_pos', 'top': 'label_adj', 'right': 'label_noun'}
+
+[89/236] horsejump-high  "a horse doing high jumps"
+  horsejump-high exp0: 4 frames  primary=label_verb  pos_map={'a': 'label_other_pos', 'horse': 'label_noun', 'doing': 'label_verb', 'high': 'label_adj', 'jumps': 'label_noun'}
+
+[90/236] horsejump-high  "a horse jumping over obstacles"
+  horsejump-high exp1: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'horse': 'label_noun', 'jumping': 'label_noun', 'over': 'label_other_pos', 'obstacles': 'label_noun'}
+
+[91/236] horsejump-high  "a horse ridden by a woman"
+  horsejump-high exp2: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'horse': 'label_noun', 'ridden': 'label_noun', 'by': 'label_other_pos', 'woman': 'label_noun'}
+
+[92/236] horsejump-high  "a brown colored horse"
+  horsejump-high exp3: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'brown': 'label_noun', 'colored': 'label_adj', 'horse': 'label_noun'}
+
+[93/236] horsejump-high  "a woman riding a horse"
+  horsejump-high exp4: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'woman': 'label_noun', 'riding': 'label_verb', 'horse': 'label_noun'}
+
+[94/236] horsejump-high  "a jockey wearing a white uniform"
+  horsejump-high exp5: 4 frames  primary=label_verb  pos_map={'a': 'label_other_pos', 'jockey': 'label_noun', 'wearing': 'label_verb', 'white': 'label_adj', 'uniform': 'label_noun'}
+
+[95/236] horsejump-high  "a girl riding a horse"
+  horsejump-high exp6: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'girl': 'label_noun', 'riding': 'label_verb', 'horse': 'label_noun'}
+
+[96/236] horsejump-high  "a woman in a black and white dress riding a horse"
+  horsejump-high exp7: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'woman': 'label_noun', 'in': 'label_other_pos', 'black': 'label_adj', 'and': 'label_other_pos', 'white': 'label_adj', 'dress': 'label_noun', 'riding': 'label_verb', 'horse': 'label_noun'}
+
+[97/236] india  "a woman in a yellow salwar suit"
+  india exp0: 6 frames  primary=other_content  pos_map={'a': 'label_other_pos', 'woman': 'label_noun', 'in': 'label_other_pos', 'yellow': 'label_adj', 'salwar': 'label_noun', 'suit': 'label_noun'}
+
+[98/236] india  "a woman on the left wearing a yellow dress"
+  india exp1: 6 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'woman': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'left': 'label_noun', 'wearing': 'label_verb', 'yellow': 'label_adj', 'dress': 'label_noun'}
+
+[99/236] india  "a woman in a yellow sari"
+  india exp2: 6 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'woman': 'label_noun', 'in': 'label_other_pos', 'yellow': 'label_adj', 'sari': 'label_noun'}
+
+[100/236] india  "a woman in yellow on the left"
+  india exp3: 6 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'woman': 'label_noun', 'in': 'label_other_pos', 'yellow': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'left': 'label_noun'}
+
+[101/236] india  "a woman in a red sari in the middle"
+  india exp4: 6 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'woman': 'label_noun', 'in': 'label_other_pos', 'red': 'label_adj', 'sari': 'label_noun', 'the': 'label_other_pos', 'middle': 'label_noun'}
+
+[102/236] india  "a woman in the middle wearing a red dress"
+  india exp5: 6 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'woman': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'middle': 'label_adj', 'wearing': 'label_verb', 'red': 'label_adj', 'dress': 'label_noun'}
+
+[103/236] india  "a woman in a red sari"
+  india exp6: 6 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'woman': 'label_noun', 'in': 'label_other_pos', 'red': 'label_adj', 'sari': 'label_noun'}
+
+[104/236] india  "a woman in a red dress in the middle"
+  india exp7: 6 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'woman': 'label_noun', 'in': 'label_other_pos', 'red': 'label_adj', 'dress': 'label_noun', 'the': 'label_other_pos', 'middle': 'label_noun'}
+
+[105/236] india  "a lady in a black salwar on the right"
+  india exp8: 6 frames  primary=label_function  pos_map={'a': 'label_other_pos', 'lady': 'label_noun', 'in': 'label_other_pos', 'black': 'label_adj', 'salwar': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'right': 'label_noun'}
+
+[106/236] india  "a woman on right wearing a black dress"
+  india exp9: 6 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'woman': 'label_noun', 'on': 'label_other_pos', 'right': 'label_adj', 'wearing': 'label_verb', 'black': 'label_adj', 'dress': 'label_noun'}
+
+[107/236] india  "a woman in black on the right"
+  india exp10: 6 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'woman': 'label_noun', 'in': 'label_other_pos', 'black': 'label_adj', 'on': 'label_other_pos', 'the': 'label_other_pos', 'right': 'label_noun'}
+
+[108/236] india  "a woman on the right wearing a pink and black dress carrying"
+  india exp11: 6 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'woman': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'right': 'label_adj', 'wearing': 'label_verb', 'pink': 'label_noun', 'and': 'label_other_pos', 'black': 'label_adj', 'dress': 'label_noun', 'carrying': 'label_verb', 'shopping': 'label_noun', 'bag': 'label_noun'}
+
+[109/236] judo  "a man with a blue belt on the right"
+  judo exp0: 3 frames  primary=label_function  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'with': 'label_other_pos', 'blue': 'label_adj', 'belt': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'right': 'label_noun'}
+
+[110/236] judo  "a man with a blue belt on the right"
+  judo exp1: 3 frames  primary=label_function  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'with': 'label_other_pos', 'blue': 'label_adj', 'belt': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'right': 'label_noun'}
+
+[111/236] judo  "a man fighting on the right"
+  judo exp2: 3 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'fighting': 'label_verb', 'on': 'label_other_pos', 'the': 'label_other_pos', 'right': 'label_noun'}
+
+[112/236] judo  "a man in the middle wearing a blue belt teaching judo"
+  judo exp3: 3 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'middle': 'label_adj', 'wearing': 'label_verb', 'blue': 'label_noun', 'belt': 'label_noun', 'teaching': 'label_verb', 'judo': 'label_noun'}
+
+[113/236] judo  "a bald man with a black belt in the center"
+  judo exp4: 3 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'bald': 'label_noun', 'man': 'label_noun', 'with': 'label_other_pos', 'black': 'label_adj', 'belt': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'center': 'label_noun'}
+
+[114/236] judo  "a bald man with a black belt in the center of the mat"
+  judo exp5: 3 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'bald': 'label_noun', 'man': 'label_noun', 'with': 'label_other_pos', 'black': 'label_adj', 'belt': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'center': 'label_noun', 'of': 'label_other_pos', 'mat': 'label_noun'}
+
+[115/236] judo  "a man fighting on the left"
+  judo exp6: 3 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'fighting': 'label_verb', 'on': 'label_other_pos', 'the': 'label_other_pos', 'left': 'label_noun'}
+
+[116/236] judo  "a bald man in the middle wearing a black belt falling down"
+  judo exp7: 3 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'bald': 'label_noun', 'man': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'middle': 'label_adj', 'wearing': 'label_verb', 'black': 'label_adj', 'belt': 'label_noun', 'falling': 'label_verb', 'down': 'label_other_pos'}
+
+[117/236] kite-surf  "a power kite with blue handles"
+  kite-surf exp0: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'power': 'label_noun', 'kite': 'label_noun', 'with': 'label_other_pos', 'blue': 'label_adj', 'handles': 'label_noun'}
+
+[118/236] kite-surf  "a power kite with blue handles"
+  kite-surf exp1: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'power': 'label_noun', 'kite': 'label_noun', 'with': 'label_other_pos', 'blue': 'label_adj', 'handles': 'label_noun'}
+
+[119/236] kite-surf  "a kite"
+  kite-surf exp2: 4 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'kite': 'label_noun'}
+
+[120/236] kite-surf  "a surfing rope attached to a person"
+  kite-surf exp3: 4 frames  primary=label_verb  pos_map={'a': 'label_other_pos', 'surfing': 'label_verb', 'rope': 'label_noun', 'attached': 'label_verb', 'to': 'label_other_pos', 'person': 'label_noun'}
+
+[121/236] kite-surf  "a surf-board"
+  kite-surf exp4: 3 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'surf-board': 'label_adj'}
+
+[122/236] kite-surf  "a surf-board"
+  kite-surf exp5: 3 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'surf-board': 'label_adj'}
+
+[123/236] kite-surf  "a surf-board"
+  kite-surf exp6: 3 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'surf-board': 'label_adj'}
+
+[124/236] kite-surf  "a surfboard"
+  kite-surf exp7: 3 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'surfboard': 'label_noun'}
+
+[125/236] kite-surf  "a man wearing a black vest"
+  kite-surf exp8: 4 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'wearing': 'label_verb', 'black': 'label_adj', 'vest': 'label_noun'}
+
+[126/236] kite-surf  "a person surfing"
+  kite-surf exp9: 4 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'person': 'label_noun', 'surfing': 'label_verb'}
+
+[127/236] kite-surf  "a man in a black vest"
+  kite-surf exp10: 4 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'in': 'label_other_pos', 'black': 'label_adj', 'vest': 'label_noun'}
+
+[128/236] kite-surf  "a person wearing a black helmet surfing"
+  kite-surf exp11: 4 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'person': 'label_noun', 'wearing': 'label_verb', 'black': 'label_adj', 'helmet': 'label_noun', 'surfing': 'label_noun'}
+
+[129/236] lab-coat  "a white cell phone in a left hand"
+  lab-coat exp0: 3 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'white': 'label_adj', 'cell': 'label_noun', 'phone': 'label_noun', 'in': 'label_other_pos', 'left': 'label_adj', 'hand': 'label_noun'}
+
+[130/236] lab-coat  "a pink cell phone in a girl's hand"
+  lab-coat exp1: 3 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'pink': 'label_noun', 'cell': 'label_noun', 'phone': 'label_noun', 'in': 'label_other_pos', 'girl': 'label_noun', "'s": 'label_other_pos', 'hand': 'label_noun'}
+
+[131/236] lab-coat  "a pink cell phone"
+  lab-coat exp2: 3 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'pink': 'label_noun', 'cell': 'label_noun', 'phone': 'label_noun'}
+
+[132/236] lab-coat  "a white colored mobile phone on the left"
+  lab-coat exp3: 3 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'white': 'label_adj', 'colored': 'label_verb', 'mobile': 'label_adj', 'phone': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'left': 'label_noun'}
+
+[133/236] lab-coat  "a pink cell phone in a girl's hand"
+  lab-coat exp4: 3 frames  primary=special  pos_map={'a': 'label_other_pos', 'pink': 'label_noun', 'cell': 'label_noun', 'phone': 'label_noun', 'in': 'label_other_pos', 'girl': 'label_noun', "'s": 'label_other_pos', 'hand': 'label_noun'}
+
+[134/236] lab-coat  "a white cell phone in a left hand"
+  lab-coat exp5: 3 frames  primary=special  pos_map={'a': 'label_other_pos', 'white': 'label_adj', 'cell': 'label_noun', 'phone': 'label_noun', 'in': 'label_other_pos', 'left': 'label_adj', 'hand': 'label_noun'}
+
+[135/236] lab-coat  "a white cell phone"
+  lab-coat exp6: 3 frames  primary=special  pos_map={'a': 'label_other_pos', 'white': 'label_adj', 'cell': 'label_noun', 'phone': 'label_noun'}
+
+[136/236] lab-coat  "a pink colored mobile phone in the hands of the girl on the "
+  lab-coat exp7: 3 frames  primary=special  pos_map={'a': 'label_other_pos', 'pink': 'label_noun', 'colored': 'label_verb', 'mobile': 'label_adj', 'phone': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'hands': 'label_noun', 'of': 'label_other_pos', 'girl': 'label_noun', 'on': 'label_other_pos', 'left': 'label_noun'}
+
+[137/236] lab-coat  "a girl on the right with blonde hair"
+  lab-coat exp8: 3 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'girl': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'right': 'label_noun', 'with': 'label_other_pos', 'blonde': 'label_adj', 'hair': 'label_noun'}
+
+[138/236] lab-coat  "a girl on the right with blonde hair"
+  lab-coat exp9: 3 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'girl': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'right': 'label_noun', 'with': 'label_other_pos', 'blonde': 'label_adj', 'hair': 'label_noun'}
+
+[139/236] lab-coat  "a girl on the right"
+  lab-coat exp10: 3 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'girl': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'right': 'label_noun'}
+
+[140/236] lab-coat  "a girl on the right wearing light brown boots"
+  lab-coat exp11: 3 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'girl': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'right': 'label_adj', 'wearing': 'label_noun', 'light': 'label_adj', 'brown': 'label_adj', 'boots': 'label_noun'}
+
+[141/236] lab-coat  "a girl in the middle wearing a lab-coat and a black shirt"
+  lab-coat exp12: 3 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'girl': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'middle': 'label_adj', 'wearing': 'label_verb', 'lab-coat': 'label_noun', 'and': 'label_other_pos', 'black': 'label_adj', 'shirt': 'label_noun'}
+
+[142/236] lab-coat  "a girl in the middle wearing a lab-coat and a black shirt"
+  lab-coat exp13: 3 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'girl': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'middle': 'label_adj', 'wearing': 'label_verb', 'lab-coat': 'label_noun', 'and': 'label_other_pos', 'black': 'label_adj', 'shirt': 'label_noun'}
+
+[143/236] lab-coat  "a girl in the middle"
+  lab-coat exp14: 3 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'girl': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'middle': 'label_noun'}
+
+[144/236] lab-coat  "a girl in the middle wearing dark brown boots and a black sh"
+  lab-coat exp15: 3 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'girl': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'middle': 'label_adj', 'wearing': 'label_noun', 'dark': 'label_noun', 'brown': 'label_adj', 'boots': 'label_noun', 'and': 'label_other_pos', 'black': 'label_adj', 'shirt': 'label_noun'}
+
+[145/236] libby  "a dog running in the garden"
+  libby exp0: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'dog': 'label_noun', 'running': 'label_verb', 'in': 'label_other_pos', 'the': 'label_other_pos', 'garden': 'label_noun'}
+
+[146/236] libby  "a dog running"
+  libby exp1: 4 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'dog': 'label_noun', 'running': 'label_verb'}
+
+[147/236] libby  "a dog"
+  libby exp2: 4 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'dog': 'label_noun'}
+
+[148/236] libby  "a black and brown dog running"
+  libby exp3: 4 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'and': 'label_other_pos', 'brown': 'label_adj', 'dog': 'label_noun', 'running': 'label_verb'}
+
+[149/236] loading  "a fat man on the right in a black jacket"
+  loading exp0: 4 frames  primary=other_content  pos_map={'a': 'label_other_pos', 'fat': 'label_adj', 'man': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'right': 'label_noun', 'in': 'label_other_pos', 'black': 'label_adj', 'jacket': 'label_noun'}
+
+[150/236] loading  "a big man on the right in a black jacket"
+  loading exp1: 4 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'big': 'label_adj', 'man': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'right': 'label_noun', 'in': 'label_other_pos', 'black': 'label_adj', 'jacket': 'label_noun'}
+
+[151/236] loading  "a man on the right"
+  loading exp2: 4 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'right': 'label_noun'}
+
+[152/236] loading  "a man in a black jacket wearing glasses"
+  loading exp3: 4 frames  primary=other_content  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'in': 'label_other_pos', 'black': 'label_adj', 'jacket': 'label_noun', 'wearing': 'label_noun', 'glasses': 'label_noun'}
+
+[153/236] loading  "a cardboard box held by a man"
+  loading exp4: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'cardboard': 'label_noun', 'box': 'label_noun', 'held': 'label_verb', 'by': 'label_other_pos', 'man': 'label_noun'}
+
+[154/236] loading  "a cardboard box held by a man"
+  loading exp5: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'cardboard': 'label_noun', 'box': 'label_noun', 'held': 'label_verb', 'by': 'label_other_pos', 'man': 'label_noun'}
+
+[155/236] loading  "a cardboard box held by a man"
+  loading exp6: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'cardboard': 'label_noun', 'box': 'label_noun', 'held': 'label_verb', 'by': 'label_other_pos', 'man': 'label_noun'}
+
+[156/236] loading  "a box in the hands of a man wearing glasses"
+  loading exp7: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'box': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'hands': 'label_noun', 'of': 'label_other_pos', 'man': 'label_noun', 'wearing': 'label_noun', 'glasses': 'label_noun'}
+
+[157/236] loading  "a man on the left with a beard wearing jeans"
+  loading exp8: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'left': 'label_noun', 'with': 'label_other_pos', 'beard': 'label_noun', 'wearing': 'label_noun', 'jeans': 'label_noun'}
+
+[158/236] loading  "a man on the left with a beard wearing jeans"
+  loading exp9: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'left': 'label_noun', 'with': 'label_other_pos', 'beard': 'label_noun', 'wearing': 'label_noun', 'jeans': 'label_noun'}
+
+[159/236] loading  "a man on the left"
+  loading exp10: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'left': 'label_noun'}
+
+[160/236] loading  "a man in the center wearing a blue and black jacket"
+  loading exp11: 4 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'center': 'label_noun', 'wearing': 'label_verb', 'blue': 'label_noun', 'and': 'label_other_pos', 'black': 'label_adj', 'jacket': 'label_noun'}
+
+[161/236] mbike-trick  "a biker man in a white tshirt"
+  mbike-trick exp0: 5 frames  primary=other_content  pos_map={'a': 'label_other_pos', 'biker': 'label_noun', 'man': 'label_noun', 'in': 'label_other_pos', 'white': 'label_adj', 'tshirt': 'label_noun'}
+
+[162/236] mbike-trick  "a person performing bike tricks"
+  mbike-trick exp1: 5 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'person': 'label_noun', 'performing': 'label_verb', 'bike': 'label_noun', 'tricks': 'label_noun'}
+
+[163/236] mbike-trick  "a man on a bike"
+  mbike-trick exp2: 5 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'on': 'label_other_pos', 'bike': 'label_noun'}
+
+[164/236] mbike-trick  "a person in a white helmet riding a bike"
+  mbike-trick exp3: 5 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'person': 'label_noun', 'in': 'label_other_pos', 'white': 'label_adj', 'helmet': 'label_noun', 'riding': 'label_verb', 'bike': 'label_noun'}
+
+[165/236] mbike-trick  "a black stunt bike"
+  mbike-trick exp4: 5 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'stunt': 'label_noun', 'bike': 'label_noun'}
+
+[166/236] mbike-trick  "a black bike moving"
+  mbike-trick exp5: 5 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'bike': 'label_noun', 'moving': 'label_verb'}
+
+[167/236] mbike-trick  "a bike"
+  mbike-trick exp6: 5 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'bike': 'label_noun'}
+
+[168/236] mbike-trick  "a black motorbike with golden rims"
+  mbike-trick exp7: 5 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'motorbike': 'label_noun', 'with': 'label_other_pos', 'golden': 'label_adj', 'rims': 'label_noun'}
+
+[169/236] motocross-jump  "a man riding a motorbike"
+  motocross-jump exp0: 3 frames  primary=other_content  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'riding': 'label_verb', 'motorbike': 'label_noun'}
+
+[170/236] motocross-jump  "a man riding a motorbike"
+  motocross-jump exp1: 3 frames  primary=other_content  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'riding': 'label_verb', 'motorbike': 'label_noun'}
+
+[171/236] motocross-jump  "a man riding a motorbike"
+  motocross-jump exp2: 3 frames  primary=other_content  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'riding': 'label_verb', 'motorbike': 'label_noun'}
+
+[172/236] motocross-jump  "a man wearing a green helmet"
+  motocross-jump exp3: 3 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'wearing': 'label_verb', 'green': 'label_adj', 'helmet': 'label_noun'}
+
+[173/236] motocross-jump  "a green motorbike"
+  motocross-jump exp4: 3 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'green': 'label_adj', 'motorbike': 'label_noun'}
+
+[174/236] motocross-jump  "a green motorbike"
+  motocross-jump exp5: 3 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'green': 'label_adj', 'motorbike': 'label_noun'}
+
+[175/236] motocross-jump  "a motorbike"
+  motocross-jump exp6: 3 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'motorbike': 'label_noun'}
+
+[176/236] motocross-jump  "a motor-bike"
+  motocross-jump exp7: 3 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'motor-bike': 'label_noun'}
+
+[177/236] paragliding-launch  "a black harness with an airbag"
+  paragliding-launch exp0: 5 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'harness': 'label_noun', 'with': 'label_other_pos', 'an': 'label_other_pos', 'airbag': 'label_noun'}
+
+[178/236] paragliding-launch  "a black harness"
+  paragliding-launch exp1: 5 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'harness': 'label_noun'}
+
+[179/236] paragliding-launch  "a harness"
+  paragliding-launch exp2: 5 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'harness': 'label_noun'}
+
+[180/236] paragliding-launch  "a backpack"
+  paragliding-launch exp3: 5 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'backpack': 'label_noun'}
+
+[181/236] paragliding-launch  "a man launching a paraglider"
+  paragliding-launch exp4: 5 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'launching': 'label_verb', 'paraglider': 'label_noun'}
+
+[182/236] paragliding-launch  "a person launching paragliding"
+  paragliding-launch exp5: 5 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'person': 'label_noun', 'launching': 'label_verb', 'paragliding': 'label_noun'}
+
+[183/236] paragliding-launch  "a man with the paraglider"
+  paragliding-launch exp6: 5 frames  primary=label_function  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'with': 'label_other_pos', 'the': 'label_other_pos', 'paraglider': 'label_noun'}
+
+[184/236] paragliding-launch  "a person wearing a backpack"
+  paragliding-launch exp7: 5 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'person': 'label_noun', 'wearing': 'label_verb', 'backpack': 'label_noun'}
+
+[185/236] paragliding-launch  "wing risers with cascade"
+  paragliding-launch exp8: 5 frames  primary=json_structure  pos_map={'wing': 'label_verb', 'risers': 'label_noun', 'with': 'label_other_pos', 'cascade': 'label_noun'}
+
+[186/236] paragliding-launch  "paraglider lines"
+  paragliding-launch exp9: 5 frames  primary=label_noun  pos_map={'paraglider': 'label_noun', 'lines': 'label_noun'}
+
+[187/236] paragliding-launch  "paraglider lines"
+  paragliding-launch exp10: 5 frames  primary=label_noun  pos_map={'paraglider': 'label_noun', 'lines': 'label_noun'}
+
+[188/236] paragliding-launch  "strings of a parachute"
+  paragliding-launch exp11: 5 frames  primary=label_noun  pos_map={'strings': 'label_noun', 'of': 'label_other_pos', 'a': 'label_other_pos', 'parachute': 'label_noun'}
+
+[189/236] parkour  "a man jumping across fences"
+  parkour exp0: 7 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'jumping': 'label_verb', 'across': 'label_other_pos', 'fences': 'label_noun'}
+
+[190/236] parkour  "a person crossing over obstacles"
+  parkour exp1: 7 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'person': 'label_noun', 'crossing': 'label_verb', 'over': 'label_other_pos', 'obstacles': 'label_noun'}
+
+[191/236] parkour  "a parkour guy"
+  parkour exp2: 7 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'parkour': 'label_noun', 'guy': 'label_noun'}
+
+[192/236] parkour  "a person in a greyish blue shirt"
+  parkour exp3: 7 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'person': 'label_noun', 'in': 'label_other_pos', 'greyish': 'label_adj', 'blue': 'label_noun', 'shirt': 'label_noun'}
+
+[193/236] pigs  "a brown and white colored piglet"
+  pigs exp0: 5 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'brown': 'label_noun', 'and': 'label_other_pos', 'white': 'label_adj', 'colored': 'label_adj', 'piglet': 'label_noun'}
+
+[194/236] pigs  "a brown and white coloured piglet"
+  pigs exp1: 5 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'brown': 'label_noun', 'and': 'label_other_pos', 'white': 'label_adj', 'coloured': 'label_adj', 'piglet': 'label_noun'}
+
+[195/236] pigs  "a brown and white colored piglet"
+  pigs exp2: 5 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'brown': 'label_noun', 'and': 'label_other_pos', 'white': 'label_adj', 'colored': 'label_adj', 'piglet': 'label_noun'}
+
+[196/236] pigs  "a brown and white pig"
+  pigs exp3: 5 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'brown': 'label_noun', 'and': 'label_other_pos', 'white': 'label_adj', 'pig': 'label_noun'}
+
+[197/236] pigs  "a brown piglet in the middle"
+  pigs exp4: 5 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'brown': 'label_adj', 'piglet': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'middle': 'label_noun'}
+
+[198/236] pigs  "a brown piglet"
+  pigs exp5: 5 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'brown': 'label_adj', 'piglet': 'label_noun'}
+
+[199/236] pigs  "a brown piglet in the middle"
+  pigs exp6: 5 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'brown': 'label_adj', 'piglet': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'middle': 'label_noun'}
+
+[200/236] pigs  "a fully brown pig in the centre"
+  pigs exp7: 5 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'fully': 'label_adv', 'brown': 'label_adj', 'pig': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'centre': 'label_noun'}
+
+[201/236] pigs  "an adult pig on the right"
+  pigs exp8: 5 frames  primary=label_noun  pos_map={'an': 'label_other_pos', 'adult': 'label_noun', 'pig': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'right': 'label_noun'}
+
+[202/236] pigs  "an adult pig"
+  pigs exp9: 5 frames  primary=label_noun  pos_map={'an': 'label_other_pos', 'adult': 'label_noun', 'pig': 'label_noun'}
+
+[203/236] pigs  "a pig on the right"
+  pigs exp10: 5 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'pig': 'label_noun', 'on': 'label_other_pos', 'the': 'label_other_pos', 'right': 'label_noun'}
+
+[204/236] pigs  "a black colored pig"
+  pigs exp11: 5 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'colored': 'label_noun', 'pig': 'label_noun'}
+
+[205/236] scooter-black  "a man in a suit riding a scooter"
+  scooter-black exp0: 3 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'in': 'label_other_pos', 'suit': 'label_noun', 'riding': 'label_verb', 'scooter': 'label_noun'}
+
+[206/236] scooter-black  "a man in a suit riding on a black scooter"
+  scooter-black exp1: 3 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'in': 'label_other_pos', 'suit': 'label_noun', 'riding': 'label_verb', 'on': 'label_other_pos', 'black': 'label_adj', 'scooter': 'label_noun'}
+
+[207/236] scooter-black  "a man riding a scooter"
+  scooter-black exp2: 3 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'riding': 'label_verb', 'scooter': 'label_noun'}
+
+[208/236] scooter-black  "a man wearing a white helmet riding a scooter"
+  scooter-black exp3: 3 frames  primary=label_verb  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'wearing': 'label_verb', 'white': 'label_adj', 'helmet': 'label_noun', 'riding': 'label_verb', 'scooter': 'label_noun'}
+
+[209/236] scooter-black  "a black scooter ridden by a man"
+  scooter-black exp4: 3 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'scooter': 'label_noun', 'ridden': 'label_noun', 'by': 'label_other_pos', 'man': 'label_noun'}
+
+[210/236] scooter-black  "a black scooter being ridden in a street"
+  scooter-black exp5: 3 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'scooter': 'label_noun', 'being': 'label_verb', 'ridden': 'label_verb', 'in': 'label_other_pos', 'street': 'label_noun'}
+
+[211/236] scooter-black  "a black scooter"
+  scooter-black exp6: 3 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'scooter': 'label_noun'}
+
+[212/236] scooter-black  "a black heavy bike with a bmw logo in the middle of the road"
+  scooter-black exp7: 3 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'heavy': 'label_adj', 'bike': 'label_noun', 'with': 'label_other_pos', 'bmw': 'label_noun', 'logo': 'label_noun', 'in': 'label_other_pos', 'the': 'label_other_pos', 'middle': 'label_noun', 'of': 'label_other_pos', 'road': 'label_noun'}
+
+[213/236] shooting  "a black shooting gun"
+  shooting exp0: 3 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'shooting': 'label_noun', 'gun': 'label_noun'}
+
+[214/236] shooting  "a black rifle"
+  shooting exp1: 3 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'rifle': 'label_noun'}
+
+[215/236] shooting  "a gun"
+  shooting exp2: 3 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'gun': 'label_noun'}
+
+[216/236] shooting  "an automatic rifle"
+  shooting exp3: 3 frames  primary=label_adj  pos_map={'an': 'label_other_pos', 'automatic': 'label_adj', 'rifle': 'label_noun'}
+
+[217/236] shooting  "a black man"
+  shooting exp4: 3 frames  primary=label_adj  pos_map={'a': 'label_other_pos', 'black': 'label_adj', 'man': 'label_noun'}
+
+[218/236] shooting  "a person shooting with a rifle"
+  shooting exp5: 3 frames  primary=frame_index  pos_map={'a': 'label_other_pos', 'person': 'label_noun', 'shooting': 'label_verb', 'with': 'label_other_pos', 'rifle': 'label_noun'}
+
+[219/236] shooting  "a man"
+  shooting exp6: 3 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'man': 'label_noun'}
+
+[220/236] shooting  "a person holding a rifle"
+  shooting exp7: 3 frames  primary=frame_index  pos_map={'a': 'label_other_pos', 'person': 'label_noun', 'holding': 'label_verb', 'rifle': 'label_noun'}
+
+[221/236] shooting  "a rope"
+  shooting exp8: 3 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'rope': 'label_noun'}
+
+[222/236] shooting  "a rope which the guy is hanging on"
+  shooting exp9: 3 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'rope': 'label_noun', 'which': 'label_other_pos', 'the': 'label_other_pos', 'guy': 'label_noun', 'is': 'label_verb', 'hanging': 'label_verb', 'on': 'label_other_pos'}
+
+[223/236] shooting  "a rope"
+  shooting exp10: 3 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'rope': 'label_noun'}
+
+[224/236] shooting  "a rope"
+  shooting exp11: 3 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'rope': 'label_noun'}
+
+[225/236] soapbox  "a blue wooden car"
+  soapbox exp0: 7 frames  primary=special  pos_map={'a': 'label_other_pos', 'blue': 'label_adj', 'wooden': 'label_noun', 'car': 'label_noun'}
+
+[226/236] soapbox  "a blue wooden car"
+  soapbox exp1: 7 frames  primary=special  pos_map={'a': 'label_other_pos', 'blue': 'label_adj', 'wooden': 'label_noun', 'car': 'label_noun'}
+
+[227/236] soapbox  "a blue car"
+  soapbox exp2: 7 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'blue': 'label_noun', 'car': 'label_noun'}
+
+[228/236] soapbox  "a go-cart type car"
+  soapbox exp3: 7 frames  primary=special  pos_map={'a': 'label_other_pos', 'go-cart': 'label_adj', 'type': 'label_noun', 'car': 'label_noun'}
+
+[229/236] soapbox  "a man in a white helmet driving a wooden car"
+  soapbox exp4: 7 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'in': 'label_other_pos', 'white': 'label_adj', 'helmet': 'label_noun', 'driving': 'label_verb', 'wooden': 'label_noun', 'car': 'label_noun'}
+
+[230/236] soapbox  "a man in a white helmet driving a wooden car"
+  soapbox exp5: 7 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'in': 'label_other_pos', 'white': 'label_adj', 'helmet': 'label_noun', 'driving': 'label_verb', 'wooden': 'label_noun', 'car': 'label_noun'}
+
+[231/236] soapbox  "a man driving a car"
+  soapbox exp6: 7 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'driving': 'label_verb', 'car': 'label_noun'}
+
+[232/236] soapbox  "a person driving the go cart"
+  soapbox exp7: 7 frames  primary=bbox_coord  pos_map={'a': 'label_other_pos', 'person': 'label_noun', 'driving': 'label_verb', 'the': 'label_other_pos', 'go': 'label_adj', 'cart': 'label_noun'}
+
+[233/236] soapbox  "a man wearing a white shirt on a wooden car without a helmet"
+  soapbox exp8: 7 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'wearing': 'label_verb', 'white': 'label_adj', 'shirt': 'label_noun', 'on': 'label_other_pos', 'wooden': 'label_adj', 'car': 'label_noun', 'without': 'label_other_pos', 'helmet': 'label_noun'}
+
+[234/236] soapbox  "a man wearing a white shirt on a wooden car without a helmet"
+  soapbox exp9: 7 frames  primary=label_noun  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'wearing': 'label_verb', 'white': 'label_adj', 'shirt': 'label_noun', 'on': 'label_other_pos', 'wooden': 'label_adj', 'car': 'label_noun', 'without': 'label_other_pos', 'helmet': 'label_noun'}
+
+[235/236] soapbox  "a man in a white shirt standing on a car"
+  soapbox exp10: 7 frames  primary=json_structure  pos_map={'a': 'label_other_pos', 'man': 'label_noun', 'in': 'label_other_pos', 'white': 'label_adj', 'shirt': 'label_noun', 'standing': 'label_verb', 'on': 'label_other_pos', 'car': 'label_noun'}
+
+[236/236] soapbox  "person at the back of the go-cart without a helmet"
+  soapbox exp11: 7 frames  primary=label_noun  pos_map={'person': 'label_noun', 'at': 'label_other_pos', 'the': 'label_other_pos', 'back': 'label_noun', 'of': 'label_other_pos', 'go-cart': 'label_noun', 'without': 'label_other_pos', 'a': 'label_other_pos', 'helmet': 'label_noun'}
+
+POS tagger: NLTK
+
+=== Overall dominance ===
+  label_noun            26.2%  mean_mass=0.3628  n=283
+  label_adj             14.8%  mean_mass=0.3816  n=160
+  label_verb             3.1%  mean_mass=0.3019  n=34
+  label_other_pos        0.1%  mean_mass=0.4161  n=1
+  label_function         3.1%  mean_mass=0.3241  n=34
+  bbox_coord            11.4%  mean_mass=0.2845  n=123
+  frame_index            2.0%  mean_mass=0.4536  n=22
+  other_content          7.7%  mean_mass=0.3411  n=83
+  json_structure        25.4%  mean_mass=0.4168  n=274
+  special                6.1%  mean_mass=0.1942  n=66
+
+=== Top-5 pairwise combined scores  (best-per-category, unordered) ===
+  json_structure|json_structure             0.2691  n=1080 [single]
+  label_noun|json_structure                 0.2586  n=1023
+  label_noun|label_noun                     0.2506  n=1023 [single]
+  label_adj|label_adv                       0.2490  n=5
+  bbox_coord|json_structure                 0.2486  n=1080
+
+=== Top-5 adjacency-based combined scores  (cat_p → cat_p+1, ordered) ===
+  json_structure|label_adj                  0.3162  n_pairs=20
+  label_verb|json_structure                 0.2576  n_pairs=137
+  other_content|label_verb                  0.2562  n_pairs=72
+  label_adv|label_adj                       0.2460  n_pairs=20
+  label_noun|label_adj                      0.2387  n_pairs=64
+
+Generating plots…
+  temporal_profile  → results/pos_dominance/temporal_profile.png
+  category_summary  → results/pos_dominance/category_summary.png
+  dominance_heatmap → results/pos_dominance/dominance_heatmap.png
+  category_race     → results/pos_dominance/category_race.png
+  pairwise_matrix   → results/pos_dominance/pairwise_matrix.png
+  adjacency_matrix  → results/pos_dominance/adjacency_matrix.png
+  category_position_profile → results/pos_dominance/category_position_profile.png
+
+Results  → results/pos_dominance/results.json
+Summary  → results/pos_dominance/summary.json

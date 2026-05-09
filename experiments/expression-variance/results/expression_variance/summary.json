@@ -1,0 +1,30 @@
+{
+  "num_groups": 61,
+  "iou": {
+    "mean_within_group_variance": 0.004360435035678639,
+    "mean_within_group_std": 0.03821581284524336,
+    "mean_within_group_range": 0.09010272818144227,
+    "mean_best": 0.5663336713294513,
+    "mean_worst": 0.4762309431480091,
+    "mean_avg": 0.5212574159024191,
+    "mean_best_minus_worst": 0.09010272818144227
+  },
+  "mass_in_gt": {
+    "mean_within_group_variance": 0.0005428917092066,
+    "mean_within_group_std": 0.017445083814534044,
+    "mean_within_group_range": 0.042860528005987227,
+    "mean_best": 0.20643568511168184,
+    "mean_worst": 0.16357515710569454,
+    "mean_avg": 0.18652897586761633,
+    "mean_best_minus_worst": 0.042860528005987227
+  },
+  "mass_in_pred": {
+    "mean_within_group_variance": 0.0008272523202435017,
+    "mean_within_group_std": 0.02089649875461743,
+    "mean_within_group_range": 0.05145373278336755,
+    "mean_best": 0.19446481915580333,
+    "mean_worst": 0.1430110863724358,
+    "mean_avg": 0.16943094185081609,
+    "mean_best_minus_worst": 0.05145373278336755
+  }
+}

@@ -1,0 +1,5 @@
+group_mean_iou_bucket,n_groups,avg_group_mean_iou,avg_range_best_minus_worst,avg_oracle_gain_best_minus_mean
+"[0.00, 0.30)",11,0.171,0.200,0.106
+"[0.30, 0.50)",15,0.434,0.084,0.051
+"[0.50, 0.70)",20,0.601,0.071,0.025
+"[0.70, 1.00]",15,0.758,0.041,0.021

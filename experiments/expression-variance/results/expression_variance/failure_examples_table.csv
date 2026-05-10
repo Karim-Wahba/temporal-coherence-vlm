@@ -1,0 +1,9 @@
+group,failure_mode,best_expression,best_iou,worst_expression,worst_iou,range
+dogs-jump__obj2,action/motion language,"a white dog with grey patches",0.667,"a dog jumping for a snack going to the right",0.103,0.567
+gold-fish__obj4,ordinal/relative spatial,"a small orange goldfish on the top half",0.498,"a goldfish at the end",0.000,0.498
+gold-fish__obj3,ordinal/superlative,"a gold fish in the middle swimming towards down-right",0.512,"a smallest goldfish on the bottom half",0.047,0.465
+kite-surf__obj1,over-specific attribute,"a kite",0.349,"a power kite with blue handles",0.042,0.323
+soapbox__obj2,wrong head noun,"a person driving the go cart",0.375,"a man driving a car",0.077,0.298
+dogs-jump__obj1,action/motion language,"a white dog with black patches",0.228,"a dog jumping for a snack going to the left",0.017,0.211
+mbike-trick__obj2,vague vs specific noun,"a black motorbike with golden rims",0.472,"a black bike moving",0.282,0.190
+shooting__obj3,context disambiguation,"a rope which the guy is hanging on",0.607,"a rope",0.431,0.176

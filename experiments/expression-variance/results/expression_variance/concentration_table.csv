@@ -1,0 +1,6 @@
+top_k_groups,fraction_of_groups,fraction_of_total_gap
+5,0.082,0.391
+10,0.164,0.558
+15,0.246,0.680
+20,0.328,0.787
+30,0.492,0.902

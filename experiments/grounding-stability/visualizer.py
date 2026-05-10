@@ -257,7 +257,7 @@ def save_flow_figure(
 def _scatter_with_regression(ax, xs, ys, color, label, all_xs, all_ys):
     """Plot per-sequence points and accumulate into global lists."""
     if xs:
-        ax.scatter(xs, ys, color=color, alpha=0.6, s=20, label=label)
+        ax.scatter(xs, ys, color=color, alpha=0.6, s=20)
         all_xs.extend(xs)
         all_ys.extend(ys)
 
@@ -267,9 +267,11 @@ def _add_regression_line(ax, all_xs, all_ys, loc="upper left"):
     if len(all_xs) >= 3:
         slope, intercept, r_val, p_val, _ = stats.linregress(all_xs, all_ys)
         x_line = np.linspace(min(all_xs), max(all_xs), 100)
-        ax.plot(x_line, slope * x_line + intercept, "k--", lw=1.5,
-                label=f"r={r_val:.3f}  p={p_val:.3f}  n={len(all_xs)}")
-    ax.legend(fontsize=5, ncol=2, loc=loc)
+        ax.plot(x_line, slope * x_line + intercept, "k--", lw=1.5)
+        ax.text(0.05, 0.95,
+                f"r={r_val:.3f}  p={p_val:.3f}  n={len(all_xs)}",
+                transform=ax.transAxes, va="top", ha="left", fontsize=8,
+                bbox=dict(boxstyle="round,pad=0.3", facecolor="white", alpha=0.8))
 
 
 def save_correlation_plots(results: List[dict], save_dir: str) -> str:

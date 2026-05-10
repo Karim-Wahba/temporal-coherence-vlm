@@ -1,0 +1,33 @@
+group,expression,iou,group_range,group_mean
+dogs-jump__obj2,a white dog with gray patches,0.670,0.567,0.527
+dogs-jump__obj2,a white dog with grey patches,0.667,0.567,0.527
+dogs-jump__obj2,a white dog with grey patches,0.667,0.567,0.527
+dogs-jump__obj2,a dog jumping for a snack going to the right,0.103,0.567,0.527
+gold-fish__obj4,a goldfish at the end,0.000,0.498,0.248
+gold-fish__obj4,a small orange goldfish on the top half,0.498,0.498,0.248
+gold-fish__obj4,a small goldfish in the end,0.000,0.498,0.248
+gold-fish__obj4,a gold fish on the left swimming towards the top right,0.493,0.498,0.248
+gold-fish__obj3,a smallest goldfish,0.062,0.465,0.171
+gold-fish__obj3,a smallest goldfish on the bottom half,0.047,0.465,0.171
+gold-fish__obj3,the smallest goldfish,0.062,0.465,0.171
+gold-fish__obj3,a gold fish in the middle swimming towards down-right,0.512,0.465,0.171
+kite-surf__obj1,a power kite with blue handles,0.042,0.323,0.199
+kite-surf__obj1,a power kite with blue handles,0.042,0.323,0.199
+kite-surf__obj1,a kite,0.349,0.323,0.199
+kite-surf__obj1,a surfing rope attached to a person,0.365,0.323,0.199
+soapbox__obj2,a man in a white helmet driving a wooden car,0.088,0.298,0.157
+soapbox__obj2,a man in a white helmet driving a wooden car,0.088,0.298,0.157
+soapbox__obj2,a man driving a car,0.077,0.298,0.157
+soapbox__obj2,a person driving the go cart,0.375,0.298,0.157
+dogs-jump__obj1,a white dog with black patches,0.228,0.211,0.175
+dogs-jump__obj1,a white dog with black patches,0.228,0.211,0.175
+dogs-jump__obj1,a white dog with black patches,0.228,0.211,0.175
+dogs-jump__obj1,a dog jumping for a snack going to the left,0.017,0.211,0.175
+mbike-trick__obj2,a black stunt bike,0.446,0.190,0.396
+mbike-trick__obj2,a black bike moving,0.282,0.190,0.396
+mbike-trick__obj2,a bike,0.386,0.190,0.396
+mbike-trick__obj2,a black motorbike with golden rims,0.472,0.190,0.396
+gold-fish__obj2,an orange goldfish in the center next to the largest fish,0.326,0.189,0.275
+gold-fish__obj2,an orange goldfish with a white stripe in the center,0.137,0.189,0.275
+gold-fish__obj2,an orange goldfish in the center next to the largest fish,0.326,0.189,0.275
+gold-fish__obj2,a gold fish swimming towards the camera,0.311,0.189,0.275

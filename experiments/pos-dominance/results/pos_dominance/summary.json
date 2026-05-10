@@ -1,0 +1,1476 @@
+{
+  "n_sequences": 236,
+  "n_errors": 0,
+  "n_frames": 1080,
+  "overall_dominance": {
+    "label_noun": {
+      "count": 283,
+      "fraction": 0.262037037037037,
+      "mean_gt_mass": 0.3628357276733698
+    },
+    "label_adj": {
+      "count": 160,
+      "fraction": 0.14814814814814814,
+      "mean_gt_mass": 0.3815621894200974
+    },
+    "label_verb": {
+      "count": 34,
+      "fraction": 0.03148148148148148,
+      "mean_gt_mass": 0.3018828996288439
+    },
+    "label_other_pos": {
+      "count": 1,
+      "fraction": 0.000925925925925926,
+      "mean_gt_mass": 0.4161490683229814
+    },
+    "label_function": {
+      "count": 34,
+      "fraction": 0.03148148148148148,
+      "mean_gt_mass": 0.32408874304456775
+    },
+    "bbox_coord": {
+      "count": 123,
+      "fraction": 0.11388888888888889,
+      "mean_gt_mass": 0.28446776761688475
+    },
+    "frame_index": {
+      "count": 22,
+      "fraction": 0.020370370370370372,
+      "mean_gt_mass": 0.4536441093375027
+    },
+    "other_content": {
+      "count": 83,
+      "fraction": 0.07685185185185185,
+      "mean_gt_mass": 0.3411369680989148
+    },
+    "json_structure": {
+      "count": 274,
+      "fraction": 0.2537037037037037,
+      "mean_gt_mass": 0.4168226523730301
+    },
+    "special": {
+      "count": 66,
+      "fraction": 0.06111111111111111,
+      "mean_gt_mass": 0.1941810032760439
+    }
+  },
+  "temporal_bins": [
+    {
+      "bin_idx": 0,
+      "range": "0-9%",
+      "n_frames": 236,
+      "dominance": {
+        "label_noun": 0.3347457627118644,
+        "label_adj": 0.1906779661016949,
+        "label_verb": 0.038135593220338986,
+        "label_adv": 0.0,
+        "label_other_pos": 0.0,
+        "label_function": 0.012711864406779662,
+        "bbox_coord": 0.13559322033898305,
+        "frame_index": 0.0211864406779661,
+        "other_content": 0.08898305084745763,
+        "stopword": 0.0,
+        "json_structure": 0.1440677966101695,
+        "special": 0.03389830508474576
+      }
+    },
+    {
+      "bin_idx": 1,
+      "range": "10-19%",
+      "n_frames": 20,
+      "dominance": {
+        "label_noun": 0.25,
+        "label_adj": 0.15,
+        "label_verb": 0.1,
+        "label_adv": 0.0,
+        "label_other_pos": 0.0,
+        "label_function": 0.1,
+        "bbox_coord": 0.0,
+        "frame_index": 0.15,
+        "other_content": 0.0,
+        "stopword": 0.0,
+        "json_structure": 0.1,
+        "special": 0.15
+      }
+    },
+    {
+      "bin_idx": 2,
+      "range": "20-29%",
+      "n_frames": 108,
+      "dominance": {
+        "label_noun": 0.25925925925925924,
+        "label_adj": 0.19444444444444445,
+        "label_verb": 0.037037037037037035,
+        "label_adv": 0.0,
+        "label_other_pos": 0.0,
+        "label_function": 0.05555555555555555,
+        "bbox_coord": 0.08333333333333333,
+        "frame_index": 0.009259259259259259,
+        "other_content": 0.06481481481481481,
+        "stopword": 0.0,
+        "json_structure": 0.2222222222222222,
+        "special": 0.07407407407407407
+      }
+    },
+    {
+      "bin_idx": 3,
+      "range": "30-39%",
+      "n_frames": 72,
+      "dominance": {
+        "label_noun": 0.2222222222222222,
+        "label_adj": 0.18055555555555555,
+        "label_verb": 0.06944444444444445,
+        "label_adv": 0.0,
+        "label_other_pos": 0.0,
+        "label_function": 0.041666666666666664,
+        "bbox_coord": 0.041666666666666664,
+        "frame_index": 0.0,
+        "other_content": 0.08333333333333333,
+        "stopword": 0.0,
+        "json_structure": 0.3472222222222222,
+        "special": 0.013888888888888888
+      }
+    },
+    {
+      "bin_idx": 4,
+      "range": "40-49%",
+      "n_frames": 28,
+      "dominance": {
+        "label_noun": 0.32142857142857145,
+        "label_adj": 0.17857142857142858,
+        "label_verb": 0.03571428571428571,
+        "label_adv": 0.0,
+        "label_other_pos": 0.0,
+        "label_function": 0.07142857142857142,
+        "bbox_coord": 0.03571428571428571,
+        "frame_index": 0.0,
+        "other_content": 0.14285714285714285,
+        "stopword": 0.0,
+        "json_structure": 0.14285714285714285,
+        "special": 0.07142857142857142
+      }
+    },
+    {
+      "bin_idx": 5,
+      "range": "50-59%",
+      "n_frames": 156,
+      "dominance": {
+        "label_noun": 0.20512820512820512,
+        "label_adj": 0.10256410256410256,
+        "label_verb": 0.01282051282051282,
+        "label_adv": 0.0,
+        "label_other_pos": 0.0,
+        "label_function": 0.03205128205128205,
+        "bbox_coord": 0.11538461538461539,
+        "frame_index": 0.0,
+        "other_content": 0.057692307692307696,
+        "stopword": 0.0,
+        "json_structure": 0.40384615384615385,
+        "special": 0.07051282051282051
+      }
+    },
+    {
+      "bin_idx": 6,
+      "range": "60-69%",
+      "n_frames": 96,
+      "dominance": {
+        "label_noun": 0.3854166666666667,
+        "label_adj": 0.15625,
+        "label_verb": 0.0,
+        "label_adv": 0.0,
+        "label_other_pos": 0.0,
+        "label_function": 0.010416666666666666,
+        "bbox_coord": 0.13541666666666666,
+        "frame_index": 0.020833333333333332,
+        "other_content": 0.09375,
+        "stopword": 0.0,
+        "json_structure": 0.14583333333333334,
+        "special": 0.052083333333333336
+      }
+    },
+    {
+      "bin_idx": 7,
+      "range": "70-79%",
+      "n_frames": 80,
+      "dominance": {
+        "label_noun": 0.175,
+        "label_adj": 0.2375,
+        "label_verb": 0.05,
+        "label_adv": 0.0,
+        "label_other_pos": 0.0,
+        "label_function": 0.0125,
+        "bbox_coord": 0.1,
+        "frame_index": 0.0,
+        "other_content": 0.025,
+        "stopword": 0.0,
+        "json_structure": 0.4,
+        "special": 0.0
+      }
+    },
+    {
+      "bin_idx": 8,
+      "range": "80-89%",
+      "n_frames": 48,
+      "dominance": {
+        "label_noun": 0.20833333333333334,
+        "label_adj": 0.041666666666666664,
+        "label_verb": 0.0,
+        "label_adv": 0.0,
+        "label_other_pos": 0.0,
+        "label_function": 0.0625,
+        "bbox_coord": 0.20833333333333334,
+        "frame_index": 0.14583333333333334,
+        "other_content": 0.0,
+        "stopword": 0.0,
+        "json_structure": 0.3125,
+        "special": 0.020833333333333332
+      }
+    },
+    {
+      "bin_idx": 9,
+      "range": "90-99%",
+      "n_frames": 236,
+      "dominance": {
+        "label_noun": 0.2245762711864407,
+        "label_adj": 0.08898305084745763,
+        "label_verb": 0.029661016949152543,
+        "label_adv": 0.0,
+        "label_other_pos": 0.00423728813559322,
+        "label_function": 0.03389830508474576,
+        "bbox_coord": 0.1228813559322034,
+        "frame_index": 0.01694915254237288,
+        "other_content": 0.1059322033898305,
+        "stopword": 0.0,
+        "json_structure": 0.2584745762711864,
+        "special": 0.11440677966101695
+      }
+    }
+  ],
+  "pairwise": {
+    "label_noun|label_noun": {
+      "cat_A": "label_noun",
+      "cat_B": "label_noun",
+      "mean_combined": 0.25062351035949787,
+      "n_frames": 1023
+    },
+    "label_noun|label_adj": {
+      "cat_A": "label_noun",
+      "cat_B": "label_adj",
+      "mean_combined": 0.23242992070948998,
+      "n_frames": 597
+    },
+    "label_noun|label_function": {
+      "cat_A": "label_noun",
+      "cat_B": "label_function",
+      "mean_combined": 0.21036941871371492,
+      "n_frames": 1013
+    },
+    "label_noun|bbox_coord": {
+      "cat_A": "label_noun",
+      "cat_B": "bbox_coord",
+      "mean_combined": 0.23813296136508363,
+      "n_frames": 1023
+    },
+    "label_noun|frame_index": {
+      "cat_A": "label_noun",
+      "cat_B": "frame_index",
+      "mean_combined": 0.21023199330588702,
+      "n_frames": 1023
+    },
+    "label_noun|other_content": {
+      "cat_A": "label_noun",
+      "cat_B": "other_content",
+      "mean_combined": 0.18357633299775772,
+      "n_frames": 1023
+    },
+    "label_noun|json_structure": {
+      "cat_A": "label_noun",
+      "cat_B": "json_structure",
+      "mean_combined": 0.25859238586570965,
+      "n_frames": 1023
+    },
+    "label_noun|special": {
+      "cat_A": "label_noun",
+      "cat_B": "special",
+      "mean_combined": 0.21935293777565643,
+      "n_frames": 1023
+    },
+    "label_adj|label_adj": {
+      "cat_A": "label_adj",
+      "cat_B": "label_adj",
+      "mean_combined": 0.23862539811451539,
+      "n_frames": 644
+    },
+    "label_adj|label_function": {
+      "cat_A": "label_adj",
+      "cat_B": "label_function",
+      "mean_combined": 0.20192458630036628,
+      "n_frames": 644
+    },
+    "label_adj|bbox_coord": {
+      "cat_A": "label_adj",
+      "cat_B": "bbox_coord",
+      "mean_combined": 0.22906060848506818,
+      "n_frames": 644
+    },
+    "label_adj|frame_index": {
+      "cat_A": "label_adj",
+      "cat_B": "frame_index",
+      "mean_combined": 0.20064676070717888,
+      "n_frames": 644
+    },
+    "label_adj|other_content": {
+      "cat_A": "label_adj",
+      "cat_B": "other_content",
+      "mean_combined": 0.17882040205232722,
+      "n_frames": 644
+    },
+    "label_adj|json_structure": {
+      "cat_A": "label_adj",
+      "cat_B": "json_structure",
+      "mean_combined": 0.2467319686231793,
+      "n_frames": 644
+    },
+    "label_adj|special": {
+      "cat_A": "label_adj",
+      "cat_B": "special",
+      "mean_combined": 0.21073524664862886,
+      "n_frames": 644
+    },
+    "label_function|label_function": {
+      "cat_A": "label_function",
+      "cat_B": "label_function",
+      "mean_combined": 0.1716231242570094,
+      "n_frames": 1070
+    },
+    "label_function|bbox_coord": {
+      "cat_A": "label_function",
+      "cat_B": "bbox_coord",
+      "mean_combined": 0.1997896425223631,
+      "n_frames": 1070
+    },
+    "label_function|frame_index": {
+      "cat_A": "label_function",
+      "cat_B": "frame_index",
+      "mean_combined": 0.1708226489819908,
+      "n_frames": 1070
+    },
+    "label_function|other_content": {
+      "cat_A": "label_function",
+      "cat_B": "other_content",
+      "mean_combined": 0.14621994288401574,
+      "n_frames": 1070
+    },
+    "label_function|json_structure": {
+      "cat_A": "label_function",
+      "cat_B": "json_structure",
+      "mean_combined": 0.22028762323780282,
+      "n_frames": 1070
+    },
+    "label_function|special": {
+      "cat_A": "label_function",
+      "cat_B": "special",
+      "mean_combined": 0.18126517483190757,
+      "n_frames": 1070
+    },
+    "bbox_coord|bbox_coord": {
+      "cat_A": "bbox_coord",
+      "cat_B": "bbox_coord",
+      "mean_combined": 0.22802895829747646,
+      "n_frames": 1080
+    },
+    "bbox_coord|frame_index": {
+      "cat_A": "bbox_coord",
+      "cat_B": "frame_index",
+      "mean_combined": 0.19911953813829872,
+      "n_frames": 1080
+    },
+    "bbox_coord|other_content": {
+      "cat_A": "bbox_coord",
+      "cat_B": "other_content",
+      "mean_combined": 0.1754167839294859,
+      "n_frames": 1080
+    },
+    "bbox_coord|json_structure": {
+      "cat_A": "bbox_coord",
+      "cat_B": "json_structure",
+      "mean_combined": 0.24855522605122618,
+      "n_frames": 1080
+    },
+    "bbox_coord|special": {
+      "cat_A": "bbox_coord",
+      "cat_B": "special",
+      "mean_combined": 0.20950733181248563,
+      "n_frames": 1080
+    },
+    "frame_index|frame_index": {
+      "cat_A": "frame_index",
+      "cat_B": "frame_index",
+      "mean_combined": 0.17021011797912086,
+      "n_frames": 1080
+    },
+    "frame_index|other_content": {
+      "cat_A": "frame_index",
+      "cat_B": "other_content",
+      "mean_combined": 0.1465073637703079,
+      "n_frames": 1080
+    },
+    "frame_index|json_structure": {
+      "cat_A": "frame_index",
+      "cat_B": "json_structure",
+      "mean_combined": 0.2196458058920481,
+      "n_frames": 1080
+    },
+    "frame_index|special": {
+      "cat_A": "frame_index",
+      "cat_B": "special",
+      "mean_combined": 0.18059791165330777,
+      "n_frames": 1080
+    },
+    "other_content|other_content": {
+      "cat_A": "other_content",
+      "cat_B": "other_content",
+      "mean_combined": 0.12280460956149482,
+      "n_frames": 1080
+    },
+    "other_content|json_structure": {
+      "cat_A": "other_content",
+      "cat_B": "json_structure",
+      "mean_combined": 0.19594305168323492,
+      "n_frames": 1080
+    },
+    "other_content|special": {
+      "cat_A": "other_content",
+      "cat_B": "special",
+      "mean_combined": 0.15689515744449448,
+      "n_frames": 1080
+    },
+    "json_structure|json_structure": {
+      "cat_A": "json_structure",
+      "cat_B": "json_structure",
+      "mean_combined": 0.26908149380497537,
+      "n_frames": 1080
+    },
+    "json_structure|special": {
+      "cat_A": "json_structure",
+      "cat_B": "special",
+      "mean_combined": 0.2300335995662347,
+      "n_frames": 1080
+    },
+    "special|special": {
+      "cat_A": "special",
+      "cat_B": "special",
+      "mean_combined": 0.19098570532749454,
+      "n_frames": 1080
+    },
+    "label_noun|label_verb": {
+      "cat_A": "label_noun",
+      "cat_B": "label_verb",
+      "mean_combined": 0.204118234985065,
+      "n_frames": 379
+    },
+    "label_adj|label_verb": {
+      "cat_A": "label_adj",
+      "cat_B": "label_verb",
+      "mean_combined": 0.17038126431702647,
+      "n_frames": 195
+    },
+    "label_verb|label_verb": {
+      "cat_A": "label_verb",
+      "cat_B": "label_verb",
+      "mean_combined": 0.17656053190101492,
+      "n_frames": 379
+    },
+    "label_verb|label_function": {
+      "cat_A": "label_verb",
+      "cat_B": "label_function",
+      "mean_combined": 0.16534326228836868,
+      "n_frames": 379
+    },
+    "label_verb|bbox_coord": {
+      "cat_A": "label_verb",
+      "cat_B": "bbox_coord",
+      "mean_combined": 0.19142974249508568,
+      "n_frames": 379
+    },
+    "label_verb|frame_index": {
+      "cat_A": "label_verb",
+      "cat_B": "frame_index",
+      "mean_combined": 0.1649920104210569,
+      "n_frames": 379
+    },
+    "label_verb|other_content": {
+      "cat_A": "label_verb",
+      "cat_B": "other_content",
+      "mean_combined": 0.1383017765949646,
+      "n_frames": 379
+    },
+    "label_verb|json_structure": {
+      "cat_A": "label_verb",
+      "cat_B": "json_structure",
+      "mean_combined": 0.20832311283280291,
+      "n_frames": 379
+    },
+    "label_verb|special": {
+      "cat_A": "label_verb",
+      "cat_B": "special",
+      "mean_combined": 0.16974329750691347,
+      "n_frames": 379
+    },
+    "label_adj|stopword": {
+      "cat_A": "label_adj",
+      "cat_B": "stopword",
+      "mean_combined": 0.23622565253269198,
+      "n_frames": 28
+    },
+    "label_function|stopword": {
+      "cat_A": "label_function",
+      "cat_B": "stopword",
+      "mean_combined": 0.17225384954517192,
+      "n_frames": 32
+    },
+    "bbox_coord|stopword": {
+      "cat_A": "bbox_coord",
+      "cat_B": "stopword",
+      "mean_combined": 0.2180563060510145,
+      "n_frames": 32
+    },
+    "frame_index|stopword": {
+      "cat_A": "frame_index",
+      "cat_B": "stopword",
+      "mean_combined": 0.14165731816893354,
+      "n_frames": 32
+    },
+    "other_content|stopword": {
+      "cat_A": "other_content",
+      "cat_B": "stopword",
+      "mean_combined": 0.2112618828458132,
+      "n_frames": 32
+    },
+    "stopword|stopword": {
+      "cat_A": "stopword",
+      "cat_B": "stopword",
+      "mean_combined": 0.11402339535512325,
+      "n_frames": 32
+    },
+    "stopword|json_structure": {
+      "cat_A": "stopword",
+      "cat_B": "json_structure",
+      "mean_combined": 0.23647833081858632,
+      "n_frames": 32
+    },
+    "stopword|special": {
+      "cat_A": "stopword",
+      "cat_B": "special",
+      "mean_combined": 0.2006200369924008,
+      "n_frames": 32
+    },
+    "label_noun|label_other_pos": {
+      "cat_A": "label_noun",
+      "cat_B": "label_other_pos",
+      "mean_combined": 0.1421254339538502,
+      "n_frames": 72
+    },
+    "label_noun|stopword": {
+      "cat_A": "label_noun",
+      "cat_B": "stopword",
+      "mean_combined": 0.13208363953586463,
+      "n_frames": 16
+    },
+    "label_adj|label_other_pos": {
+      "cat_A": "label_adj",
+      "cat_B": "label_other_pos",
+      "mean_combined": 0.10127284736906385,
+      "n_frames": 44
+    },
+    "label_verb|label_other_pos": {
+      "cat_A": "label_verb",
+      "cat_B": "label_other_pos",
+      "mean_combined": 0.09567743077355195,
+      "n_frames": 26
+    },
+    "label_verb|stopword": {
+      "cat_A": "label_verb",
+      "cat_B": "stopword",
+      "mean_combined": 0.11501936633830924,
+      "n_frames": 11
+    },
+    "label_other_pos|label_other_pos": {
+      "cat_A": "label_other_pos",
+      "cat_B": "label_other_pos",
+      "mean_combined": 0.10668492604368988,
+      "n_frames": 72
+    },
+    "label_other_pos|label_function": {
+      "cat_A": "label_other_pos",
+      "cat_B": "label_function",
+      "mean_combined": 0.1307566558995269,
+      "n_frames": 72
+    },
+    "label_other_pos|bbox_coord": {
+      "cat_A": "label_other_pos",
+      "cat_B": "bbox_coord",
+      "mean_combined": 0.14593763651518968,
+      "n_frames": 72
+    },
+    "label_other_pos|frame_index": {
+      "cat_A": "label_other_pos",
+      "cat_B": "frame_index",
+      "mean_combined": 0.12838592465240695,
+      "n_frames": 72
+    },
+    "label_other_pos|other_content": {
+      "cat_A": "label_other_pos",
+      "cat_B": "other_content",
+      "mean_combined": 0.09932371522830259,
+      "n_frames": 72
+    },
+    "label_other_pos|stopword": {
+      "cat_A": "label_other_pos",
+      "cat_B": "stopword",
+      "mean_combined": 0.08892757047310582,
+      "n_frames": 5
+    },
+    "label_other_pos|json_structure": {
+      "cat_A": "label_other_pos",
+      "cat_B": "json_structure",
+      "mean_combined": 0.174529535724936,
+      "n_frames": 72
+    },
+    "label_other_pos|special": {
+      "cat_A": "label_other_pos",
+      "cat_B": "special",
+      "mean_combined": 0.13752962669340651,
+      "n_frames": 72
+    },
+    "label_noun|label_adv": {
+      "cat_A": "label_noun",
+      "cat_B": "label_adv",
+      "mean_combined": 0.13836125989132353,
+      "n_frames": 5
+    },
+    "label_adj|label_adv": {
+      "cat_A": "label_adj",
+      "cat_B": "label_adv",
+      "mean_combined": 0.2489584982692817,
+      "n_frames": 5
+    },
+    "label_adv|label_adv": {
+      "cat_A": "label_adv",
+      "cat_B": "label_adv",
+      "mean_combined": 0.15192105279159052,
+      "n_frames": 5
+    },
+    "label_adv|label_function": {
+      "cat_A": "label_adv",
+      "cat_B": "label_function",
+      "mean_combined": 0.14175256394550767,
+      "n_frames": 5
+    },
+    "label_adv|bbox_coord": {
+      "cat_A": "label_adv",
+      "cat_B": "bbox_coord",
+      "mean_combined": 0.1864955427833658,
+      "n_frames": 5
+    },
+    "label_adv|frame_index": {
+      "cat_A": "label_adv",
+      "cat_B": "frame_index",
+      "mean_combined": 0.1697596546862384,
+      "n_frames": 5
+    },
+    "label_adv|other_content": {
+      "cat_A": "label_adv",
+      "cat_B": "other_content",
+      "mean_combined": 0.10168996936661752,
+      "n_frames": 5
+    },
+    "label_adv|json_structure": {
+      "cat_A": "label_adv",
+      "cat_B": "json_structure",
+      "mean_combined": 0.23060991765761268,
+      "n_frames": 5
+    },
+    "label_adv|special": {
+      "cat_A": "label_adv",
+      "cat_B": "special",
+      "mean_combined": 0.18368540540105363,
+      "n_frames": 5
+    }
+  },
+  "top2_pairs": {
+    "counts": {
+      "label_noun|label_noun": 275,
+      "json_structure|json_structure": 241,
+      "label_verb|label_verb": 34,
+      "bbox_coord|bbox_coord": 105,
+      "label_adj|label_adj": 155,
+      "other_content|other_content": 39,
+      "label_adj|label_noun": 4,
+      "label_noun|json_structure": 3,
+      "json_structure|bbox_coord": 9,
+      "label_noun|bbox_coord": 3,
+      "bbox_coord|label_noun": 4,
+      "other_content|bbox_coord": 8,
+      "label_function|label_function": 33,
+      "special|label_adj": 2,
+      "special|special": 22,
+      "frame_index|label_noun": 2,
+      "frame_index|special": 2,
+      "frame_index|label_verb": 2,
+      "bbox_coord|frame_index": 6,
+      "frame_index|bbox_coord": 11,
+      "frame_index|json_structure": 2,
+      "bbox_coord|special": 1,
+      "bbox_coord|json_structure": 3,
+      "json_structure|label_noun": 6,
+      "special|json_structure": 34,
+      "frame_index|label_adj": 3,
+      "other_content|label_adj": 2,
+      "other_content|json_structure": 16,
+      "other_content|label_noun": 7,
+      "label_noun|other_content": 1,
+      "json_structure|special": 7,
+      "special|label_noun": 5,
+      "special|label_function": 1,
+      "json_structure|label_adj": 8,
+      "json_structure|label_function": 1,
+      "label_other_pos|label_other_pos": 1,
+      "json_structure|other_content": 1,
+      "label_noun|label_adj": 1,
+      "other_content|label_function": 3,
+      "other_content|special": 6,
+      "label_adj|json_structure": 1,
+      "other_content|stopword": 2,
+      "bbox_coord|other_content": 2,
+      "bbox_coord|label_adj": 1,
+      "json_structure|frame_index": 1,
+      "special|bbox_coord": 1,
+      "bbox_coord|label_function": 1,
+      "label_function|bbox_coord": 1,
+      "special|label_other_pos": 1
+    },
+    "fractions": {
+      "label_noun|label_noun": 0.25462962962962965,
+      "json_structure|json_structure": 0.22314814814814815,
+      "label_verb|label_verb": 0.03148148148148148,
+      "bbox_coord|bbox_coord": 0.09722222222222222,
+      "label_adj|label_adj": 0.14351851851851852,
+      "other_content|other_content": 0.03611111111111111,
+      "label_adj|label_noun": 0.003703703703703704,
+      "label_noun|json_structure": 0.002777777777777778,
+      "json_structure|bbox_coord": 0.008333333333333333,
+      "label_noun|bbox_coord": 0.002777777777777778,
+      "bbox_coord|label_noun": 0.003703703703703704,
+      "other_content|bbox_coord": 0.007407407407407408,
+      "label_function|label_function": 0.030555555555555555,
+      "special|label_adj": 0.001851851851851852,
+      "special|special": 0.020370370370370372,
+      "frame_index|label_noun": 0.001851851851851852,
+      "frame_index|special": 0.001851851851851852,
+      "frame_index|label_verb": 0.001851851851851852,
+      "bbox_coord|frame_index": 0.005555555555555556,
+      "frame_index|bbox_coord": 0.010185185185185186,
+      "frame_index|json_structure": 0.001851851851851852,
+      "bbox_coord|special": 0.000925925925925926,
+      "bbox_coord|json_structure": 0.002777777777777778,
+      "json_structure|label_noun": 0.005555555555555556,
+      "special|json_structure": 0.03148148148148148,
+      "frame_index|label_adj": 0.002777777777777778,
+      "other_content|label_adj": 0.001851851851851852,
+      "other_content|json_structure": 0.014814814814814815,
+      "other_content|label_noun": 0.006481481481481481,
+      "label_noun|other_content": 0.000925925925925926,
+      "json_structure|special": 0.006481481481481481,
+      "special|label_noun": 0.004629629629629629,
+      "special|label_function": 0.000925925925925926,
+      "json_structure|label_adj": 0.007407407407407408,
+      "json_structure|label_function": 0.000925925925925926,
+      "label_other_pos|label_other_pos": 0.000925925925925926,
+      "json_structure|other_content": 0.000925925925925926,
+      "label_noun|label_adj": 0.000925925925925926,
+      "other_content|label_function": 0.002777777777777778,
+      "other_content|special": 0.005555555555555556,
+      "label_adj|json_structure": 0.000925925925925926,
+      "other_content|stopword": 0.001851851851851852,
+      "bbox_coord|other_content": 0.001851851851851852,
+      "bbox_coord|label_adj": 0.000925925925925926,
+      "json_structure|frame_index": 0.000925925925925926,
+      "special|bbox_coord": 0.000925925925925926,
+      "bbox_coord|label_function": 0.000925925925925926,
+      "label_function|bbox_coord": 0.000925925925925926,
+      "special|label_other_pos": 0.000925925925925926
+    },
+    "total_frames": 1080
+  },
+  "adjacent_pairwise": {
+    "json_structure|other_content": {
+      "cat_A": "json_structure",
+      "cat_B": "other_content",
+      "mean_combined": 0.11452372761200394,
+      "n_pairs": 1477
+    },
+    "other_content|special": {
+      "cat_A": "other_content",
+      "cat_B": "special",
+      "mean_combined": 0.11675097456885321,
+      "n_pairs": 1080
+    },
+    "special|json_structure": {
+      "cat_A": "special",
+      "cat_B": "json_structure",
+      "mean_combined": 0.1306179884204404,
+      "n_pairs": 5649
+    },
+    "json_structure|special": {
+      "cat_A": "json_structure",
+      "cat_B": "special",
+      "mean_combined": 0.12450171020217338,
+      "n_pairs": 23925
+    },
+    "json_structure|json_structure": {
+      "cat_A": "json_structure",
+      "cat_B": "json_structure",
+      "mean_combined": 0.11113644961068407,
+      "n_pairs": 47952
+    },
+    "special|frame_index": {
+      "cat_A": "special",
+      "cat_B": "frame_index",
+      "mean_combined": 0.10539740848142107,
+      "n_pairs": 4569
+    },
+    "frame_index|json_structure": {
+      "cat_A": "frame_index",
+      "cat_B": "json_structure",
+      "mean_combined": 0.1331112875529825,
+      "n_pairs": 4569
+    },
+    "json_structure|bbox_coord": {
+      "cat_A": "json_structure",
+      "cat_B": "bbox_coord",
+      "mean_combined": 0.12171950324431653,
+      "n_pairs": 9138
+    },
+    "bbox_coord|json_structure": {
+      "cat_A": "bbox_coord",
+      "cat_B": "json_structure",
+      "mean_combined": 0.1287230124735375,
+      "n_pairs": 22845
+    },
+    "bbox_coord|bbox_coord": {
+      "cat_A": "bbox_coord",
+      "cat_B": "bbox_coord",
+      "mean_combined": 0.10326837194257156,
+      "n_pairs": 40486
+    },
+    "special|bbox_coord": {
+      "cat_A": "special",
+      "cat_B": "bbox_coord",
+      "mean_combined": 0.10400851360686167,
+      "n_pairs": 13707
+    },
+    "json_structure|label_function": {
+      "cat_A": "json_structure",
+      "cat_B": "label_function",
+      "mean_combined": 0.1351771451834647,
+      "n_pairs": 4397
+    },
+    "label_function|label_adj": {
+      "cat_A": "label_function",
+      "cat_B": "label_adj",
+      "mean_combined": 0.1819156332057682,
+      "n_pairs": 3228
+    },
+    "label_adj|label_noun": {
+      "cat_A": "label_adj",
+      "cat_B": "label_noun",
+      "mean_combined": 0.2009594482705136,
+      "n_pairs": 2459
+    },
+    "label_noun|json_structure": {
+      "cat_A": "label_noun",
+      "cat_B": "json_structure",
+      "mean_combined": 0.13363389142222876,
+      "n_pairs": 3656
+    },
+    "json_structure|label_adj": {
+      "cat_A": "json_structure",
+      "cat_B": "label_adj",
+      "mean_combined": 0.31619646630674747,
+      "n_pairs": 20
+    },
+    "label_adj|label_function": {
+      "cat_A": "label_adj",
+      "cat_B": "label_function",
+      "mean_combined": 0.1917910004737538,
+      "n_pairs": 86
+    },
+    "label_adj|label_verb": {
+      "cat_A": "label_adj",
+      "cat_B": "label_verb",
+      "mean_combined": 0.17579469241656673,
+      "n_pairs": 146
+    },
+    "label_verb|label_noun": {
+      "cat_A": "label_verb",
+      "cat_B": "label_noun",
+      "mean_combined": 0.17146555521038612,
+      "n_pairs": 107
+    },
+    "label_noun|label_adj": {
+      "cat_A": "label_noun",
+      "cat_B": "label_adj",
+      "mean_combined": 0.23873983562633255,
+      "n_pairs": 64
+    },
+    "label_adj|json_structure": {
+      "cat_A": "label_adj",
+      "cat_B": "json_structure",
+      "mean_combined": 0.2102048974970186,
+      "n_pairs": 284
+    },
+    "json_structure|label_noun": {
+      "cat_A": "json_structure",
+      "cat_B": "label_noun",
+      "mean_combined": 0.2020704207890256,
+      "n_pairs": 192
+    },
+    "label_function|label_noun": {
+      "cat_A": "label_function",
+      "cat_B": "label_noun",
+      "mean_combined": 0.1648953452650282,
+      "n_pairs": 5148
+    },
+    "label_noun|label_verb": {
+      "cat_A": "label_noun",
+      "cat_B": "label_verb",
+      "mean_combined": 0.17495682464097873,
+      "n_pairs": 1434
+    },
+    "label_verb|label_function": {
+      "cat_A": "label_verb",
+      "cat_B": "label_function",
+      "mean_combined": 0.13189555922475057,
+      "n_pairs": 1272
+    },
+    "label_noun|label_function": {
+      "cat_A": "label_noun",
+      "cat_B": "label_function",
+      "mean_combined": 0.18459714765626134,
+      "n_pairs": 2746
+    },
+    "label_adj|other_content": {
+      "cat_A": "label_adj",
+      "cat_B": "other_content",
+      "mean_combined": 0.22477821916882196,
+      "n_pairs": 411
+    },
+    "other_content|stopword": {
+      "cat_A": "other_content",
+      "cat_B": "stopword",
+      "mean_combined": 0.20947333245625463,
+      "n_pairs": 88
+    },
+    "stopword|json_structure": {
+      "cat_A": "stopword",
+      "cat_B": "json_structure",
+      "mean_combined": 0.11604738838474504,
+      "n_pairs": 88
+    },
+    "other_content|other_content": {
+      "cat_A": "other_content",
+      "cat_B": "other_content",
+      "mean_combined": 0.1642265447547853,
+      "n_pairs": 1005
+    },
+    "label_function|other_content": {
+      "cat_A": "label_function",
+      "cat_B": "other_content",
+      "mean_combined": 0.15829933909662283,
+      "n_pairs": 364
+    },
+    "other_content|label_noun": {
+      "cat_A": "other_content",
+      "cat_B": "label_noun",
+      "mean_combined": 0.1497680207944767,
+      "n_pairs": 365
+    },
+    "label_function|json_structure": {
+      "cat_A": "label_function",
+      "cat_B": "json_structure",
+      "mean_combined": 0.07102491076798914,
+      "n_pairs": 165
+    },
+    "other_content|json_structure": {
+      "cat_A": "other_content",
+      "cat_B": "json_structure",
+      "mean_combined": 0.13679707899643123,
+      "n_pairs": 666
+    },
+    "label_function|label_function": {
+      "cat_A": "label_function",
+      "cat_B": "label_function",
+      "mean_combined": 0.12376060334645989,
+      "n_pairs": 2570
+    },
+    "other_content|label_verb": {
+      "cat_A": "other_content",
+      "cat_B": "label_verb",
+      "mean_combined": 0.25617177878591674,
+      "n_pairs": 72
+    },
+    "label_verb|other_content": {
+      "cat_A": "label_verb",
+      "cat_B": "other_content",
+      "mean_combined": 0.20734046731772546,
+      "n_pairs": 79
+    },
+    "label_noun|other_content": {
+      "cat_A": "label_noun",
+      "cat_B": "other_content",
+      "mean_combined": 0.199091787511059,
+      "n_pairs": 180
+    },
+    "label_verb|json_structure": {
+      "cat_A": "label_verb",
+      "cat_B": "json_structure",
+      "mean_combined": 0.25761878150143325,
+      "n_pairs": 137
+    },
+    "label_noun|label_noun": {
+      "cat_A": "label_noun",
+      "cat_B": "label_noun",
+      "mean_combined": 0.17583878062313016,
+      "n_pairs": 1161
+    },
+    "label_verb|label_other_pos": {
+      "cat_A": "label_verb",
+      "cat_B": "label_other_pos",
+      "mean_combined": 0.14702755043666746,
+      "n_pairs": 62
+    },
+    "label_other_pos|label_function": {
+      "cat_A": "label_other_pos",
+      "cat_B": "label_function",
+      "mean_combined": 0.10377736639334732,
+      "n_pairs": 295
+    },
+    "label_function|label_verb": {
+      "cat_A": "label_function",
+      "cat_B": "label_verb",
+      "mean_combined": 0.1480410252807139,
+      "n_pairs": 39
+    },
+    "label_noun|label_other_pos": {
+      "cat_A": "label_noun",
+      "cat_B": "label_other_pos",
+      "mean_combined": 0.1457593667107984,
+      "n_pairs": 233
+    },
+    "label_verb|label_adj": {
+      "cat_A": "label_verb",
+      "cat_B": "label_adj",
+      "mean_combined": 0.2280035323119904,
+      "n_pairs": 54
+    },
+    "other_content|label_function": {
+      "cat_A": "other_content",
+      "cat_B": "label_function",
+      "mean_combined": 0.09825639269827492,
+      "n_pairs": 240
+    },
+    "label_adj|label_adj": {
+      "cat_A": "label_adj",
+      "cat_B": "label_adj",
+      "mean_combined": 0.14876107843059722,
+      "n_pairs": 77
+    },
+    "json_structure|stopword": {
+      "cat_A": "json_structure",
+      "cat_B": "stopword",
+      "mean_combined": 0.09634582242410168,
+      "n_pairs": 12
+    },
+    "stopword|label_function": {
+      "cat_A": "stopword",
+      "cat_B": "label_function",
+      "mean_combined": 0.10070047380385168,
+      "n_pairs": 12
+    },
+    "json_structure|label_verb": {
+      "cat_A": "json_structure",
+      "cat_B": "label_verb",
+      "mean_combined": 0.21549188114603696,
+      "n_pairs": 20
+    },
+    "label_other_pos|label_noun": {
+      "cat_A": "label_other_pos",
+      "cat_B": "label_noun",
+      "mean_combined": 0.08272770946030707,
+      "n_pairs": 42
+    },
+    "label_function|label_adv": {
+      "cat_A": "label_function",
+      "cat_B": "label_adv",
+      "mean_combined": 0.12266865886833896,
+      "n_pairs": 20
+    },
+    "label_adv|label_adj": {
+      "cat_A": "label_adv",
+      "cat_B": "label_adj",
+      "mean_combined": 0.24595225800367043,
+      "n_pairs": 20
+    },
+    "label_verb|label_verb": {
+      "cat_A": "label_verb",
+      "cat_B": "label_verb",
+      "mean_combined": 0.06164823800968292,
+      "n_pairs": 9
+    },
+    "label_function|label_other_pos": {
+      "cat_A": "label_function",
+      "cat_B": "label_other_pos",
+      "mean_combined": 0.055759936454149915,
+      "n_pairs": 84
+    },
+    "label_other_pos|json_structure": {
+      "cat_A": "label_other_pos",
+      "cat_B": "json_structure",
+      "mean_combined": 0.0355928763715175,
+      "n_pairs": 84
+    },
+    "json_structure|label_other_pos": {
+      "cat_A": "json_structure",
+      "cat_B": "label_other_pos",
+      "mean_combined": 0.023125078603036756,
+      "n_pairs": 42
+    }
+  },
+  "category_position_profile": {
+    "label_noun": {
+      "bin_means": [
+        0.28032367904267086,
+        0.1855941802285836,
+        0.2659356557841654,
+        0.23001518745416313,
+        0.3578490803080963,
+        0.20313063399359377,
+        0.2851296691855939,
+        0.2256726304387649,
+        0.297395400614996,
+        0.22806283621960144
+      ],
+      "bin_counts": [
+        221,
+        20,
+        104,
+        64,
+        28,
+        149,
+        92,
+        76,
+        48,
+        221
+      ],
+      "overall_mean": 0.25062351035949776
+    },
+    "label_adj": {
+      "bin_means": [
+        0.2547460423575112,
+        0.1924111518635164,
+        0.2821086181902518,
+        0.23740718506908642,
+        0.31752413255900863,
+        0.18566042397303242,
+        0.2792850528007504,
+        0.2254555045394852,
+        0.2674069718616648,
+        0.2109177016994101
+      ],
+      "bin_counts": [
+        139,
+        10,
+        72,
+        36,
+        20,
+        93,
+        53,
+        52,
+        30,
+        139
+      ],
+      "overall_mean": 0.23862539811451491
+    },
+    "label_verb": {
+      "bin_means": [
+        0.18767920485836537,
+        0.0724615603228026,
+        0.2467235961170744,
+        0.14036540242295484,
+        0.3428056719644938,
+        0.12846753468858912,
+        0.17250584318393264,
+        0.21810965260983636,
+        0.21596211628119458,
+        0.14410573125842563
+      ],
+      "bin_counts": [
+        82,
+        9,
+        32,
+        28,
+        14,
+        49,
+        42,
+        18,
+        23,
+        82
+      ],
+      "overall_mean": 0.17656053190101498
+    },
+    "label_adv": {
+      "bin_means": [
+        0.17752007136485282,
+        null,
+        0.2021604938271605,
+        null,
+        null,
+        0.16512345679012347,
+        null,
+        0.11400848999393572,
+        null,
+        0.10079275198187995
+      ],
+      "bin_counts": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "overall_mean": 0.15192105279159052
+    },
+    "label_other_pos": {
+      "bin_means": [
+        0.0943639185871164,
+        0.09344242654883377,
+        0.11975820761718974,
+        0.0999625203818272,
+        null,
+        0.10665913720056892,
+        0.1261053373958142,
+        0.09783351863199546,
+        0.1101088225618934,
+        0.11548108390567689
+      ],
+      "bin_counts": [
+        12,
+        6,
+        6,
+        6,
+        0,
+        12,
+        6,
+        6,
+        6,
+        12
+      ],
+      "overall_mean": 0.10668492604368986
+    },
+    "label_function": {
+      "bin_means": [
+        0.14695857548986255,
+        0.15398969338531282,
+        0.17411775608149768,
+        0.16705033491680288,
+        0.2549813659939188,
+        0.15643705965108706,
+        0.18248369994495894,
+        0.16162842093903546,
+        0.23114486063765916,
+        0.18475788628782883
+      ],
+      "bin_counts": [
+        234,
+        20,
+        106,
+        72,
+        28,
+        154,
+        96,
+        78,
+        48,
+        234
+      ],
+      "overall_mean": 0.1716231242570095
+    },
+    "bbox_coord": {
+      "bin_means": [
+        0.2341094796699256,
+        0.09763625754038781,
+        0.24401354753846205,
+        0.1851193927343059,
+        0.30399777775185427,
+        0.19234113341393366,
+        0.23998091736775387,
+        0.22083035392743317,
+        0.3201341317672464,
+        0.23219688093808608
+      ],
+      "bin_counts": [
+        236,
+        20,
+        108,
+        72,
+        28,
+        156,
+        96,
+        80,
+        48,
+        236
+      ],
+      "overall_mean": 0.2280289582974767
+    },
+    "frame_index": {
+      "bin_means": [
+        0.1744851205545102,
+        0.15211808952438144,
+        0.19982563134364403,
+        0.13020395327278256,
+        0.2594839345237718,
+        0.12262645527512611,
+        0.1902073656376806,
+        0.15194710995778518,
+        0.29629706908714765,
+        0.1593941184395598
+      ],
+      "bin_counts": [
+        236,
+        20,
+        108,
+        72,
+        28,
+        156,
+        96,
+        80,
+        48,
+        236
+      ],
+      "overall_mean": 0.17021011797912092
+    },
+    "other_content": {
+      "bin_means": [
+        0.11879498849670635,
+        0.027167777071537485,
+        0.13980943374728683,
+        0.11679349056585307,
+        0.11925562801320222,
+        0.10257894468216605,
+        0.15686158673999354,
+        0.10107802065543825,
+        0.1665385498421469,
+        0.12737787291367586
+      ],
+      "bin_counts": [
+        236,
+        20,
+        108,
+        72,
+        28,
+        156,
+        96,
+        80,
+        48,
+        236
+      ],
+      "overall_mean": 0.12280460956149482
+    },
+    "stopword": {
+      "bin_means": [
+        0.12774310281485596,
+        null,
+        0.0,
+        0.17968477778793954,
+        null,
+        0.026433142995152415,
+        0.19136631561469675,
+        0.0,
+        null,
+        0.12960836040674265
+      ],
+      "bin_counts": [
+        8,
+        0,
+        2,
+        4,
+        0,
+        4,
+        4,
+        2,
+        0,
+        8
+      ],
+      "overall_mean": 0.11402339535512324
+    },
+    "json_structure": {
+      "bin_means": [
+        0.23865885102044168,
+        0.14037720048529728,
+        0.3026080413953881,
+        0.24347263942033553,
+        0.39495080936962645,
+        0.26637365449484274,
+        0.26878790192821184,
+        0.28089810635686097,
+        0.38884738619045417,
+        0.26149240489632675
+      ],
+      "bin_counts": [
+        236,
+        20,
+        108,
+        72,
+        28,
+        156,
+        96,
+        80,
+        48,
+        236
+      ],
+      "overall_mean": 0.26908149380497537
+    },
+    "special": {
+      "bin_means": [
+        0.16391627948376097,
+        0.13803066665261005,
+        0.22071825395819356,
+        0.1829972628052742,
+        0.27218672940634414,
+        0.1576563424583871,
+        0.20480334738224726,
+        0.18396368419176334,
+        0.24333164725860035,
+        0.20988380980370303
+      ],
+      "bin_counts": [
+        236,
+        20,
+        108,
+        72,
+        28,
+        156,
+        96,
+        80,
+        48,
+        236
+      ],
+      "overall_mean": 0.19098570532749445
+    }
+  }
+}

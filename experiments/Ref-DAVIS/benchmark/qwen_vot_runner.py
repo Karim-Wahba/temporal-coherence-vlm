@@ -13,14 +13,37 @@ Evaluation is against GT bboxes from Annotations_bbox (bbox IoU instead of
 mask J&F).
 """
 
+import os
+import random
 import re
 import json
 from typing import List, Optional, Tuple
 
 import numpy as np
+import torch
 from PIL import Image
 
 from qwen_vl_utils import process_vision_info
+
+# Make CUBLAS reductions reproducible. Must be set before the first CUDA op.
+os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
+
+
+def _seed_all(seed: int = 0) -> None:
+    """Reset every RNG that can affect generate() to a known state."""
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+    try:
+        # Forces deterministic kernel choices where available; warn-only so
+        # ops without a deterministic impl fall back instead of raising.
+        torch.use_deterministic_algorithms(True, warn_only=True)
+    except Exception:
+        pass
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
 Box = Optional[Tuple[int, int, int, int]]  # (x1, y1, x2, y2) or None
 
@@ -164,13 +187,15 @@ class QwenVOTRunner:
 
     def __init__(self, model, processor, max_new_tokens: int = 8192,
                  fps: float = DAVIS_FPS, sample_rate: int = 8,
-                 video_mode: bool = True):
+                 video_mode: bool = True, seed: int = 0):
         self.model = model
         self.processor = processor
         self.max_new_tokens = max_new_tokens
         self.fps = fps
         self.sample_rate = sample_rate
         self.video_mode = video_mode
+        self.seed = seed
+        _seed_all(seed)
 
     def _generate(self, messages: list, is_video: bool = False,
                   return_hidden_states: bool = False):
@@ -214,11 +239,21 @@ class QwenVOTRunner:
 
         inputs = self.processor(**proc_kwargs).to(self.model.device)
 
-        generate_kwargs = dict(max_new_tokens=self.max_new_tokens)
+        generate_kwargs = dict(
+            max_new_tokens=self.max_new_tokens,
+            do_sample=False,
+            temperature=1.0,
+            top_p=1.0,
+            top_k=0,
+        )
         if return_hidden_states:
             generate_kwargs["output_hidden_states"] = True
             generate_kwargs["return_dict_in_generate"] = True
 
+        # Re-seed before every generate() so call ordering doesn't shift RNG
+        # state between runs. Greedy decoding shouldn't need this, but some
+        # kernels still consume the generator.
+        _seed_all(self.seed)
         outputs = self.model.generate(**inputs, **generate_kwargs)
 
         seq = outputs.sequences if return_hidden_states else outputs

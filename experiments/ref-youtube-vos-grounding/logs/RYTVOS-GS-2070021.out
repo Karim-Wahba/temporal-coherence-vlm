@@ -1,0 +1,556 @@
+JobId=2070021 JobName=RYTVOS-GS
+   UserId=wahba(2286) GroupId=ra_staff(5011) MCS_label=N/A
+   Priority=300 Nice=0 Account=l40s QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:01 TimeLimit=23:00:00 TimeMin=N/A
+   SubmitTime=2026-05-04T01:50:16 EligibleTime=2026-05-04T01:50:16
+   AccrueTime=2026-05-04T01:50:16
+   StartTime=2026-05-04T01:50:16 EndTime=2026-05-05T00:50:16 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-05-04T01:50:16 Scheduler=Main
+   Partition=L40Sday AllocNode:Sid=tcml-login3:871800
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=tcml-node3
+   BatchHost=tcml-node3
+   NumNodes=1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=1,mem=100G,node=1,billing=19,gres/gpu=1
+   AllocTRES=cpu=1,mem=100G,node=1,billing=19,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryCPU=100G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/mnt/beegfs/home/wahba/git/temporal-coherence-vlm/experiments/ref-youtube-vos-grounding/sbatch_run.sh
+   WorkDir=/mnt/beegfs/home/wahba/git/temporal-coherence-vlm/experiments/ref-youtube-vos-grounding
+   StdErr=/mnt/beegfs/home/wahba/git/temporal-coherence-vlm/experiments/ref-youtube-vos-grounding/logs/RYTVOS-GS-2070021.err
+   StdIn=/dev/null
+   StdOut=/mnt/beegfs/home/wahba/git/temporal-coherence-vlm/experiments/ref-youtube-vos-grounding/logs/RYTVOS-GS-2070021.out
+   TresPerNode=gres/gpu:1
+   
+
+Mon May  4 01:50:17 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.126.09             Driver Version: 580.126.09     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA L40S                    Off |   00000000:41:00.0 Off |                    0 |
+| N/A   29C    P8             32W /  350W |       0MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Loading model: Qwen/Qwen3-VL-8B-Instruct
+Resume: loaded 317 existing results (317 items already done)
+Running Ref-YouTube-VOS grounding-stability on 345 items (skipped 317 already done)
+
+[1/345] 6a75316e99
+  Running 6a75316e99_exp1 | "a red bottle on the sink near a tissue paper bundle"
+
+[2/345] 6a75316e99
+  Running 6a75316e99_exp2 | "the white tissue is on the counter and up against the mirror"
+
+[3/345] 6a75316e99
+  Running 6a75316e99_exp3 | "tissue paper near a red bottle"
+
+[4/345] 6cb5b08d93
+  Running 6cb5b08d93_exp0 | "a small fox like dog on the right side of a sofa"
+
+[5/345] 6cb5b08d93
+  Running 6cb5b08d93_exp1 | "a fennec fox"
+
+[6/345] 6cb5b08d93
+  Running 6cb5b08d93_exp2 | "a black and white dog playing with a white fox like animal"
+
+[7/345] 6cb5b08d93
+  Running 6cb5b08d93_exp3 | "a black and white dog"
+
+[8/345] 6cc8bce61a
+  Running 6cc8bce61a_exp0 | "a small grey shark swimming under a scuba diver"
+
+[9/345] 6cc8bce61a
+  Running 6cc8bce61a_exp1 | "a shark swimming"
+
+[10/345] 72d613f21a
+  Running 72d613f21a_exp0 | "a mouse on the palm of a person"
+
+[11/345] 72d613f21a
+  Running 72d613f21a_exp1 | "a mouse is sitting on the persons hand"
+
+[12/345] 72d613f21a
+  Running 72d613f21a_exp2 | "the palm of a person carrying a mouse"
+
+[13/345] 72d613f21a
+  Running 72d613f21a_exp3 | "a left hand of a person is carrying a mouse"
+
+[14/345] 749f1abdf9
+  Running 749f1abdf9_exp0 | "a person walking with a child to a parked school bus"
+
+[15/345] 749f1abdf9
+  Running 749f1abdf9_exp1 | "a person walking with a kid on the road to a bus"
+
+[16/345] 749f1abdf9
+  Running 749f1abdf9_exp2 | "a small child with a green snow suit on walking towards a sc"
+
+[17/345] 749f1abdf9
+  Running 749f1abdf9_exp3 | "a child walking to the bus with an adult"
+
+[18/345] 7741a0fbce
+  Running 7741a0fbce_exp0 | "a brown and white panda running across a tree branch"
+
+[19/345] 7741a0fbce
+  Running 7741a0fbce_exp1 | "a panda running in a wooded area"
+
+[20/345] 7775043b5e
+  Running 7775043b5e_exp0 | "a person skiing on a rail"
+
+[21/345] 7775043b5e
+  Running 7775043b5e_exp1 | "a person skiing on a rail"
+
+[22/345] 7775043b5e
+  Running 7775043b5e_exp2 | "a pair of orange skis"
+
+[23/345] 7775043b5e
+  Running 7775043b5e_exp3 | "skis being used by a person in a blue jacket"
+
+[24/345] 77df215672
+  Running 77df215672_exp0 | "a dog is walking from the water to land"
+
+[25/345] 77df215672
+  Running 77df215672_exp1 | "a dog walking near the water"
+
+[26/345] 77df215672
+  Running 77df215672_exp2 | "a dog is tied with black band on its neck"
+
+[27/345] 77df215672
+  Running 77df215672_exp3 | "a collar on a dog"
+
+[28/345] 7836afc0c2
+  Running 7836afc0c2_exp0 | "a zebra"
+
+[29/345] 7836afc0c2
+  Running 7836afc0c2_exp1 | "a zebra in the grass"
+
+[30/345] 7a19a80b19
+  Running 7a19a80b19_exp0 | "a purple truck"
+
+[31/345] 7a19a80b19
+  Running 7a19a80b19_exp1 | "a large, purple truck"
+
+[32/345] 7a19a80b19
+  Running 7a19a80b19_exp2 | "a red and white truck"
+
+[33/345] 7a19a80b19
+  Running 7a19a80b19_exp3 | "a red truck with people around"
+
+[34/345] 7a72130f21
+  Running 7a72130f21_exp0 | "a person in orange playing tennis"
+
+[35/345] 7a72130f21
+  Running 7a72130f21_exp1 | "a man in red shirt and black pant with with stripes playing "
+
+[36/345] 7a72130f21
+  Running 7a72130f21_exp2 | "a tennis racket used by a person in orange"
+
+[37/345] 7a72130f21
+  Running 7a72130f21_exp3 | "a tennis racket in the hand of a player with red shirt"
+
+[38/345] 7daa6343e6
+  Running 7daa6343e6_exp0 | "a zebra is standing on the center with group in the grass fi"
+
+[39/345] 7daa6343e6
+  Running 7daa6343e6_exp1 | "a zebra which is third from the right is standing on the gra"
+
+[40/345] 7daa6343e6
+  Running 7daa6343e6_exp2 | "a zebra standing third from the left"
+
+[41/345] 7daa6343e6
+  Running 7daa6343e6_exp3 | "a zebra which is standing second from the right is standing "
+
+[42/345] 7f26b553ae
+  Running 7f26b553ae_exp0 | "a snail moving on the ground"
+
+[43/345] 7f26b553ae
+  Running 7f26b553ae_exp1 | "a snailing eating dirt"
+
+[44/345] 822c31928a
+  Running 822c31928a_exp0 | "a jellyfish second from the left"
+
+[45/345] 822c31928a
+  Running 822c31928a_exp1 | "a jellyfish in the middle of the ocean, with its whole body "
+
+[46/345] 822c31928a
+  Running 822c31928a_exp2 | "a jellyfish third from the left"
+
+[47/345] 822c31928a
+  Running 822c31928a_exp3 | "a smaller jellyfish swimming in the middle of the frame, the"
+
+[48/345] 8273b59141
+  Running 8273b59141_exp0 | "a tennis player wearing a red shirt and a yellow pant on the"
+
+[49/345] 8273b59141
+  Running 8273b59141_exp1 | "a person in a red shirt and white shorts"
+
+[50/345] 8273b59141
+  Running 8273b59141_exp2 | "a tennis racket held by a person on the right hand side of t"
+
+[51/345] 8273b59141
+  Running 8273b59141_exp3 | "a racket held by a person in a red shirt"
+
+[52/345] 853ca85618
+  Running 853ca85618_exp0 | "the large lizard is sitting in a tree above a white trellis "
+
+[53/345] 853ca85618
+  Running 853ca85618_exp1 | "a green lizard"
+
+[54/345] 853ca85618
+  Running 853ca85618_exp2 | "the hand is stretched out toward the tree and lizard behind "
+
+[55/345] 853ca85618
+  Running 853ca85618_exp3 | "a hand reaching towards a lizard"
+
+[56/345] 85968ae408
+  Running 85968ae408_exp0 | "the black and white penguin is facing right walking on the r"
+
+[57/345] 85968ae408
+  Running 85968ae408_exp1 | "a penguin running to the right"
+
+[58/345] 8939473ea7
+  Running 8939473ea7_exp0 | "a white car"
+
+[59/345] 8939473ea7
+  Running 8939473ea7_exp1 | "a white sedan moving leftwards through with its headlights o"
+
+[60/345] 8b7b57b94d
+  Running 8b7b57b94d_exp0 | "a black and brown snake"
+
+[61/345] 8b7b57b94d
+  Running 8b7b57b94d_exp1 | "a brown and black colored snake moving through the ground"
+
+[62/345] 8c60938d92
+  Running 8c60938d92_exp0 | "a white car to the right of another white car"
+
+[63/345] 8c60938d92
+  Running 8c60938d92_exp1 | "a white honda car on the right of another"
+
+[64/345] 8c60938d92
+  Running 8c60938d92_exp2 | "a white sedan parked on the left of another car"
+
+[65/345] 8c60938d92
+  Running 8c60938d92_exp3 | "a white car on the left of another"
+
+[66/345] 8d803e87f7
+  Running 8d803e87f7_exp0 | "a black and tan snake crawling on the floor"
+
+[67/345] 8d803e87f7
+  Running 8d803e87f7_exp1 | "a snake crawling on a concrete floor"
+
+[68/345] 8dea7458de
+  Running 8dea7458de_exp0 | "the hand of a motorcycle rider holding the handle"
+
+[69/345] 8dea7458de
+  Running 8dea7458de_exp1 | "the front part of a motorcycle"
+
+[70/345] 8dea7458de
+  Running 8dea7458de_exp2 | "a motorbike is being rode by a person wearing black gloves i"
+
+[71/345] 8e2e5af6a8
+  Running 8e2e5af6a8_exp0 | "the third giraffe from the right"
+
+[72/345] 8e2e5af6a8
+  Running 8e2e5af6a8_exp1 | "the giraffe is in the middle of the group with its head hang"
+
+[73/345] 8e2e5af6a8
+  Running 8e2e5af6a8_exp2 | "the second giraffe from the right"
+
+[74/345] 8e2e5af6a8
+  Running 8e2e5af6a8_exp3 | "the giraffe is on the side side of the group standing straig"
+
+[75/345] 92fde455eb
+  Running 92fde455eb_exp0 | "a big snake looking leftwards"
+
+[76/345] 92fde455eb
+  Running 92fde455eb_exp1 | "a snake is looking something on the left"
+
+[77/345] 94fa9bd3b5
+  Running 94fa9bd3b5_exp0 | "a white toilet in a bathroom"
+
+[78/345] 94fa9bd3b5
+  Running 94fa9bd3b5_exp1 | "a white toilet"
+
+[79/345] 94fa9bd3b5
+  Running 94fa9bd3b5_exp2 | "a shower curtain hanging in a bathroom"
+
+[80/345] 94fa9bd3b5
+  Running 94fa9bd3b5_exp3 | "a brown shower curtain"
+
+[81/345] 975be70866
+  Running 975be70866_exp0 | "a large monkey sitting in the left foreground with it s mout"
+
+[82/345] 975be70866
+  Running 975be70866_exp1 | "the biggest gorilla among the others"
+
+[83/345] 9787f452bf
+  Running 9787f452bf_exp0 | "a small brown monkey crawling across a black pipe"
+
+[84/345] 9787f452bf
+  Running 9787f452bf_exp1 | "a baby ape climbing close to its mother"
+
+[85/345] 9787f452bf
+  Running 9787f452bf_exp2 | "a large brown ape sitting against a walk under a black pipe"
+
+[86/345] 9787f452bf
+  Running 9787f452bf_exp3 | "an adult ape supervising her young"
+
+[87/345] 97b38cabcc
+  Running 97b38cabcc_exp0 | "a giraffe walking"
+
+[88/345] 97b38cabcc
+  Running 97b38cabcc_exp1 | "a giraffe with white ears is in the middle of the grass movi"
+
+[89/345] 9a38b8e463
+  Running 9a38b8e463_exp0 | "a boat on the sea"
+
+[90/345] 9a38b8e463
+  Running 9a38b8e463_exp1 | "a white boat moving through the water"
+
+[91/345] 9c0b55cae5
+  Running 9c0b55cae5_exp0 | "a white parrot"
+
+[92/345] 9c0b55cae5
+  Running 9c0b55cae5_exp1 | "a white cockatoo in its cage"
+
+[93/345] 9ce299a510
+  Running 9ce299a510_exp0 | "a small kangaroo standing in the grass"
+
+[94/345] 9ce299a510
+  Running 9ce299a510_exp1 | "a kangaroo"
+
+[95/345] 9da2156a73
+  Running 9da2156a73_exp0 | "a toilet with the cover open"
+
+[96/345] 9da2156a73
+  Running 9da2156a73_exp1 | "a white toilet is sitting on a tan colored tile floor with a"
+
+[97/345] 9da2156a73
+  Running 9da2156a73_exp2 | "washhand basin in a toilet"
+
+[98/345] 9da2156a73
+  Running 9da2156a73_exp3 | "a white table is inside the shower to the left of the handle"
+
+[99/345] 9f16d17e42
+  Running 9f16d17e42_exp0 | "a green chameleon is eating a yellow bug"
+
+[100/345] 9f16d17e42
+  Running 9f16d17e42_exp1 | "a chemeleon eating"
+
+[101/345] 9f21474aca
+  Running 9f21474aca_exp0 | "a giant panda is laying on their back by the rock eating bam"
+
+[102/345] 9f21474aca
+  Running 9f21474aca_exp1 | "a giant panda"
+
+[103/345] 9f429af409
+  Running 9f429af409_exp0 | "the black elephant is on the dirt and rock moving their trun"
+
+[104/345] 9f429af409
+  Running 9f429af409_exp1 | "an elephant eating"
+
+[105/345] 9f429af409
+  Running 9f429af409_exp2 | "the black elephant is in front of another facing towards the"
+
+[106/345] 9f429af409
+  Running 9f429af409_exp3 | "an elephant behind another elephant"
+
+[107/345] 9fd2d2782b
+  Running 9fd2d2782b_exp0 | "a black and white zebra is walking away towards the grey and"
+
+[108/345] 9fd2d2782b
+  Running 9fd2d2782b_exp1 | "a zebra walking in the dirt"
+
+[109/345] 9fd2d2782b
+  Running 9fd2d2782b_exp2 | "the white box is attached to the stone wall in the middle"
+
+[110/345] 9fd2d2782b
+  Running 9fd2d2782b_exp3 | "a silver box on a stone built wall"
+
+[111/345] a00c3fa88e
+  Running a00c3fa88e_exp0 | "the human hand is laying on the blue and grey knife"
+
+[112/345] a00c3fa88e
+  Running a00c3fa88e_exp1 | "a person s hand picking up a blue switch blade"
+
+[113/345] a00c3fa88e
+  Running a00c3fa88e_exp2 | "the grey and white knife is behind another sitting on the gr"
+
+[114/345] a00c3fa88e
+  Running a00c3fa88e_exp3 | "a small grey switch blade on sitting to the left a blue swit"
+
+[115/345] a0fc95d8fc
+  Running a0fc95d8fc_exp0 | "a white hat on the head of a skateboarder"
+
+[116/345] a0fc95d8fc
+  Running a0fc95d8fc_exp1 | "a white hat is being worn by a person riding a skateboard up"
+
+[117/345] a0fc95d8fc
+  Running a0fc95d8fc_exp2 | "a black backpack being used by a skateboarder doing tricks o"
+
+[118/345] a0fc95d8fc
+  Running a0fc95d8fc_exp3 | "a black backpack is being worn by a person riding a skateboa"
+
+[119/345] a1251195e7
+  Running a1251195e7_exp0 | "a dark brown bunny rabbit sitting on a weight scale"
+
+[120/345] a1251195e7
+  Running a1251195e7_exp1 | "a brown and black rabbit is sitting on a scale to the left o"
+
+[121/345] a1251195e7
+  Running a1251195e7_exp2 | "a rabbit sitting in a white scale that has a blue surface"
+
+[122/345] a1251195e7
+  Running a1251195e7_exp3 | "a large black rabbit sitting on a white and blue scale"
+
+[123/345] a2948d4116
+  Running a2948d4116_exp0 | "the first man closest to the camera on the left hand side lo"
+
+[124/345] a2948d4116
+  Running a2948d4116_exp1 | "a skydiver to the far left standing in the grass"
+
+[125/345] a2948d4116
+  Running a2948d4116_exp2 | "a man on the right side closest to the view looks at a parac"
+
+[126/345] a2948d4116
+  Running a2948d4116_exp3 | "a person standing in the right foreground wearing a parachut"
+
+[127/345] a46012c642
+  Running a46012c642_exp0 | "a yellow butterfly in the hand of a person"
+
+[128/345] a46012c642
+  Running a46012c642_exp1 | "a yellow butterfly with brown spots is being held in a human"
+
+[129/345] a46012c642
+  Running a46012c642_exp2 | "the hand of a person with a yellow butterfly"
+
+[130/345] a46012c642
+  Running a46012c642_exp3 | "the human hand is holding a yellow butterfly with brown spot"
+
+[131/345] a4bce691c6
+  Running a4bce691c6_exp0 | "a person wearing a black hat handing out the window of a tra"
+
+[132/345] a4bce691c6
+  Running a4bce691c6_exp1 | "on the right a person in a white shirt leaning out of a door"
+
+[133/345] a4bce691c6
+  Running a4bce691c6_exp2 | "a hand bag being carried by a person wearing a red and white"
+
+[134/345] a4bce691c6
+  Running a4bce691c6_exp3 | "a person in a red dress holding a handbag"
+
+[135/345] a7462d6aaf
+  Running a7462d6aaf_exp0 | "the brown bear is standing behind a green container and a la"
+
+[136/345] a7462d6aaf
+  Running a7462d6aaf_exp1 | "a bear is standing in front of a green box"
+
+[137/345] a7462d6aaf
+  Running a7462d6aaf_exp2 | "a green bucket is behind a brown bear on the grass"
+
+[138/345] a806e58451
+  Running a806e58451_exp0 | "a black elephant is on the left side of another with its tru"
+
+[139/345] a806e58451
+  Running a806e58451_exp1 | "an elephant in the left is playing with another"
+
+[140/345] a806e58451
+  Running a806e58451_exp2 | "a smaller grey elephant is on the right side facing a larger"
+
+[141/345] a806e58451
+  Running a806e58451_exp3 | "an elephant in the right is playing with another one in the "
+
+[142/345] a9f23c9150
+  Running a9f23c9150_exp0 | "a guitar being played by second man from the left that is on"
+
+[143/345] a9f23c9150
+  Running a9f23c9150_exp1 | "a black guitar being played on the left part of a stage"
+
+[144/345] a9f23c9150
+  Running a9f23c9150_exp2 | "second man from the left on stage playing guitar"
+
+[145/345] a9f23c9150
+  Running a9f23c9150_exp3 | "a person playing a black guitar on the left side of a stage"
+
+[146/345] ab9a7583f1
+  Running ab9a7583f1_exp0 | "a sock being played with by a cat"
+
+[147/345] ab9a7583f1
+  Running ab9a7583f1_exp1 | "a sock being played with by a black cat"
+
+[148/345] ab9a7583f1
+  Running ab9a7583f1_exp2 | "a black cat playing with a sock"
+
+[149/345] ab9a7583f1
+  Running ab9a7583f1_exp3 | "a black cat laying on it s back playing with an off white ob"
+
+[150/345] abae1ce57d
+  Running abae1ce57d_exp0 | "a spider is moving on the floor"
+
+[151/345] abae1ce57d
+  Running abae1ce57d_exp1 | "a spider crawling"
+
+[152/345] aceb34fcbe
+  Running aceb34fcbe_exp0 | "a lizard is sitting on the plant with a dragon fly in its mo"
+
+[153/345] aceb34fcbe
+  Running aceb34fcbe_exp1 | "a lizard eating a dragon fly"
+
+[154/345] b00ff71889
+  Running b00ff71889_exp0 | "a person wearing a red helmet and black shirt flying in the "
+
+[155/345] b00ff71889
+  Running b00ff71889_exp1 | "a skydiver wearing a red helmet carrying another person unde"
+
+[156/345] b00ff71889
+  Running b00ff71889_exp2 | "a person wearing a grey long sleeved shirt is flying in the "
+
+[157/345] b00ff71889
+  Running b00ff71889_exp3 | "an amateur sky diver strapped under a person wearing a red h"
+
+[158/345] b05faf54f7
+  Running b05faf54f7_exp0 | "a persons arms riding a bike"
+
+[159/345] b05faf54f7
+  Running b05faf54f7_exp1 | "the hands of the second rider from the view"
+
+[160/345] b05faf54f7
+  Running b05faf54f7_exp2 | "a black backpack on someone in red"
+
+[161/345] b05faf54f7
+  Running b05faf54f7_exp3 | "the backpack of the first rider"
+
+[162/345] b205d868e6
+  Running b205d868e6_exp0 | "a red clothe"
+
+[163/345] b205d868e6
+  Running b205d868e6_exp1 | "a red cloth being held by a person wearing black pants"
+
+[164/345] b205d868e6
+  Running b205d868e6_exp2 | "a person holding a red cloth"
+
+[165/345] b205d868e6
+  Running b205d868e6_exp3 | "a person wearing a black and grey hoodie with white sleeves "
+
+[166/345] b2256e265c
+  Running b2256e265c_exp0 | "a white feather cat toy"
+
+[167/345] b2256e265c
+  Running b2256e265c_exp1 | "a white fur stuffed toy with a blue string attached is being"
+
+[168/345] b2256e265c
+  Running b2256e265c_exp2 | "a laying cat gets up and jumps towards the camera"

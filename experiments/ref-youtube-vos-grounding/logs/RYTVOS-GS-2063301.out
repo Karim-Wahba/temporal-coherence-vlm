@@ -1,0 +1,535 @@
+JobId=2063301 JobName=RYTVOS-GS
+   UserId=wahba(2286) GroupId=ra_staff(5011) MCS_label=N/A
+   Priority=300 Nice=0 Account=l40s QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:01 TimeLimit=23:00:00 TimeMin=N/A
+   SubmitTime=2026-05-03T00:29:39 EligibleTime=2026-05-03T00:29:39
+   AccrueTime=2026-05-03T00:29:39
+   StartTime=2026-05-03T00:29:39 EndTime=2026-05-03T23:29:39 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-05-03T00:29:39 Scheduler=Main
+   Partition=L40Sday AllocNode:Sid=tcml-login3:635997
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=tcml-node3
+   BatchHost=tcml-node3
+   NumNodes=1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=1,mem=100G,node=1,billing=19,gres/gpu=1
+   AllocTRES=cpu=1,mem=100G,node=1,billing=19,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryCPU=100G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/mnt/beegfs/home/wahba/git/temporal-coherence-vlm/experiments/ref-youtube-vos-grounding/sbatch_run.sh
+   WorkDir=/mnt/beegfs/home/wahba/git/temporal-coherence-vlm/experiments/ref-youtube-vos-grounding
+   StdErr=/mnt/beegfs/home/wahba/git/temporal-coherence-vlm/experiments/ref-youtube-vos-grounding/logs/RYTVOS-GS-2063301.err
+   StdIn=/dev/null
+   StdOut=/mnt/beegfs/home/wahba/git/temporal-coherence-vlm/experiments/ref-youtube-vos-grounding/logs/RYTVOS-GS-2063301.out
+   TresPerNode=gres/gpu:1
+   
+
+Sun May  3 00:29:40 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.126.09             Driver Version: 580.126.09     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA L40S                    Off |   00000000:21:00.0 Off |                    0 |
+| N/A   29C    P8             33W /  350W |       0MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Loading model: Qwen/Qwen3-VL-8B-Instruct
+Resume: loaded 157 existing results (157 items already done)
+Running Ref-YouTube-VOS grounding-stability on 505 items (skipped 157 already done)
+
+[1/505] 352ad66724
+  Running 352ad66724_exp3 | "a hand blocks the mouse in the table"
+
+[2/505] 35948a7fca
+  Running 35948a7fca_exp0 | "a big mother white tiger is sitting on the left"
+
+[3/505] 35948a7fca
+  Running 35948a7fca_exp1 | "a large white tiger sitting in the bottom left foreground"
+
+[4/505] 35948a7fca
+  Running 35948a7fca_exp2 | "a tiger which is on the right end playing with another tiger"
+
+[5/505] 35948a7fca
+  Running 35948a7fca_exp3 | "a small white tiger laying on top of another tiger as they p"
+
+[6/505] 35d5e5149d
+  Running 35d5e5149d_exp0 | "a rabbit jumps in to the cage"
+
+[7/505] 35d5e5149d
+  Running 35d5e5149d_exp1 | "a whit rabbit walking and hoping on a couch"
+
+[8/505] 3674b2c70a
+  Running 3674b2c70a_exp0 | "a person with red jacket who is at the center start moving w"
+
+[9/505] 3674b2c70a
+  Running 3674b2c70a_exp1 | "a person in a red jacket on a bicycle in a crowd of cyclist"
+
+[10/505] 3674b2c70a
+  Running 3674b2c70a_exp2 | "a person with yellow jacket in the cycle on the left side st"
+
+[11/505] 3674b2c70a
+  Running 3674b2c70a_exp3 | "the person on the bike, with a yellow hoodie and black pants"
+
+[12/505] 369919ef49
+  Running 369919ef49_exp0 | "a person standing in the front comes near the door of the ai"
+
+[13/505] 369919ef49
+  Running 369919ef49_exp1 | "a person in a black outfit ready to jump out of an airplane"
+
+[14/505] 37b4ec2e1a
+  Running 37b4ec2e1a_exp0 | "a dog is waiting to catch the ball shown to him"
+
+[15/505] 37b4ec2e1a
+  Running 37b4ec2e1a_exp1 | "a dog standing on a deck"
+
+[16/505] 37b4ec2e1a
+  Running 37b4ec2e1a_exp2 | "a hand is showing a ball to a dog"
+
+[17/505] 37b4ec2e1a
+  Running 37b4ec2e1a_exp3 | "a hand giving a yellow ball to a dog"
+
+[18/505] 39b7491321
+  Running 39b7491321_exp0 | "a teal train"
+
+[19/505] 39b7491321
+  Running 39b7491321_exp1 | "a green train on tracks"
+
+[20/505] 39bce09d8d
+  Running 39bce09d8d_exp0 | "a black and orange butterfly"
+
+[21/505] 39bce09d8d
+  Running 39bce09d8d_exp1 | "a butterfly hanging from a cocoon"
+
+[22/505] 3b72dc1941
+  Running 3b72dc1941_exp0 | "a fire truck pulling out with another behind it"
+
+[23/505] 3b72dc1941
+  Running 3b72dc1941_exp1 | "a red and white truck driving out of a garage"
+
+[24/505] 3be852ed44
+  Running 3be852ed44_exp0 | "a spider in a web"
+
+[25/505] 3be852ed44
+  Running 3be852ed44_exp1 | "an upside down orange,yellow and black spider in a web"
+
+[26/505] 3dd327ab4e
+  Running 3dd327ab4e_exp0 | "a brown colored cow at the center is standing and advancing "
+
+[27/505] 3dd327ab4e
+  Running 3dd327ab4e_exp1 | "a brown and white cow walking towards the camera"
+
+[28/505] 3dd327ab4e
+  Running 3dd327ab4e_exp2 | "a cow is standing a fair distance behind the brown cow which"
+
+[29/505] 3dd327ab4e
+  Running 3dd327ab4e_exp3 | "a white cow with black spots standing in the middle backgrou"
+
+[30/505] 3e03f623bb
+  Running 3e03f623bb_exp0 | "a white goose carried by a lady wearing a black shirt"
+
+[31/505] 3e03f623bb
+  Running 3e03f623bb_exp1 | "a duck is holded by a person with her both hands"
+
+[32/505] 3e03f623bb
+  Running 3e03f623bb_exp2 | "a lady carrying a white goose"
+
+[33/505] 3e03f623bb
+  Running 3e03f623bb_exp3 | "a person is holding a duck and showing a duck photo"
+
+[34/505] 3f4bacb16a
+  Running 3f4bacb16a_exp0 | "a rider on the leftside of the view without an helmet wearin"
+
+[35/505] 3f4bacb16a
+  Running 3f4bacb16a_exp1 | "a person in a yellow and blue shirt with no helmet"
+
+[36/505] 3f4bacb16a
+  Running 3f4bacb16a_exp2 | "a person on the right side of the view wearing a blue shirt "
+
+[37/505] 3f4bacb16a
+  Running 3f4bacb16a_exp3 | "a person in a dark jacket with red near the shoulders"
+
+[38/505] 4037d8305d
+  Running 4037d8305d_exp0 | "a lizard on the floor smells the foot of a person with socks"
+
+[39/505] 4037d8305d
+  Running 4037d8305d_exp1 | "a lizard distracted by a white substance"
+
+[40/505] 411774e9ff
+  Running 411774e9ff_exp0 | "a jelly fish is swimming in front of a person in the water"
+
+[41/505] 411774e9ff
+  Running 411774e9ff_exp1 | "a jellyfish swimming near a person"
+
+[42/505] 411774e9ff
+  Running 411774e9ff_exp2 | "a person is swimming in front of a jelly fish under the wate"
+
+[43/505] 411774e9ff
+  Running 411774e9ff_exp3 | "a person swimming very close by a jelly fish"
+
+[44/505] 4307020e0f
+  Running 4307020e0f_exp0 | "a green parakeet"
+
+[45/505] 4307020e0f
+  Running 4307020e0f_exp1 | "a parrot on a branch"
+
+[46/505] 43115c42b2
+  Running 43115c42b2_exp0 | "a person in tan shorts riding a bike"
+
+[47/505] 43115c42b2
+  Running 43115c42b2_exp1 | "a person riding a bike on the front"
+
+[48/505] 43115c42b2
+  Running 43115c42b2_exp2 | "a silver bike ridden by a person in tan shorts"
+
+[49/505] 43115c42b2
+  Running 43115c42b2_exp3 | "a bike being ridden by a person in a red shirt"
+
+[50/505] 44e5d1a969
+  Running 44e5d1a969_exp0 | "a dolphin swimming on the right hand side of a female swimme"
+
+[51/505] 44e5d1a969
+  Running 44e5d1a969_exp1 | "a dolphin swimming next to a woman"
+
+[52/505] 450bd2e238
+  Running 450bd2e238_exp0 | "a kangaroo jumping around in its enclosure"
+
+[53/505] 450bd2e238
+  Running 450bd2e238_exp1 | "a kangaroo on the sand"
+
+[54/505] 45dc90f558
+  Running 45dc90f558_exp0 | "others can see that the wood cabinet has a rack attached to "
+
+[55/505] 45dc90f558
+  Running 45dc90f558_exp1 | "a wooden shelf on the wall of the bathroom"
+
+[56/505] 45dc90f558
+  Running 45dc90f558_exp2 | "the mirror in the bathroom is to the right of the wood cabin"
+
+[57/505] 45dc90f558
+  Running 45dc90f558_exp3 | "a mirror on the bathroom above the bath tub"
+
+[58/505] 466734bc5c
+  Running 466734bc5c_exp0 | "a package being opened by a person"
+
+[59/505] 466734bc5c
+  Running 466734bc5c_exp1 | "a wrist watch being worn by a man"
+
+[60/505] 466734bc5c
+  Running 466734bc5c_exp2 | "a silver watch"
+
+[61/505] 466734bc5c
+  Running 466734bc5c_exp3 | "a man wearing a brown pant and silver watch"
+
+[62/505] 47d01d34c8
+  Running 47d01d34c8_exp0 | "a cloth is explained by a person to how to handle it"
+
+[63/505] 47d01d34c8
+  Running 47d01d34c8_exp1 | "a cloth being held by a woman in a boat"
+
+[64/505] 47d01d34c8
+  Running 47d01d34c8_exp2 | "a person sitting on the boat explaining about cloth use by h"
+
+[65/505] 47d01d34c8
+  Running 47d01d34c8_exp3 | "a girl in a boat"
+
+[66/505] 48d2909d9e
+  Running 48d2909d9e_exp0 | "a surfboard is being rode by a man wearing a black shirt and"
+
+[67/505] 48d2909d9e
+  Running 48d2909d9e_exp1 | "a blue and pink surfboard"
+
+[68/505] 48d2909d9e
+  Running 48d2909d9e_exp2 | "a person wearing a black shirt is riding in a canoe on a wav"
+
+[69/505] 48d2909d9e
+  Running 48d2909d9e_exp3 | "a person paddleboarding"
+
+[70/505] 4b783f1fc5
+  Running 4b783f1fc5_exp0 | "a large train racing down the tracks"
+
+[71/505] 4b783f1fc5
+  Running 4b783f1fc5_exp1 | "a train moving down tracks"
+
+[72/505] 4ee0105885
+  Running 4ee0105885_exp0 | "a baby seal"
+
+[73/505] 4ee0105885
+  Running 4ee0105885_exp1 | "a wet black seal sitting in the bottom left foreground"
+
+[74/505] 4ee0105885
+  Running 4ee0105885_exp2 | "an adult seal to the left of another adult seal"
+
+[75/505] 4ee0105885
+  Running 4ee0105885_exp3 | "a large brown seal sitting on the left side"
+
+[76/505] 4f5b3310e3
+  Running 4f5b3310e3_exp0 | "a person wearing black pants and grey jacket with a hood is "
+
+[77/505] 4f5b3310e3
+  Running 4f5b3310e3_exp1 | "a snow surfer gliding through a mountain snow"
+
+[78/505] 4f5b3310e3
+  Running 4f5b3310e3_exp2 | "the snowboard is being rode by a person wearing black pants "
+
+[79/505] 4f5b3310e3
+  Running 4f5b3310e3_exp3 | "a snowboard being used by a snowboarder"
+
+[80/505] 4f6662e4e0
+  Running 4f6662e4e0_exp0 | "a black hat is being worn by a person riding a horse on the "
+
+[81/505] 4f6662e4e0
+  Running 4f6662e4e0_exp1 | "a black hat worn by a girl on a horse"
+
+[82/505] 4f6662e4e0
+  Running 4f6662e4e0_exp2 | "the person dressed in black and blue is riding a pony"
+
+[83/505] 4f6662e4e0
+  Running 4f6662e4e0_exp3 | "a child on a pony"
+
+[84/505] 4fe6619a47
+  Running 4fe6619a47_exp0 | "there is an orange sign on the wall above the bathroom sink"
+
+[85/505] 4fe6619a47
+  Running 4fe6619a47_exp1 | "a white outlet"
+
+[86/505] 4fe6619a47
+  Running 4fe6619a47_exp2 | "a mirror on the left above the sink"
+
+[87/505] 4fe6619a47
+  Running 4fe6619a47_exp3 | "a bathroom mirror"
+
+[88/505] 541ccb0844
+  Running 541ccb0844_exp0 | "a person in brown blouse and blue jeans riding a horse"
+
+[89/505] 541ccb0844
+  Running 541ccb0844_exp1 | "a person on the left side in the water is riding a brown hor"
+
+[90/505] 541ccb0844
+  Running 541ccb0844_exp2 | "a horse being ridden by a person in brown blouse and blue je"
+
+[91/505] 541ccb0844
+  Running 541ccb0844_exp3 | "a brown horse is being rode by a person on the left wearing "
+
+[92/505] 54526e3c66
+  Running 54526e3c66_exp0 | "a person riding a horse that is wearing a blue cloth"
+
+[93/505] 54526e3c66
+  Running 54526e3c66_exp1 | "a person is riding a horse with flowers around their neck an"
+
+[94/505] 54526e3c66
+  Running 54526e3c66_exp2 | "a horse with a blue cover and a ceremonial flower wreath on "
+
+[95/505] 54526e3c66
+  Running 54526e3c66_exp3 | "a horse with blue dress covered is walking on the field with"
+
+[96/505] 5460cc540a
+  Running 5460cc540a_exp0 | "a spider crawling near sticks"
+
+[97/505] 5460cc540a
+  Running 5460cc540a_exp1 | "a spider is standing in the stones and creepers"
+
+[98/505] 547416bda1
+  Running 547416bda1_exp0 | "a rider with white helmet and cloths"
+
+[99/505] 547416bda1
+  Running 547416bda1_exp1 | "a person wearing white dress is riding bicycle in a race"
+
+[100/505] 547416bda1
+  Running 547416bda1_exp2 | "a rider with blue cloths and with lines"
+
+[101/505] 547416bda1
+  Running 547416bda1_exp3 | "a person wearing a blue dress is riding a bicycle in a race"
+
+[102/505] 559a611d86
+  Running 559a611d86_exp0 | "a person wearing a white shirt is in the ocean on a surfboar"
+
+[103/505] 559a611d86
+  Running 559a611d86_exp1 | "a person in white surfing"
+
+[104/505] 559a611d86
+  Running 559a611d86_exp2 | "a white surfboard is being rode by a person in the ocean wea"
+
+[105/505] 559a611d86
+  Running 559a611d86_exp3 | "a white surfboard"
+
+[106/505] 5d2020eff8
+  Running 5d2020eff8_exp0 | "an orange fish in the middle"
+
+[107/505] 5d2020eff8
+  Running 5d2020eff8_exp1 | "a yellow fish is swimming above another one on the fish tank"
+
+[108/505] 5d2020eff8
+  Running 5d2020eff8_exp2 | "an orange fish below the other fish"
+
+[109/505] 5d2020eff8
+  Running 5d2020eff8_exp3 | "a fish is swimming below another fish in the fish tank"
+
+[110/505] 6031809500
+  Running 6031809500_exp0 | "a person wearing white shorts and a red shirt is on the oppo"
+
+[111/505] 6031809500
+  Running 6031809500_exp1 | "a person in a red shirt and white shorts"
+
+[112/505] 6031809500
+  Running 6031809500_exp2 | "a person wearing black shorts and a blue shirt is hitting a "
+
+[113/505] 6031809500
+  Running 6031809500_exp3 | "a person in a blue shirt and black shorts"
+
+[114/505] 60362df585
+  Running 60362df585_exp0 | "a kangaroo standing on the right of a man beside the water"
+
+[115/505] 60362df585
+  Running 60362df585_exp1 | "a kangaroo by the river"
+
+[116/505] 60362df585
+  Running 60362df585_exp2 | "a person on the left hand side of a kangaroo"
+
+[117/505] 60362df585
+  Running 60362df585_exp3 | "a man standing by the river"
+
+[118/505] 61fca8cbf1
+  Running 61fca8cbf1_exp0 | "an owl which is sitting on left eat something from its leg"
+
+[119/505] 61fca8cbf1
+  Running 61fca8cbf1_exp1 | "a small yellow and black owl is sitting in the tree to the l"
+
+[120/505] 61fca8cbf1
+  Running 61fca8cbf1_exp2 | "an owl sitting on the right scratches his body around with i"
+
+[121/505] 61fca8cbf1
+  Running 61fca8cbf1_exp3 | "a yellow and black owl is sitting next to another on the rig"
+
+[122/505] 621487be65
+  Running 621487be65_exp0 | "a giraffe is taking a food from a person"
+
+[123/505] 621487be65
+  Running 621487be65_exp1 | "a giraffe is behind a wall and and looking at a baby"
+
+[124/505] 621487be65
+  Running 621487be65_exp2 | "a black watch"
+
+[125/505] 621487be65
+  Running 621487be65_exp3 | "the gold watch is being worn by a woman holding a child look"
+
+[126/505] 623d24ce2b
+  Running 623d24ce2b_exp0 | "a person in a white shirt"
+
+[127/505] 623d24ce2b
+  Running 623d24ce2b_exp1 | "a person wearing a white shirt and visor is holding a tennis"
+
+[128/505] 623d24ce2b
+  Running 623d24ce2b_exp2 | "a tennis racket held by a person in a white shirt"
+
+[129/505] 623d24ce2b
+  Running 623d24ce2b_exp3 | "the tennis racket is being held by a person wearing a white "
+
+[130/505] 62bf7630b3
+  Running 62bf7630b3_exp0 | "a gray outlet"
+
+[131/505] 62bf7630b3
+  Running 62bf7630b3_exp1 | "a light switch located on the back wall"
+
+[132/505] 62bf7630b3
+  Running 62bf7630b3_exp2 | "a white basin to the right of another basin"
+
+[133/505] 62bf7630b3
+  Running 62bf7630b3_exp3 | "the sink located to the far right close to the wall"
+
+[134/505] 63883da4f5
+  Running 63883da4f5_exp0 | "a brown and white rabbit"
+
+[135/505] 63883da4f5
+  Running 63883da4f5_exp1 | "a brown and white rabbit playing with a branch of a plant"
+
+[136/505] 64c6f2ed76
+  Running 64c6f2ed76_exp0 | "a skateboard is being rode by a person wearing red pants up "
+
+[137/505] 64c6f2ed76
+  Running 64c6f2ed76_exp1 | "a skateboard being used by a skateboarder wearing a red pant"
+
+[138/505] 64c6f2ed76
+  Running 64c6f2ed76_exp2 | "a skateboard is being rode by a person wearing black pants b"
+
+[139/505] 64c6f2ed76
+  Running 64c6f2ed76_exp3 | "a skateboard being used by a person wearing a purple pant"
+
+[140/505] 65350fd60a
+  Running 65350fd60a_exp0 | "a person on the left holding a camera is in a group of peopl"
+
+[141/505] 65350fd60a
+  Running 65350fd60a_exp1 | "a person in the back on the left is wearing a white shirt mo"
+
+[142/505] 65350fd60a
+  Running 65350fd60a_exp2 | "a person holding up a camera"
+
+[143/505] 65350fd60a
+  Running 65350fd60a_exp3 | "a person with black hair is in the middle of the group of pe"
+
+[144/505] 65e0640a2a
+  Running 65e0640a2a_exp0 | "a person on the left side of the road wearing a red shirt an"
+
+[145/505] 65e0640a2a
+  Running 65e0640a2a_exp1 | "a dark haired woman in a red shirt clapping"
+
+[146/505] 65e0640a2a
+  Running 65e0640a2a_exp2 | "a black handbag is being worn by a person on the left side o"
+
+[147/505] 65e0640a2a
+  Running 65e0640a2a_exp3 | "a black backpack worn by a dark haired woman in a red shirt"
+
+[148/505] 68dab8f80c
+  Running 68dab8f80c_exp0 | "a gray cat"
+
+[149/505] 68dab8f80c
+  Running 68dab8f80c_exp1 | "a cat laying near an apple"
+
+[150/505] 68dab8f80c
+  Running 68dab8f80c_exp2 | "a red apple"
+
+[151/505] 68dab8f80c
+  Running 68dab8f80c_exp3 | "a red apple being played with by a black cat"
+
+[152/505] 696e01387c
+  Running 696e01387c_exp0 | "a tortoise second from the front all the way to the left"
+
+[153/505] 696e01387c
+  Running 696e01387c_exp1 | "a turtle to the bottom left"
+
+[154/505] 696e01387c
+  Running 696e01387c_exp2 | "a tortoise first in front all the way to the far left"
+
+[155/505] 696e01387c
+  Running 696e01387c_exp3 | "a turtle on the bottom, to the middle of the frame"
+
+[156/505] 69c0f7494e
+  Running 69c0f7494e_exp0 | "a person skateboarding"
+
+[157/505] 69c0f7494e
+  Running 69c0f7494e_exp1 | "a person riding a skateboard"
+
+[158/505] 69c0f7494e
+  Running 69c0f7494e_exp2 | "a skateboard is being rode by a person wearing a red hat and"
+
+[159/505] 69c0f7494e
+  Running 69c0f7494e_exp3 | "a skateboard being used by a boy in red cap"
+
+[160/505] 6a75316e99
+  Running 6a75316e99_exp0 | "the bottle is in front of the paper towels and to the left o"
+
+[161/505] 6a75316e99
+  Running 6a75316e99_exp1 | "a red bottle on the sink near a tissue paper bundle"

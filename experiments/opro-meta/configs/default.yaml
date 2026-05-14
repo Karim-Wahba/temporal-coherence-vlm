@@ -1,0 +1,114 @@
+# Default config for opro-meta.
+# Override by passing --config configs/other.yaml or overriding fields via --set.
+
+run:
+  out_dir: results/run_default
+  seed: 0
+
+data:
+  davis_root: /home/geiger/gwb913/git/davis/DAVIS2017/unsupervised
+  split: valid
+  # Optional: limit the run to specific sequences or a max clip count
+  sequences: null
+  max_clips: 1                # ← keep at 1 for the skeleton end-to-end validation
+
+grounder:
+  model_id: Qwen/Qwen3-VL-8B-Instruct
+  sample_rate: 8
+  max_new_tokens: 4096
+  video_mode: true
+  # Fast path: skip TAM (attention-map) extraction. Drops MassGT / MassPred /
+  # token-category breakdown but roughly halves per-iteration time. Useful for
+  # quick iteration during development.
+  skip_tam: false
+
+# Inner-loop LLM: proposes candidate reformulations every iteration.
+# With enable_thinking=true the model emits a <think> block before the JSON.
+# Budget needs to cover both: ~1500-2500 tokens for thinking + ~500-800 for
+# the 5-candidate JSON. 4096 is safe; bump to 6144 if you see truncation.
+llm:
+  backend: deepseek           # deepseek | qwen3 | local | anthropic | openai
+  deepseek:
+    model_id: deepseek-ai/DeepSeek-V4-Pro
+    max_new_tokens: 4096
+    temperature: 0.0
+    trust_remote_code: true
+    enable_thinking: true
+  qwen3:
+    model_id: Qwen/Qwen3-8B
+    max_new_tokens: 4096
+    temperature: 0.0
+    trust_remote_code: true
+    enable_thinking: true
+  local:
+    # Pass any HuggingFace repo, e.g. Qwen/Qwen2.5-7B-Instruct
+    model_id: null
+    max_new_tokens: 4096
+    temperature: 0.0
+    trust_remote_code: true
+    enable_thinking: true
+  anthropic:
+    model_id: claude-opus-4-7
+    max_tokens: 2048
+    temperature: 0.0
+  openai:
+    model_id: gpt-4o
+    max_tokens: 2048
+    temperature: 0.0
+
+# Outer-loop (meta) LLM: distills rules from inner-loop trajectories.
+# Set backend: null (or comment the whole block) to reuse the inner llm.
+# If backend+model_id match the inner config, the same loaded instance is
+# shared automatically — no double-load.
+meta_llm:
+  backend: deepseek           # same options as llm.backend
+  # Cross-clip analysis is harder than per-iter proposals; give the meta LLM
+  # more thinking room: ~2500-4000 for thought + ~1500 for the rules JSON.
+  deepseek:
+    model_id: deepseek-ai/DeepSeek-V4-Pro
+    max_new_tokens: 8192
+    temperature: 0.0
+    trust_remote_code: true
+    enable_thinking: true
+  qwen3:
+    model_id: Qwen/Qwen3-8B
+    max_new_tokens: 8192
+    temperature: 0.0
+    trust_remote_code: true
+    enable_thinking: true
+  local:
+    model_id: null
+    max_new_tokens: 8192
+    temperature: 0.0
+    trust_remote_code: true
+    enable_thinking: true
+  anthropic:
+    model_id: claude-opus-4-7
+    max_tokens: 4096
+    temperature: 0.0
+  openai:
+    model_id: gpt-4o
+    max_tokens: 4096
+    temperature: 0.0
+
+inner_loop:
+  n_candidates: 5
+  n_iterations: 10
+  early_stop_no_improve: 3
+  # Cap the history shown to the LLM each iteration so the prompt size stays
+  # bounded as the history grows. Full history is still kept in ClipResult and
+  # the JSONL log; only the prompt sees a windowed view.
+  history_top_n: 5         # best by IoU
+  history_bottom_n: 5      # worst by IoU; middle band is summarised
+
+outer_loop:
+  enabled: true
+  source_clips_min: 1
+  meta_prompt_dir: meta_prompts
+  # Reasoning models (DeepSeek-V4, R1) burn many tokens on <think> blocks
+  # before emitting JSON. Give the meta call a larger budget than the inner.
+  meta_max_new_tokens: 4096
+
+evaluation:
+  enabled: false              # set true once a meta-prompt exists
+  holdout_clips: 5

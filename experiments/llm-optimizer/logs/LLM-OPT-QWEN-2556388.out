@@ -1,0 +1,225 @@
+JobId=2556388 JobName=LLM-OPT-QWEN
+   UserId=gwb913(5173) GroupId=geiger(4009) MCS_label=N/A
+   Priority=52200 Nice=0 Account=geiger QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:00 TimeLimit=23:00:00 TimeMin=N/A
+   SubmitTime=2026-05-10T04:52:48 EligibleTime=2026-05-10T04:52:48
+   AccrueTime=2026-05-10T04:52:49
+   StartTime=2026-05-10T04:52:49 EndTime=2026-05-11T03:52:49 Deadline=N/A
+   PreemptEligibleTime=2026-05-10T04:53:49 PreemptTime=None
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-05-10T04:52:49 Scheduler=Main
+   Partition=a100-galvani AllocNode:Sid=galvani-login:2802497
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=galvani-cn227
+   BatchHost=galvani-cn227
+   NumNodes=1 NumCPUs=8 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=1,mem=100G,node=1,billing=10,gres/gpu=1
+   AllocTRES=cpu=8,mem=800G,node=1,billing=82,gres/gpu=1,gres/gpu:a100=1
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryCPU=100G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/mnt/lustre/home/geiger/gwb913/git/temporal-coherence-vlm/experiments/llm-optimizer/sbatch_run.sh
+   WorkDir=/mnt/lustre/home/geiger/gwb913/git/temporal-coherence-vlm/experiments/llm-optimizer
+   StdErr=/mnt/lustre/home/geiger/gwb913/git/temporal-coherence-vlm/experiments/llm-optimizer/logs/LLM-OPT-QWEN-2556388.err
+   StdIn=/dev/null
+   StdOut=/mnt/lustre/home/geiger/gwb913/git/temporal-coherence-vlm/experiments/llm-optimizer/logs/LLM-OPT-QWEN-2556388.out
+   CpusPerTres=gpu:8
+   TresPerNode=gres/gpu:1
+   
+
+Sun May 10 04:52:49 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.105.08             Driver Version: 580.105.08     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A100-PCIE-40GB          On  |   00000000:C2:00.0 Off |                    0 |
+| N/A   38C    P0             44W /  250W |       0MiB /  40960MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Loading seed data...
+Selected 5 groups by IoU range (highest variance first)
+
+Loading model: Qwen/Qwen3-VL-8B-Instruct
+Model loaded.
+Building real TAM evaluator...
+
+============================================================
+Group: dogs-jump__obj2  (mean_iou=0.527)
+Seed expressions:
+  IoU=0.670  MassGT=0.093  "a white dog with gray patches"
+  IoU=0.667  MassGT=0.092  "a white dog with grey patches"
+  IoU=0.667  MassGT=0.092  "a white dog with grey patches"
+  IoU=0.103  MassGT=0.087  "a dog jumping for a snack going to the right"
+
+  Seed: 4 expressions | best=0.670  worst=0.103
+
+  --- Iteration 1/2 ---
+  Analysis: The low-IoU / low-MassGT expressions fail due to action/motion language ('jumping', 'going to the right'), which misdirects model attention away from the object's static visual features. The model att
+  Candidates (3):
+    • a white dog with gray spots
+    • a dog with patches on its back
+    • a white dog with a black patch on its ear
+    IoU=0.012  MassGT=0.085  "a white dog with gray spots"
+    IoU=0.089  MassGT=0.080  "a dog with patches on its back"
+    IoU=0.037  MassGT=0.082  "a white dog with a black patch on its ear"
+
+  --- Iteration 2/2 ---
+  Analysis: The low-IoU / low-MassGT expressions consistently fail due to: (1) inclusion of action/motion verbs like 'jumping' and 'going to the right', which misdirect attention; (2) over-specific or ambiguous d
+  Candidates (3):
+    • a white dog with gray spots on its side
+    • a dog with a black patch near its eye
+    • a white dog with gray markings on its face
+    IoU=0.013  MassGT=0.086  "a white dog with gray spots on its side"
+    IoU=0.040  MassGT=0.079  "a dog with a black patch near its eye"
+    IoU=0.012  MassGT=0.081  "a white dog with gray markings on its face"
+
+  Best original: 0.670  →  Best overall: 0.670  MassGT=0.093  (Δ=+0.000)
+
+============================================================
+Group: gold-fish__obj4  (mean_iou=0.248)
+Seed expressions:
+  IoU=0.498  MassGT=0.149  "a small orange goldfish on the top half"
+  IoU=0.493  MassGT=0.120  "a gold fish on the left swimming towards the top right"
+  IoU=0.000  MassGT=0.127  "a goldfish at the end"
+  IoU=0.000  MassGT=0.125  "a small goldfish in the end"
+
+  Seed: 4 expressions | best=0.498  worst=0.000
+
+  --- Iteration 1/2 ---
+  Analysis: The low-IoU / low-MassGT expressions fail because they rely on ordinal/spatial terms like 'top half', 'left', 'end', which are unreliable across frames. These terms mislead the model into attending to
+  Candidates (3):
+    • a small orange goldfish
+    • a goldfish with orange stripes
+    • a small goldfish near the surface
+    IoU=0.255  MassGT=0.152  "a small orange goldfish"
+    IoU=0.000  MassGT=0.146  "a goldfish with orange stripes"
+    IoU=0.256  MassGT=0.122  "a small goldfish near the surface"
+
+  --- Iteration 2/2 ---
+  Analysis: The low-IoU / low-MassGT expressions consistently fail due to: (1) use of ordinal/spatial terms like 'top half', 'left', 'end' — which are frame-dependent and misleading; (2) inclusion of action/conte
+  Candidates (2):
+    • a goldfish with a red spot
+    • a small goldfish near the top
+    IoU=0.018  MassGT=0.125  "a goldfish with a red spot"
+    IoU=0.255  MassGT=0.122  "a small goldfish near the top"
+
+  Best original: 0.498  →  Best overall: 0.498  MassGT=0.149  (Δ=+0.000)
+
+============================================================
+Group: gold-fish__obj3  (mean_iou=0.171)
+Seed expressions:
+  IoU=0.512  MassGT=0.092  "a gold fish in the middle swimming towards down-right"
+  IoU=0.062  MassGT=0.118  "a smallest goldfish"
+  IoU=0.062  MassGT=0.086  "the smallest goldfish"
+  IoU=0.047  MassGT=0.101  "a smallest goldfish on the bottom half"
+
+  Seed: 4 expressions | best=0.512  worst=0.047
+
+  --- Iteration 1/2 ---
+  Analysis: The low-IoU and low-MassGT expressions consistently fail due to the use of ordinal/superlative terms ('smallest', 'middle', 'bottom half'), which are unreliable in video sequences where object positio
+  Candidates (3):
+    • a gold fish with orange spots
+    • a small goldfish near the surface
+    • a gold fish with a red tail
+    IoU=0.000  MassGT=0.144  "a gold fish with orange spots"
+    IoU=0.006  MassGT=0.113  "a small goldfish near the surface"
+    IoU=0.006  MassGT=0.156  "a gold fish with a red tail"
+
+  --- Iteration 2/2 ---
+  Analysis: The low-IoU / low-MassGT expressions consistently fail due to: (1) use of ordinal/superlative terms ('smallest', 'middle', 'bottom half') which are frame-dependent and misleading; (2) inclusion of act
+  Candidates (2):
+    • a gold fish swimming near the surface
+    • a gold fish with a red tail near the surface
+    IoU=0.018  MassGT=0.110  "a gold fish swimming near the surface"
+    IoU=0.006  MassGT=0.139  "a gold fish with a red tail near the surface"
+
+  Best original: 0.512  →  Best overall: 0.512  MassGT=0.092  (Δ=+0.000)
+
+============================================================
+Group: kite-surf__obj1  (mean_iou=0.199)
+Seed expressions:
+  IoU=0.365  MassGT=0.286  "a surfing rope attached to a person"
+  IoU=0.349  MassGT=0.270  "a kite"
+  IoU=0.042  MassGT=0.304  "a power kite with blue handles"
+  IoU=0.042  MassGT=0.304  "a power kite with blue handles"
+
+  Seed: 4 expressions | best=0.365  worst=0.042
+
+  --- Iteration 1/2 ---
+  Analysis: The low-IoU / low-MassGT expressions fail because they either misidentify the object (e.g., 'a kite' instead of the actual kite-surfing equipment) or use overly specific or misleading descriptors ('po
+  Candidates (3):
+    • a kite-surfing rope attached to a person
+    • a blue kite with a long tail
+    • a person holding a kite-surfing control bar
+    IoU=0.219  MassGT=0.278  "a kite-surfing rope attached to a person"
+    IoU=0.032  MassGT=0.295  "a blue kite with a long tail"
+    IoU=0.053  MassGT=0.288  "a person holding a kite-surfing control bar"
+
+  --- Iteration 2/2 ---
+  Analysis: The low-IoU / low-MassGT expressions fail due to: (1) ambiguous or overly contextual descriptions (e.g., 'attached to a person' or 'holding a control bar') that mislead the model into focusing on rela
+  Candidates (3):
+    • a blue power kite with a long tail
+    • a person holding a kite-surfing bar
+    • a kite with blue handles and a long tail
+    IoU=0.032  MassGT=0.281  "a blue power kite with a long tail"
+    IoU=0.053  MassGT=0.275  "a person holding a kite-surfing bar"
+    IoU=0.031  MassGT=0.322  "a kite with blue handles and a long tail"
+
+  Best original: 0.365  →  Best overall: 0.365  MassGT=0.286  (Δ=+0.000)
+
+============================================================
+Group: soapbox__obj2  (mean_iou=0.157)
+Seed expressions:
+  IoU=0.375  MassGT=0.079  "a person driving the go cart"
+  IoU=0.088  MassGT=0.103  "a man in a white helmet driving a wooden car"
+  IoU=0.088  MassGT=0.103  "a man in a white helmet driving a wooden car"
+  IoU=0.077  MassGT=0.086  "a man driving a car"
+
+  Seed: 4 expressions | best=0.375  worst=0.077
+
+  --- Iteration 1/2 ---
+  Analysis: The low-IoU and low-MassGT expressions fail because they include action verbs ('driving'), vague descriptors ('a person'), and lack specific static attributes. The model attends to the wrong region or
+  Candidates (3):
+    • white go cart with wooden frame
+    • person in white helmet on go cart
+    • wooden go cart being driven
+    IoU=0.142  MassGT=0.047  "white go cart with wooden frame"
+    IoU=0.199  MassGT=0.057  "person in white helmet on go cart"
+    IoU=0.158  MassGT=0.021  "wooden go cart being driven"
+
+  --- Iteration 2/2 ---
+  Analysis: The low-IoU / low-MassGT expressions fail due to: (1) vague or incorrect object categories (e.g., 'car' instead of 'go cart'), (2) inclusion of action verbs ('driving'), (3) over-specific or redundant
+  Candidates (2):
+    • person in white helmet riding go cart
+    • wooden go cart with white frame
+    IoU=0.200  MassGT=0.060  "person in white helmet riding go cart"
+    IoU=0.145  MassGT=0.049  "wooden go cart with white frame"
+
+  Best original: 0.375  →  Best overall: 0.375  MassGT=0.079  (Δ=+0.000)
+
+============================================================
+Saved results to results/llm_optimizer/optimization_results.json
+
+=== Summary ===
+Group                           Orig IoU   LLM IoU   Δ IoU   LLM MassGT  Best LLM Expression
+--------------------------------------------------------------------------------------------------------------
+dogs-jump__obj2                    0.670     0.670  +0.000        0.093  a white dog with gray patches
+gold-fish__obj4                    0.498     0.498  +0.000        0.149  a small orange goldfish on the top half
+gold-fish__obj3                    0.512     0.512  +0.000        0.092  a gold fish in the middle swimming towards do
+kite-surf__obj1                    0.365     0.365  +0.000        0.286  a surfing rope attached to a person
+soapbox__obj2                      0.375     0.375  +0.000        0.079  a person driving the go cart
+
+Wrote summary CSV to results/llm_optimizer/optimization_summary.csv

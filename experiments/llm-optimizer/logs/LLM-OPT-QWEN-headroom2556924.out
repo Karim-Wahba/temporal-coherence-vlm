@@ -1,0 +1,225 @@
+JobId=2556924 JobName=LLM-OPT-QWEN-headroom
+   UserId=gwb913(5173) GroupId=geiger(4009) MCS_label=N/A
+   Priority=51931 Nice=0 Account=geiger QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:00 TimeLimit=23:00:00 TimeMin=N/A
+   SubmitTime=2026-05-10T22:37:13 EligibleTime=2026-05-10T22:37:13
+   AccrueTime=2026-05-10T22:37:14
+   StartTime=2026-05-10T22:37:14 EndTime=2026-05-11T21:37:14 Deadline=N/A
+   PreemptEligibleTime=2026-05-10T22:38:14 PreemptTime=None
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-05-10T22:37:14 Scheduler=Main
+   Partition=a100-galvani AllocNode:Sid=galvani-login:183084
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=galvani-cn213
+   BatchHost=galvani-cn213
+   NumNodes=1 NumCPUs=8 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=1,mem=100G,node=1,billing=10,gres/gpu=1
+   AllocTRES=cpu=8,mem=800G,node=1,billing=82,gres/gpu=1,gres/gpu:a100=1
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryCPU=100G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/mnt/lustre/home/geiger/gwb913/git/temporal-coherence-vlm/experiments/llm-optimizer/sbatch_run.sh
+   WorkDir=/mnt/lustre/home/geiger/gwb913/git/temporal-coherence-vlm/experiments/llm-optimizer
+   StdErr=/mnt/lustre/home/geiger/gwb913/git/temporal-coherence-vlm/experiments/llm-optimizer/logs/LLM-OPT-QWEN-headroom2556924.err
+   StdIn=/dev/null
+   StdOut=/mnt/lustre/home/geiger/gwb913/git/temporal-coherence-vlm/experiments/llm-optimizer/logs/LLM-OPT-QWEN-headroom2556924.out
+   CpusPerTres=gpu:8
+   TresPerNode=gres/gpu:1
+   
+
+Sun May 10 22:37:14 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.105.08             Driver Version: 580.105.08     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A100-PCIE-40GB          On  |   00000000:01:00.0 Off |                    0 |
+| N/A   41C    P0             49W /  250W |       0MiB /  40960MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Loading seed data...
+
+Group selection (headroom):
+  lab-coat__obj1                  best=0.031  mean=0.020  range=0.031
+  lab-coat__obj2                  best=0.062  mean=0.043  range=0.028
+  kite-surf__obj2                 best=0.163  mean=0.161  range=0.002
+  soapbox__obj1                   best=0.181  mean=0.179  range=0.005
+  dogs-jump__obj1                 best=0.228  mean=0.175  range=0.211
+Selected 5 groups by IoU range (highest variance first)
+
+Loading model: Qwen/Qwen3-VL-8B-Instruct
+Model loaded.
+Building real TAM evaluator...
+
+============================================================
+Group: lab-coat__obj1  (mean_iou=0.020)
+Seed expressions:
+  IoU=0.031  MassGT=0.010  "a pink cell phone in a girl's hand"
+  IoU=0.025  MassGT=0.016  "a pink cell phone"
+  IoU=0.023  MassGT=0.009  "a white cell phone in a left hand"
+  IoU=0.000  MassGT=0.006  "a white colored mobile phone on the left"
+
+  Seed: 4 expressions | best=0.031  worst=0.000
+
+  --- Iteration 1/2 ---
+  Analysis: The low-IoU and low-MassGT expressions fail due to: (1) use of ordinal/spatial terms like 'on the left' which are unreliable across frames, (2) over-specificity with multiple attributes ('pink', 'cell
+  Candidates (2):
+    • a pink phone in a girl's hand
+    • a pink cell phone held by a girl
+    IoU=0.000  MassGT=0.001  "a pink phone in a girl's hand"
+    IoU=0.000  MassGT=0.001  "a pink cell phone held by a girl"
+
+  --- Iteration 2/2 ---
+  Qwen returned no usable candidates — stopping early
+
+  Best original: 0.031  →  Best overall: 0.031  MassGT=0.010  (Δ=+0.000)
+
+============================================================
+Group: lab-coat__obj2  (mean_iou=0.043)
+Seed expressions:
+  IoU=0.062  MassGT=0.005  "a white cell phone"
+  IoU=0.039  MassGT=0.004  "a white cell phone in a left hand"
+  IoU=0.037  MassGT=0.003  "a pink colored mobile phone in the hands of the girl on the left"
+  IoU=0.033  MassGT=0.004  "a pink cell phone in a girl's hand"
+
+  Seed: 4 expressions | best=0.062  worst=0.033
+
+  --- Iteration 1/2 ---
+  Analysis: The low-IoU and low-MassGT scores indicate the model is not focusing attention on the correct object region. The top-performing expression 'a white cell phone' has a low IoU but non-zero MassGT, sugge
+  Candidates (3):
+    • a white cell phone on a table
+    • a white cell phone near the lab coat
+    • a white cell phone on the desk
+    IoU=0.000  MassGT=0.000  "a white cell phone on a table"
+    IoU=0.000  MassGT=0.000  "a white cell phone near the lab coat"
+    IoU=0.000  MassGT=0.000  "a white cell phone on the desk"
+
+  --- Iteration 2/2 ---
+  Analysis: The low-IoU and low-MassGT expressions fail due to: (1) adding spatial/ordinal context (e.g., 'in a left hand', 'on the desk'), which misleads the model when object position changes; (2) using relatio
+  Candidates (3):
+    • a white cell phone with a black screen
+    • a white cell phone with a cracked screen
+    • a white cell phone with a green case
+    IoU=0.000  MassGT=0.000  "a white cell phone with a black screen"
+    IoU=0.000  MassGT=0.000  "a white cell phone with a cracked screen"
+    IoU=0.000  MassGT=0.000  "a white cell phone with a green case"
+
+  Best original: 0.062  →  Best overall: 0.062  MassGT=0.005  (Δ=+0.000)
+
+============================================================
+Group: kite-surf__obj2  (mean_iou=0.161)
+Seed expressions:
+  IoU=0.163  MassGT=0.006  "a surfboard"
+  IoU=0.161  MassGT=0.006  "a surf-board"
+  IoU=0.161  MassGT=0.006  "a surf-board"
+  IoU=0.161  MassGT=0.006  "a surf-board"
+
+  Seed: 4 expressions | best=0.163  worst=0.161
+
+  --- Iteration 1/2 ---
+  Analysis: All tested expressions fail due to lack of discriminative attributes and absence of a specific object category. The head noun 'surfboard' is correct, but no static attributes (color, texture, marking)
+  Candidates (3):
+    • a white surfboard with blue stripes
+    • a wooden surfboard with a red logo
+    • a surfboard with a black traction pad
+    IoU=0.120  MassGT=0.012  "a white surfboard with blue stripes"
+    IoU=0.120  MassGT=0.009  "a wooden surfboard with a red logo"
+    IoU=0.128  MassGT=0.005  "a surfboard with a black traction pad"
+
+  --- Iteration 2/2 ---
+  Analysis: The low-IoU and low-MassGT scores indicate that the model is not focusing attention on the correct object region, likely due to ambiguous or misleading descriptors. The current best expression 'a surf
+  Candidates (3):
+    • a surfboard with a red logo
+    • a surfboard with black traction pad
+    • a surfboard with blue stripes
+    IoU=0.120  MassGT=0.008  "a surfboard with a red logo"
+    IoU=0.128  MassGT=0.005  "a surfboard with black traction pad"
+    IoU=0.120  MassGT=0.011  "a surfboard with blue stripes"
+
+  Best original: 0.163  →  Best overall: 0.163  MassGT=0.006  (Δ=+0.000)
+
+============================================================
+Group: soapbox__obj1  (mean_iou=0.179)
+Seed expressions:
+  IoU=0.181  MassGT=0.304  "a blue wooden car"
+  IoU=0.181  MassGT=0.304  "a blue wooden car"
+  IoU=0.178  MassGT=0.307  "a blue car"
+  IoU=0.176  MassGT=0.255  "a go-cart type car"
+
+  Seed: 4 expressions | best=0.181  worst=0.176
+
+  --- Iteration 1/2 ---
+  Analysis: The low-IoU and low-MassGT expressions fail because they either lack discriminative attributes (e.g., 'a go-cart type car' is vague) or use overly generic descriptors (e.g., 'a blue car' misses the 'w
+  Candidates (3):
+    • a blue wooden toy car
+    • a blue wooden race car
+    • a blue wooden soapbox car
+    IoU=0.243  MassGT=0.079  "a blue wooden toy car"
+    IoU=0.265  MassGT=0.080  "a blue wooden race car"
+    IoU=0.270  MassGT=0.068  "a blue wooden soapbox car"
+
+  --- Iteration 2/2 ---
+  Analysis: The low-IoU and low-MassGT expressions fail because they either lack discriminative attributes (e.g., 'a blue car') or include vague/ambiguous descriptors that mislead attention (e.g., 'go-cart type c
+  Candidates (3):
+    • a blue wooden soapbox racer
+    • a blue soapbox car with wood finish
+    • a blue wooden soapbox vehicle
+    IoU=0.248  MassGT=0.073  "a blue wooden soapbox racer"
+    IoU=0.263  MassGT=0.088  "a blue soapbox car with wood finish"
+    IoU=0.262  MassGT=0.067  "a blue wooden soapbox vehicle"
+
+  Best original: 0.181  →  Best overall: 0.270  MassGT=0.068  (Δ=+0.089)
+
+============================================================
+Group: dogs-jump__obj1  (mean_iou=0.175)
+Seed expressions:
+  IoU=0.228  MassGT=0.084  "a white dog with black patches"
+  IoU=0.228  MassGT=0.084  "a white dog with black patches"
+  IoU=0.228  MassGT=0.084  "a white dog with black patches"
+  IoU=0.017  MassGT=0.009  "a dog jumping for a snack going to the left"
+
+  Seed: 4 expressions | best=0.228  worst=0.017
+
+  --- Iteration 1/2 ---
+  Analysis: The low-IoU / low-MassGT expressions fail due to action/motion language ('jumping', 'going to the left'), which misleads the model's attention. The model attends to the wrong region (MassGT=0.009) bec
+  Candidates (2):
+    • a white dog with black spots
+    • a white dog marked with black patches
+    IoU=0.100  MassGT=0.040  "a white dog with black spots"
+    IoU=0.075  MassGT=0.038  "a white dog marked with black patches"
+
+  --- Iteration 2/2 ---
+  Analysis: The low-IoU and low-MassGT expressions fail due to: (1) inclusion of action/motion verbs like 'jumping' and 'going to the left', which misdirect attention; (2) use of less discriminative or slightly d
+  Candidates (2):
+    • a white dog with black markings
+    • a white dog with black patches on its back
+    IoU=0.099  MassGT=0.040  "a white dog with black markings"
+    IoU=0.054  MassGT=0.035  "a white dog with black patches on its back"
+
+  Best original: 0.228  →  Best overall: 0.228  MassGT=0.084  (Δ=+0.000)
+
+============================================================
+Saved results to results/llm_optimizer_headroom/optimization_results.json
+
+=== Summary ===
+Group                           Orig IoU   LLM IoU   Δ IoU   LLM MassGT  Best LLM Expression
+--------------------------------------------------------------------------------------------------------------
+lab-coat__obj1                     0.031     0.031  +0.000        0.010  a pink cell phone in a girl's hand
+lab-coat__obj2                     0.062     0.062  +0.000        0.005  a white cell phone
+kite-surf__obj2                    0.163     0.163  +0.000        0.006  a surfboard
+soapbox__obj1                      0.181     0.270  +0.089        0.068  a blue wooden soapbox car
+dogs-jump__obj1                    0.228     0.228  +0.000        0.084  a white dog with black patches
+
+Wrote summary CSV to results/llm_optimizer_headroom/optimization_summary.csv
